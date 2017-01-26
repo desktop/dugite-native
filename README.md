@@ -1,5 +1,7 @@
 # Git - The Native Bits
 
+[![Build Status](https://travis-ci.com/desktop/git-native-bits.svg?token=vdtkHSqgzNMgfyZkfVbP&branch=master)](https://travis-ci.com/desktop/git-native-bits)
+
 This repository contains the source and tooling for building Git from scratch
 for the various platforms that `git-kitchen-sink` requires.
 
