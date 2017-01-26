@@ -15,3 +15,6 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     NO_INSTALL_HARDLINKS=1 \
     MACOSX_DEPLOYMENT_TARGET=10.9
 cd -
+
+echo "TODO: download Git-LFS version $GIT_LFS_VERSION to $DESTINATION"
+echo "TODO: unpack Git-LFS to $DESTINATION"

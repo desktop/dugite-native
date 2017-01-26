@@ -15,15 +15,24 @@ if [ "$EXIT_CODE" == "128" ]; then
 fi
 cd -
 
-if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-  FILE="Git-$VERSION-ubuntu-$BUILD.tgz"
-elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
-  FILE="Git-$VERSION-macOS-$BUILD.tgz"
-else
-  echo "Unable to build Git for platform $TRAVIS_OS_NAME"
+if ! [ -d "$DESTINATION" ]; then
+  echo "No output found, exiting..."
   exit 1
 fi
 
-tar -cjf $FILE -C $DESTINATION .
+if [ "$PLATFORM" == "ubuntu" ]; then
+  FILE="Git-$VERSION-ubuntu-$BUILD.tgz"
+elif [ "$PLATFORM" == "macOS" ]; then
+  FILE="Git-$VERSION-macOS-$BUILD.tgz"
+elif [ "$PLATFORM" == "win32" ]; then
+  FILE="Git-$VERSION-win32-$BUILD.tgz"
+else
+  echo "Unable to package Git for platform $PLATFORM"
+  exit 1
+fi
+
+tar -cvjf $FILE -C $DESTINATION .
+CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
 
 echo "Package created: ${FILE}"
+echo "SHA256: ${CHECKSUM}"

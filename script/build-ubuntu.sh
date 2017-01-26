@@ -18,6 +18,9 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro'
 cd -
 
+echo "TODO: download Git-LFS version $GIT_LFS_VERSION to $DESTINATION"
+echo "TODO: unpack Git-LFS to $DESTINATION"
+
 # download CA bundle and write straight to temp folder
 cd $DESTINATION
 mkdir ssl
