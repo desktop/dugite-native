@@ -1,0 +1,9 @@
+
+os:
+  - linux
+
+compiler:
+  - gcc
+
+script:
+  - script/build.sh
