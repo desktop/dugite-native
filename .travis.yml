@@ -1,3 +1,4 @@
+language: c
 
 os:
   - linux
@@ -8,3 +9,4 @@ compiler:
 
 script:
   - script/build.sh
+  - script/package.sh
