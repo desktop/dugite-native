@@ -46,3 +46,8 @@ update the values manually from the release notes for the related project.
 Packaging is rather consistent for each platform, and mostly focuses on
 ensuring the right binaries are published and fingerprinted correctly.
 
+#### GitHub Release
+
+By tagging the source in this repository the build agents should then publish up
+the artifacts to a draft GitHub release against the repository. All other builds
+will discard their artifacts.
