@@ -1,8 +1,27 @@
-language: c
+matrix:
+  include:
+    - os: linux
+      language: c
+      env:
+        - PLATFORM=ubuntu
+        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v1.5.5/git-lfs-linux-amd64-1.5.5.tar.gz
+        - GIT_LFS_CHECKSUM=910b2b5c158b238256087cae9b84cbc0bfb83c061d5b41161b79ca08cf61b2e8
 
-os:
-  - linux
-  - osx
+    - os: osx
+      language: c
+      env:
+       - PLATFORM=macOS
+       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v1.5.5/git-lfs-darwin-amd64-1.5.5.tar.gz
+       - GIT_LFS_CHECKSUM=2227668c76a07931dd387602f67c99d5d42f0a99c73b76f8949bbfe3a4cc49c7
+    # let's do the packaging here for Windows
+    - os: linux
+      language: c
+      env:
+       - PLATFORM=win32
+       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/MinGit-2.11.0.3-64-bit.zip
+       - GIT_FOR_WINDOWS_CHECKSUM=bf3714e04bcbafb464353235a27c328c43d40568d6b2e9064f1a63444b8236c5
+       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v1.5.5/git-lfs-windows-amd64-1.5.5.zip
+       - GIT_LFS_CHECKSUM=7c23635f34b0b4eed55621231148ef3e0de9a46e2d629b4bba7f706a96ae77ea
 
 compiler:
   - gcc

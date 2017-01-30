@@ -18,10 +18,24 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro'
 cd -
 
+GIT_LFS_FILE=git-lfs.tar.gz
+curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
+shasum -a 256 $GIT_LFS_FILE | awk '{print $1;}'
+COMPUTED_SHA256=$(shasum -a 256 $GIT_LFS_FILE | awk '{print $1;}')
+if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
+  echo "Git LFS: checksums match"
+  SUBFOLDER="$DESTINATION/libexec/git-core"
+  tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude="*.md"
+else
+  echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM but got $COMPUTED_SHA256"
+  echo "aborting..."
+  exit 1
+fi
+
 # download CA bundle and write straight to temp folder
 cd $DESTINATION
 mkdir ssl
-curl -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
+curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd -
 
 
