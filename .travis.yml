@@ -18,8 +18,8 @@ matrix:
       language: c
       env:
        - PLATFORM=win32
-       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.11.0.windows.3/MinGit-2.11.0.3-64-bit.zip
-       - GIT_FOR_WINDOWS_CHECKSUM=bf3714e04bcbafb464353235a27c328c43d40568d6b2e9064f1a63444b8236c5
+       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.11.1.windows.1/MinGit-2.11.1-64-bit.zip
+       - GIT_FOR_WINDOWS_CHECKSUM=668d16a799dd721ed126cc91bed49eb2c072ba1b25b50048280a4e2c5ed56e59
        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v1.5.5/git-lfs-windows-amd64-1.5.5.zip
        - GIT_LFS_CHECKSUM=7c23635f34b0b4eed55621231148ef3e0de9a46e2d629b4bba7f706a96ae77ea
 
