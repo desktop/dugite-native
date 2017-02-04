@@ -1,53 +1,55 @@
-# Contributing
+# Contributing to `dugite-native`
 
-This is a rather hands-off process, but here's how it all works.
+As these scripts are dependent on the OS you have setup, I've not spent much
+time testing things out about the local development experience.
 
-## Build Matrix
+## Setup
 
-This repository uses a number of Travis build agents to co-ordinate the
-various builds and packages that are needed. The dependencies needed for each
-agent are rather vanilla, and shouldn't need updating between releases.
+You'll need a bash environment to run these scripts, and you should be able
+to emulate the behaviour of Travis by setting environment variables
 
-## Repository Setup
+```
+GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v1.5.5/git-lfs-darwin-amd64-1.5.5.tar.gz \
+GIT_LFS_CHECKSUM=2227668c76a07931dd387602f67c99d5d42f0a99c73b76f8949bbfe3a4cc49c7 \
+script/build-macos.sh ./git /tmp/build/git/
+```
 
-### Build Step
+Please open issues if you encounter friction with running things locally and
+would like it to be easier.
 
-The shell scripts to build each platform are found under the `script` folder.
-Find the platform you wish to test out, update the script and submit the
-change as a pull request. This will kick off and test everything as required.
+## Updating Git
 
-Each script may expect a `source` argument, which represents where to find Git,
-and each script is expected to output the files for packaging to the specified
-`destination` location.
+Ensure the submodule is checked out to the correct tag, e.g:
 
-If, for whatever reason, a script needs to fail, returning a non-zero exit code
-is enough to fail the build process.
+```
+cd git
+git checkout v2.11.1
+```
 
-### Updating Dependencies
+The package scripts will look for this tag, so non-tagged builds are not
+currently supported. Committing this submodule change and publish a pull
+request to initiate the build scripts.
 
-#### Git
+## Changing how Git is built
 
-When building Git from source, only tagged commits are supported. Committing
-the submodule change is good enough to change the built version of Git, as the
-build scripts should resolve the tagged version without any other work from
-the contributor.
+Refer to the build scripts under the `script` folder for how we are building Git for each platform:
 
-We should build from the same source for each platform, so each platform script
-should focus on the flags necessary to provide when building the app.
+ - [Windows](https://github.com/desktop/dugite-native/blob/master/script/build-win32.sh)
+ - [macOS](https://github.com/desktop/dugite-native/blob/master/script/build-macos.sh)
+ - [Ubuntu](https://github.com/desktop/dugite-native/blob/master/script/build-ubuntu.sh)
 
-#### Other Dependencies
+Ideally we should be using the same flags wherever possible, but sometimes we
+need to do platform-specific things.
 
-Other dependencies are documented as environment variables in the `.travis.yml`
-file. As the fetching of checksums cannot easily be scripted currently, just
-update the values manually from the release notes for the related project.
+Windows doesn't need to be built from source, however it should be updated in step with the other Git releases. When a new [Git for Windows](https://github.com/git-for-windows/git) release is made available, just update the
+`GIT_FOR_WINDOWS_URL` and `GIT_FOR_WINDOWS_CHECKSUM` variables in `.travis.yml`
+to use their MinGit build.
 
-### Package Step
+## Updating Git LFS
 
-Packaging is rather consistent for each platform, and mostly focuses on
-ensuring the right binaries are published and fingerprinted correctly.
+Packages are published for each platform from the [Git LFS](https://github.com/git-lfs/git-lfs)
+repository. These are defined as environment variables in the `.travis.yml` -
+update the `GIT_LFS_URL` and `GIT_LFS_CHECKSUM` for all platforms and commit
+the change.
 
-#### GitHub Release
 
-By tagging the source in this repository the build agents should then publish up
-the artifacts to a draft GitHub release against the repository. All other builds
-will discard their artifacts.
