@@ -31,7 +31,7 @@ else
   exit 1
 fi
 
-tar -cvjzf $FILE -C $DESTINATION .
+tar -cvzf $FILE -C $DESTINATION .
 CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
 
 tar -tzf $FILE
