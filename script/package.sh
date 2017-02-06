@@ -21,17 +21,17 @@ if ! [ -d "$DESTINATION" ]; then
 fi
 
 if [ "$PLATFORM" == "ubuntu" ]; then
-  FILE="Git-$VERSION-ubuntu-$BUILD.tgz"
+  FILE="Git-$VERSION-ubuntu-$BUILD.tar.gz"
 elif [ "$PLATFORM" == "macOS" ]; then
-  FILE="Git-$VERSION-macOS-$BUILD.tgz"
+  FILE="Git-$VERSION-macOS-$BUILD.tar.gz"
 elif [ "$PLATFORM" == "win32" ]; then
-  FILE="Git-$VERSION-win32-$BUILD.tgz"
+  FILE="Git-$VERSION-win32-$BUILD.tar.gz"
 else
   echo "Unable to package Git for platform $PLATFORM"
   exit 1
 fi
 
-tar -cvjf $FILE -C $DESTINATION .
+tar -cvjzf $FILE -C $DESTINATION .
 CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
 
 echo "Package created: ${FILE}"
