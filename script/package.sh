@@ -34,5 +34,7 @@ fi
 tar -cvjzf $FILE -C $DESTINATION .
 CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
 
+tar -tzf $FILE
+
 echo "Package created: ${FILE}"
 echo "SHA256: ${CHECKSUM}"
