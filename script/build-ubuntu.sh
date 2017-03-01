@@ -14,7 +14,7 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     NO_OPENSSL=1 \
     NO_INSTALL_HARDLINKS=1 \
     CC='gcc' \
-    CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2' \
+    CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
     LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro'
 cd -
 
@@ -37,5 +37,3 @@ cd $DESTINATION
 mkdir ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd -
-
-
