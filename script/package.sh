@@ -21,11 +21,11 @@ if ! [ -d "$DESTINATION" ]; then
 fi
 
 if [ "$PLATFORM" == "ubuntu" ]; then
-  FILE="Git-$VERSION-ubuntu-$BUILD.tar.gz"
+  FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
 elif [ "$PLATFORM" == "macOS" ]; then
-  FILE="Git-$VERSION-macOS-$BUILD.tar.gz"
+  FILE="dugite-native-$VERSION-macOS-$BUILD.tar.gz"
 elif [ "$PLATFORM" == "win32" ]; then
-  FILE="Git-$VERSION-win32-$BUILD.tar.gz"
+  FILE="dugite-native-$VERSION-win32-$BUILD.tar.gz"
 else
   echo "Unable to package Git for platform $PLATFORM"
   exit 1
