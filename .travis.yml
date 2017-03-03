@@ -30,6 +30,10 @@ script:
   - script/build.sh
   - script/package.sh
 
+branches:
+  only:
+  - master
+
 deploy:
   provider: releases
   api_key:
