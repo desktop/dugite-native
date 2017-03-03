@@ -40,7 +40,7 @@ deploy:
   api_key:
     secure: PZYs7hghA8bk+a9B9dsT4TcbmrGgPjVSKIXG+FGEX4ndd7thvYIuVNvGwY2qzw3QNPIaS8bsaR4u0OzO5PQ04maRcYBvkk3xWhB1VxMreokrz1lD0ee5UBzZcuKMuXpBatMJHQfbzRpJxD6c9ipP56lNeTB+ZZnKoGeTUO6BA2neDSHmTwU5Ps3aDRQ8VjK9/A6TzSQqczKBmM7t4g2RdC2+b0qH+2Waw2Rdsvf34SQiIixomXXE3sJaxGSXGtFg1+IOSnirJ/qT8sTcTwVRfCLzuQdbVfNbWPPRkBpKNOMxY8qJeEEa3TNu2yKstWva+JDLuDwQ/D5Lxl1YN7yFBSdiTODbfLRaunvbphrLMiho3QGcSYTqclNxrcjB5cuqq58jC6PR5bK/LGQd6jgUhRkuJOhcxpj5eL9hmho8Yr66laROYxCnPlCENfqlXxcpCuqwMDvwxoD8U9u6hViDU2FtMS/9QwNrgkKBOCiOmiWm29NZR1S9o68DZ3trNn63F/IVaZpkfQhLg+waLKoqL54xtOmhQwEzUyyTWF3jcuLLluCpWAj6Vcttj9zLFQ0sdUWEJiuqhpmOZcgicoFd+j5eNZz7Q9l3UoyAtOowuNLHCqK0IO1Cb9Ib6+L7PscUKAlgLVMDSHe1RxuJ4EhwraqTUrXUs+aq57qyEBn9AV8=
   file_glob: true
-  file: ${TRAVIS_BUILD_DIR}/Git-v*.tar.gz
+  file: ${TRAVIS_BUILD_DIR}/dugite-native-v*.tar.gz
   skip_cleanup: true
   on:
     tags: true
