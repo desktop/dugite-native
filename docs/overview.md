@@ -29,7 +29,7 @@ is enough to fail the build process.
 Packaging is rather consistent for each platform, and mostly focuses on
 ensuring the right binaries are published and fingerprinted correctly.
 
-#### GitHub Release
+### GitHub Release
 
 When a tag is pushed to GitHub, Travis will detect this and start a new build.
 The artefacts from that build are then uploaded to GitHub, ready to use in a
