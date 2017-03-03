@@ -14,8 +14,9 @@ GIT_LFS_CHECKSUM=2227668c76a07931dd387602f67c99d5d42f0a99c73b76f8949bbfe3a4cc49c
 script/build-macos.sh ./git /tmp/build/git/
 ```
 
-Please open issues if you encounter friction with running things locally and
-would like it to be easier.
+Please :thumbsup: this issue https://github.com/desktop/dugite-native/issues/26
+if you encounter friction with running things locally and would like it to be
+easier.
 
 ## Updating Git
 
