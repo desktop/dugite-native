@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# Entry point to build process to support different platforms.
+# Platforms have different ways to build Git and prepare the environment
+# for packaging, so defer to the `build-*` files for more details
+#
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOURCE="./git"
