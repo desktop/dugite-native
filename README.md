@@ -2,10 +2,8 @@
 
 [![Build Status](https://api.travis-ci.com/desktop/dugite-native.svg?token=vdtkHSqgzNMgfyZkfVbP&branch=master)](https://travis-ci.com/desktop/dugite-native)
 
-### What?
-
-This project is designed to build a version of Git which is optimized for
-scripted usage in applications, and removes many non-core features:
+This project contains the tooling for building a version of Git that is optimized for
+scripted usage in applications. It also removes many non-core features:
 
  - no linking to system libraries
  - use symlinks to reduce output size
