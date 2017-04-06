@@ -41,3 +41,13 @@ else
   echo "aborting..."
   exit 1
 fi
+
+# replace OpenSSL curl with the WinSSL variant
+# this was recently incorporated into MinGit, so let's just move the file over and cleanup
+ORIGINAL_CURL_LIBRARY="$DESTINATION/mingw64/bin/libcurl-4.dll"
+if [ ! -f $ORIGINAL_CURL_LIBRARY ]; then echo "The source cURL library doesn't exist"; fi
+WINSSL_CURL_LIBRARY="$DESTINATION/mingw64/bin/curl-winssl/libcurl-4.dll"
+if [ ! -f $WINSSL_CURL_LIBRARY ]; then echo "The modified cURL library doesn't exist"; fi
+
+# TODO: move $WINSSL_CURL_LIBRARY to replace $ORIGINAL_CURL_LIBRARY
+# TODO: remove "$DESTINATION/mingw64/bin/curl-winssl/""
