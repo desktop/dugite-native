@@ -31,15 +31,15 @@ need to do platform-specific things.
 Windows doesn't need to be built from source, however it should be updated in
 step with the other Git releases. When a new [Git for Windows](https://github.com/git-for-windows/git)
 release is made available, just update the `GIT_FOR_WINDOWS_URL` and
-`GIT_FOR_WINDOWS_CHECKSUM` variables in `.travis.yml` to use their MinGit
-build.
+`GIT_FOR_WINDOWS_CHECKSUM` variables in `.travis.yml` and `appveyor.yml` to use
+their MinGit build.
 
 ## Update Git LFS
 
 Packages are published for each platform from the [Git LFS](https://github.com/git-lfs/git-lfs)
-repository. These are defined as environment variables in the `.travis.yml` -
-update the `GIT_LFS_URL` and `GIT_LFS_CHECKSUM` for all platforms and commit
-the change.
+repository. These are defined as environment variables in the `.travis.yml` and
+`appveyor.yml` files - update the `GIT_LFS_URL` and `GIT_LFS_CHECKSUM` for all
+platforms and commit the change.
 
 ## Add a new component
 
