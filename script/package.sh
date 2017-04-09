@@ -26,19 +26,27 @@ if ! [ -d "$DESTINATION" ]; then
   exit 1
 fi
 
-if [ "$PLATFORM" == "ubuntu" ]; then
+if [ "$APPVEYOR" == "True" ]; then
+  BUILD=$APPVEYOR_BUILD_NUMBER
+fi
+
+if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
   FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
-elif [ "$PLATFORM" == "macOS" ]; then
+elif [ "$TARGET_PLATFORM" == "macOS" ]; then
   FILE="dugite-native-$VERSION-macOS-$BUILD.tar.gz"
-elif [ "$PLATFORM" == "win32" ]; then
+elif [ "$TARGET_PLATFORM" == "win32" ]; then
   FILE="dugite-native-$VERSION-win32-$BUILD.tar.gz"
 else
-  echo "Unable to package Git for platform $PLATFORM"
+  echo "Unable to package Git for platform $TARGET_PLATFORM"
   exit 1
 fi
 
 tar -cvzf $FILE -C $DESTINATION .
-CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
+if [ "$APPVEYOR" == "True" ]; then
+  CHECKSUM=$(sha256sum $FILE | awk '{print $1;}')
+else
+  CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
+fi
 
 tar -tzf $FILE
 
