@@ -1,0 +1,16 @@
+image: Visual Studio 2015
+
+# Do not build feature branch with open Pull Requests
+skip_branch_with_pr: true
+
+environment:
+  TARGET_PLATFORM: win32
+  GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.12.2.windows.2/MinGit-2.12.2.2-64-bit.zip
+  GIT_FOR_WINDOWS_CHECKSUM: 3918cd9ab42c9a22aa3934463fdb536485c84e6876e9aaab74003deb43a08a36
+  GIT_LFS_URL: https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-windows-amd64-2.0.2.zip
+  GIT_LFS_CHECKSUM: 1b33c8cb6e2e3238b48c639738d22d755a98f7cb62a994d026bb73c158508689
+
+build_script:
+  - cmd: git submodule update --init --recursive
+  - bash script\build.sh
+  - bash script\package.sh
