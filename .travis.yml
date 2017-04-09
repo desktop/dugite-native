@@ -3,21 +3,21 @@ matrix:
     - os: linux
       language: c
       env:
-        - PLATFORM=ubuntu
+        - TARGET_PLATFORM=ubuntu
         - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-linux-amd64-2.0.2.tar.gz
         - GIT_LFS_CHECKSUM=4b3869aa5445b43146248d5edbf288eebfcce245913d4a0702c35217916a4422
 
     - os: osx
       language: c
       env:
-       - PLATFORM=macOS
+       - TARGET_PLATFORM=macOS
        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-darwin-amd64-2.0.2.tar.gz
        - GIT_LFS_CHECKSUM=0f5feb0105736f2350f286caca51fa9f8ad673d2ff9a4187e649e82374c590a9
 
     - os: linux
       language: c
       env:
-       - PLATFORM=win32
+       - TARGET_PLATFORM=win32
        - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.12.2.windows.2/MinGit-2.12.2.2-64-bit.zip
        - GIT_FOR_WINDOWS_CHECKSUM=3918cd9ab42c9a22aa3934463fdb536485c84e6876e9aaab74003deb43a08a36
        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-windows-amd64-2.0.2.zip
