@@ -70,9 +70,9 @@ if [ "$APPVEYOR" == "True" ]; then
   rm $DESTINATION/mingw64/bin/curl.exe
 
   if [ "$EXIT_CODE" == "1" ]; then
-    echo "cURL not able to resolve WinSSL dependency. Failing the build..."
+    echo "curl not able to resolve WinSSL dependency. Failing the build..."
     exit 1
   else
-    echo "Verified cURL dependency is using WinSSL"
+    echo "Verified curl dependency is using WinSSL"
   fi
 fi
