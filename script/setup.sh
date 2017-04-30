@@ -1,4 +1,7 @@
-# a more graceful way to compute checksums
+#!/bin/bash
+#
+# Some setup and environmental-specific functions
+# to make the other scripts easier to read
 
 computeChecksum() {
    if [ -z "$1" ] ; then
