@@ -3,17 +3,20 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
+# fail on any non-zero exit code
+set -e
+
+# import aliases for commands that may differ across environments
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$DIR/aliases.sh"
+
 DESTINATION=$1
 mkdir -p $DESTINATION
 
 # download Git for Windows, verify its the right contents, and unpack it
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
 curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
-if [ "$APPVEYOR" == "True" ]; then
-  COMPUTED_SHA256=$(sha256sum $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
-else
-  COMPUTED_SHA256=$(shasum -a 256 $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
-fi
+COMPUTED_SHA256=$(shasum $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
 
 if [ "$COMPUTED_SHA256" = "$GIT_FOR_WINDOWS_CHECKSUM" ]; then
   echo "Git for Windows: checksums match"
@@ -27,11 +30,8 @@ fi
 # download Git LFS, verify its the right contents, and unpack it
 GIT_LFS_FILE=git-lfs.zip
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-if [ "$APPVEYOR" == "True" ]; then
-  COMPUTED_SHA256=$(sha256sum $GIT_LFS_FILE | awk '{print $1;}')
-else
-  COMPUTED_SHA256=$(shasum -a 256 $GIT_LFS_FILE | awk '{print $1;}')
-fi
+COMPUTED_SHA256=$(shasum $GIT_LFS_FILE | awk '{print $1;}')
+
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
   SUBFOLDER="$DESTINATION/mingw64/libexec/git-core/"
