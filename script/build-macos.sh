@@ -17,7 +17,7 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     NO_DARWIN_PORTS=1 \
     NO_INSTALL_HARDLINKS=1 \
     MACOSX_DEPLOYMENT_TARGET=10.9
-cd -
+cd - > /dev/null
 
 # download Git LFS, verify its the right contents, and unpack it
 GIT_LFS_FILE=git-lfs.tar.gz

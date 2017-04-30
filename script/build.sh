@@ -10,11 +10,11 @@ SOURCE="./git"
 DESTINATION="/tmp/build/git"
 
 if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
-  sh "$DIR/build-ubuntu.sh" $SOURCE $DESTINATION
+  bash "$DIR/build-ubuntu.sh" $SOURCE $DESTINATION
 elif [ "$TARGET_PLATFORM" == "macOS" ]; then
-  sh "$DIR/build-macos.sh" $SOURCE $DESTINATION
+  bash "$DIR/build-macos.sh" $SOURCE $DESTINATION
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
-  sh "$DIR/build-win32.sh" $DESTINATION
+  bash "$DIR/build-win32.sh" $DESTINATION
 else
   echo "Unable to build Git for platform $TARGET_PLATFORM"
   exit 1

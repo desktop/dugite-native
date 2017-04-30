@@ -10,6 +10,15 @@ easier.
 
 As this project depends on the toolchain you have installed, you will also need access to the same operating system you wish to compile Git for. Currently we don't need to build from source on Windows, but for macOS we do need access to the XCode toolchain. You also need a bash environment to run these scripts.
 
+#### Fedora
+
+These two packages are necessary to compile Git, in case you don't already have them installed:
+
+```
+sudo yum install libcurl-dev
+sudo yum install expat-devel
+```
+
 ### Testing
 
 You should be able to emulate the behaviour of Travis by setting environment variables. For example, to package for macOS you could run this:
