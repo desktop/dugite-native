@@ -27,6 +27,7 @@ compiler:
   - gcc
 
 script:
+  - script/setup.sh
   - script/build.sh
   - script/package.sh
 
