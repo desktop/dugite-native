@@ -12,7 +12,6 @@ environment:
 
 build_script:
   - cmd: git submodule update --init --recursive
-  - bash script\setup.sh
   - bash script\build.sh
   - bash script\package.sh
 
