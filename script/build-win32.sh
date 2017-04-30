@@ -64,7 +64,7 @@ WINSSL_CURL_LIBRARY="$DESTINATION/mingw64/bin/curl-winssl/libcurl-4.dll"
 mv $WINSSL_CURL_LIBRARY $ORIGINAL_CURL_LIBRARY
 rm -rf "$DESTINATION/mingw64/bin/curl-winssl/"
 
-if [ "$APPVEYOR" == "True" ]; then
+if [ "$APPVEYOR" == "True" ] ; then
   # find the version of libcurl that was bundled
   PACKAGE_ENTRY=$(grep -o 'curl [0-9].[0-9]\{2\}.[0-9]-[0-9]' /tmp/build/git/etc/package-versions.txt)
   PACKAGE_VERSION=${PACKAGE_ENTRY/curl /}
