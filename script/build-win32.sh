@@ -8,7 +8,7 @@ set -e
 
 # import aliases for commands that may differ across environments
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$DIR/aliases.sh"
+. "$DIR/aliases.sh"
 
 DESTINATION=$1
 mkdir -p $DESTINATION
