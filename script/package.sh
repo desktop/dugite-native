@@ -19,7 +19,7 @@ if [ "$EXIT_CODE" == "128" ]; then
   echo "Git commit does not have tag, cannot use version to build from"
   exit 1
 fi
-cd -
+cd - > /dev/null
 
 if ! [ -d "$DESTINATION" ]; then
   echo "No output found, exiting..."
