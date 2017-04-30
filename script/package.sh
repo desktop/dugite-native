@@ -50,5 +50,8 @@ fi
 
 tar -tzf $FILE
 
+SIZE=$(du -h $FILE | cut -f1)
+
 echo "Package created: ${FILE}"
+echo "Size: ${SIZE}"
 echo "SHA256: ${CHECKSUM}"
