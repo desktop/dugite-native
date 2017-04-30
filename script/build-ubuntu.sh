@@ -39,6 +39,6 @@ fi
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html
 cd $DESTINATION
-mkdir ssl
+mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd -
