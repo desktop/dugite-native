@@ -3,18 +3,29 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
+# i want to centralize this function but everything is terrible
+# go read https://github.com/desktop/dugite-native/issues/38
+computeChecksum() {
+   if [ -z "$1" ] ; then
+     # no parameter provided, fail hard
+     exit 1
+   fi
+
+  path_to_sha256sum=$(which sha256sum)
+  if [ -x "$path_to_sha256sum" ] ; then
+    echo $(sha256sum $1 | awk '{print $1;}')
+  else
+    echo $(shasum -a 256 $1 | awk '{print $1;}')
+  fi
+}
+
 DESTINATION=$1
 mkdir -p $DESTINATION
 
 # download Git for Windows, verify its the right contents, and unpack it
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
 curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
-if [ "$APPVEYOR" == "True" ]; then
-  COMPUTED_SHA256=$(sha256sum $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
-else
-  COMPUTED_SHA256=$(shasum -a 256 $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
-fi
-
+COMPUTED_SHA256=$(computeChecksum $GIT_FOR_WINDOWS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_FOR_WINDOWS_CHECKSUM" ]; then
   echo "Git for Windows: checksums match"
   unzip -qq $GIT_FOR_WINDOWS_FILE -d $DESTINATION
@@ -27,11 +38,7 @@ fi
 # download Git LFS, verify its the right contents, and unpack it
 GIT_LFS_FILE=git-lfs.zip
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-if [ "$APPVEYOR" == "True" ]; then
-  COMPUTED_SHA256=$(sha256sum $GIT_LFS_FILE | awk '{print $1;}')
-else
-  COMPUTED_SHA256=$(shasum -a 256 $GIT_LFS_FILE | awk '{print $1;}')
-fi
+COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
   SUBFOLDER="$DESTINATION/mingw64/libexec/git-core/"

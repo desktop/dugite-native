@@ -6,7 +6,22 @@
 SOURCE=$1
 DESTINATION=$2
 
-echo "Building git at $SOURCE to $DESTINATION"
+# i want to centralize this function but everything is terrible
+# go read https://github.com/desktop/dugite-native/issues/38
+computeChecksum() {
+   if [ -z "$1" ] ; then
+     # no parameter provided, fail hard
+     exit 1
+   fi
+
+  path_to_sha256sum=$(which sha256sum)
+  if [ -x "$path_to_sha256sum" ] ; then
+    echo $(sha256sum $1 | awk '{print $1;}')
+  else
+    echo $(shasum -a 256 $1 | awk '{print $1;}')
+  fi
+}
+
 
 cd $SOURCE
 make clean
@@ -22,7 +37,7 @@ cd - > /dev/null
 # download Git LFS, verify its the right contents, and unpack it
 GIT_LFS_FILE=git-lfs.tar.gz
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-COMPUTED_SHA256=$(shasum -a 256 $GIT_LFS_FILE | awk '{print $1;}')
+COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
   SUBFOLDER="$DESTINATION/libexec/git-core"
