@@ -6,17 +6,14 @@
 # fail on any non-zero exit code
 set -e
 
-# import aliases for commands that may differ across environments
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-. "$DIR/aliases.sh"
-
 DESTINATION=$1
 mkdir -p $DESTINATION
 
 # download Git for Windows, verify its the right contents, and unpack it
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
+echo "-- Downloading MinGit"
 curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
-COMPUTED_SHA256=$(shasum $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
+COMPUTED_SHA256=$(computeChecksum $GIT_FOR_WINDOWS_FILE)
 
 if [ "$COMPUTED_SHA256" = "$GIT_FOR_WINDOWS_CHECKSUM" ]; then
   echo "Git for Windows: checksums match"
@@ -29,8 +26,9 @@ fi
 
 # download Git LFS, verify its the right contents, and unpack it
 GIT_LFS_FILE=git-lfs.zip
+echo "-- Downloading Git LFS"
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-COMPUTED_SHA256=$(shasum $GIT_LFS_FILE | awk '{print $1;}')
+COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
@@ -42,6 +40,7 @@ else
   exit 1
 fi
 
+echo "-- Patching curl to use WinSSL"
 # replace OpenSSL curl with the WinSSL variant
 # this was recently incorporated into MinGit, so let's just move the file over and cleanup
 ORIGINAL_CURL_LIBRARY="$DESTINATION/mingw64/bin/libcurl-4.dll"

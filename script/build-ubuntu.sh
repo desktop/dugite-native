@@ -6,14 +6,10 @@
 # fail on any non-zero exit code
 set -e
 
-# import aliases for commands that may differ across environments
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-. "$DIR/aliases.sh"
-
 SOURCE=$1
 DESTINATION=$2
 
-echo "Building git at $SOURCE to $DESTINATION"
+echo " -- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
 make clean
@@ -28,10 +24,10 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro'
 cd -
 
-# download Git LFS, verify its the right contents, and unpack it
+echo "-- Downloading Git LFS"
 GIT_LFS_FILE=git-lfs.tar.gz
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-COMPUTED_SHA256=$(shasum $GIT_LFS_FILE | awk '{print $1;}')
+COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
   SUBFOLDER="$DESTINATION/libexec/git-core"
@@ -44,6 +40,7 @@ fi
 
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html
+echo "-- Bundling CA certificate bundle"
 cd $DESTINATION
 mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem

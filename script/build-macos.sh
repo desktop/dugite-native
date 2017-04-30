@@ -6,14 +6,10 @@
 # fail on any non-zero exit code
 set -e
 
-# import aliases for commands that may differ across environments
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-. "$DIR/aliases.sh"
-
 SOURCE=$1
 DESTINATION=$2
 
-echo "Building git at $SOURCE to $DESTINATION"
+echo "-- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
 make clean
@@ -28,8 +24,9 @@ cd -
 
 # download Git LFS, verify its the right contents, and unpack it
 GIT_LFS_FILE=git-lfs.tar.gz
+echo "-- Downloading Git LFS"
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-COMPUTED_SHA256=$(shasum $GIT_LFS_FILE | awk '{print $1;}')
+COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
   SUBFOLDER="$DESTINATION/libexec/git-core"
