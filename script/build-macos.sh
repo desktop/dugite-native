@@ -22,6 +22,7 @@ computeChecksum() {
   fi
 }
 
+echo "-- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
 make clean
@@ -34,7 +35,7 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     MACOSX_DEPLOYMENT_TARGET=10.9
 cd - > /dev/null
 
-# download Git LFS, verify its the right contents, and unpack it
+echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.tar.gz
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)

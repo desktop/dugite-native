@@ -22,7 +22,7 @@ computeChecksum() {
   fi
 }
 
-echo "Building git at $SOURCE to $DESTINATION"
+echo " -- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
 make clean
@@ -37,7 +37,7 @@ DESTDIR="$DESTINATION" make install prefix=/ \
     LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro'
 cd - > /dev/null
 
-# download Git LFS, verify its the right contents, and unpack it
+echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.tar.gz
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 shasum -a 256 $GIT_LFS_FILE | awk '{print $1;}'
@@ -54,6 +54,7 @@ fi
 
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html
+echo "-- Adding CA bundle"
 cd $DESTINATION
 mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem

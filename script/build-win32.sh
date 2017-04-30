@@ -22,20 +22,21 @@ computeChecksum() {
 DESTINATION=$1
 mkdir -p $DESTINATION
 
-# download Git for Windows, verify its the right contents, and unpack it
+echo "-- Downloading MinGit"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
 curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_FOR_WINDOWS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_FOR_WINDOWS_CHECKSUM" ]; then
-  echo "Git for Windows: checksums match"
+  echo "MinGit: checksums match"
   unzip -qq $GIT_FOR_WINDOWS_FILE -d $DESTINATION
 else
-  echo "Git for Windows: expected checksum $GIT_FOR_WINDOWS_CHECKSUM but got $COMPUTED_SHA256"
+  echo "MinGit: expected checksum $GIT_FOR_WINDOWS_CHECKSUM but got $COMPUTED_SHA256"
   echo "aborting..."
   exit 1
 fi
 
 # download Git LFS, verify its the right contents, and unpack it
+echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.zip
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
@@ -51,6 +52,7 @@ fi
 
 # replace OpenSSL curl with the WinSSL variant
 # this was recently incorporated into MinGit, so let's just move the file over and cleanup
+echo "-- Switching curl to use S-Channel"
 ORIGINAL_CURL_LIBRARY="$DESTINATION/mingw64/bin/libcurl-4.dll"
 WINSSL_CURL_LIBRARY="$DESTINATION/mingw64/bin/curl-winssl/libcurl-4.dll"
 mv $WINSSL_CURL_LIBRARY $ORIGINAL_CURL_LIBRARY
