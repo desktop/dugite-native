@@ -3,6 +3,9 @@
 # Compiling Git for Linux and bundling Git LFS from upstream.
 #
 
+# fail on any non-zero exit code
+set -e
+
 SOURCE=$1
 DESTINATION=$2
 
