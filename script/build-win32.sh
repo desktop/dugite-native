@@ -3,17 +3,33 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
+# fail on any non-zero exit code
+set -e
+
+# i want to centralize this script but everything is terrible
+# go read https://github.com/desktop/dugite-native/issues/38
+computeChecksum() {
+   if [ -z "$1" ] ; then
+     # no parameter provided, fail hard
+     exit 1
+   fi
+
+  path_to_sha256sum=$(which sha256sum)
+  if [ -x "$path_to_sha256sum" ] ; then
+    echo $(sha256sum $1 | awk '{print $1;}')
+  else
+    echo $(shasum -a 256 $1 | awk '{print $1;}')
+  fi
+}
+
 DESTINATION=$1
 mkdir -p $DESTINATION
 
 # download Git for Windows, verify its the right contents, and unpack it
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
+echo "-- Downloading MinGit"
 curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
-if [ "$APPVEYOR" == "True" ]; then
-  COMPUTED_SHA256=$(sha256sum $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
-else
-  COMPUTED_SHA256=$(shasum -a 256 $GIT_FOR_WINDOWS_FILE | awk '{print $1;}')
-fi
+COMPUTED_SHA256=$(computeChecksum $GIT_FOR_WINDOWS_FILE)
 
 if [ "$COMPUTED_SHA256" = "$GIT_FOR_WINDOWS_CHECKSUM" ]; then
   echo "Git for Windows: checksums match"
@@ -26,12 +42,10 @@ fi
 
 # download Git LFS, verify its the right contents, and unpack it
 GIT_LFS_FILE=git-lfs.zip
+echo "-- Downloading Git LFS"
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-if [ "$APPVEYOR" == "True" ]; then
-  COMPUTED_SHA256=$(sha256sum $GIT_LFS_FILE | awk '{print $1;}')
-else
-  COMPUTED_SHA256=$(shasum -a 256 $GIT_LFS_FILE | awk '{print $1;}')
-fi
+COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
+
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
   SUBFOLDER="$DESTINATION/mingw64/libexec/git-core/"
@@ -42,6 +56,7 @@ else
   exit 1
 fi
 
+echo "-- Patching curl to use WinSSL"
 # replace OpenSSL curl with the WinSSL variant
 # this was recently incorporated into MinGit, so let's just move the file over and cleanup
 ORIGINAL_CURL_LIBRARY="$DESTINATION/mingw64/bin/libcurl-4.dll"
@@ -49,7 +64,7 @@ WINSSL_CURL_LIBRARY="$DESTINATION/mingw64/bin/curl-winssl/libcurl-4.dll"
 mv $WINSSL_CURL_LIBRARY $ORIGINAL_CURL_LIBRARY
 rm -rf "$DESTINATION/mingw64/bin/curl-winssl/"
 
-if [ "$APPVEYOR" == "True" ]; then
+if [ "$APPVEYOR" == "True" ] ; then
   # find the version of libcurl that was bundled
   PACKAGE_ENTRY=$(grep -o 'curl [0-9].[0-9]\{2\}.[0-9]-[0-9]' /tmp/build/git/etc/package-versions.txt)
   PACKAGE_VERSION=${PACKAGE_ENTRY/curl /}
