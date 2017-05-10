@@ -4,24 +4,24 @@ matrix:
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
-        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-linux-amd64-2.0.2.tar.gz
-        - GIT_LFS_CHECKSUM=4b3869aa5445b43146248d5edbf288eebfcce245913d4a0702c35217916a4422
+        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.0/git-lfs-linux-amd64-2.1.0.tar.gz
+        - GIT_LFS_CHECKSUM=0260d1908b097dcd703ef6cf83d9c32c1a418325d29b063bf03a165e3dd8e364
 
     - os: osx
       language: c
       env:
        - TARGET_PLATFORM=macOS
-       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-darwin-amd64-2.0.2.tar.gz
-       - GIT_LFS_CHECKSUM=0f5feb0105736f2350f286caca51fa9f8ad673d2ff9a4187e649e82374c590a9
+       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.0/git-lfs-darwin-amd64-2.1.0.tar.gz
+       - GIT_LFS_CHECKSUM=e7c841a4a7d6e5f319c21f7836f6cbad1f1abe93c3dc6f532903c9b8cf589b3c
 
     - os: linux
       language: c
       env:
        - TARGET_PLATFORM=win32
-       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.12.2.windows.2/MinGit-2.12.2.2-64-bit.zip
-       - GIT_FOR_WINDOWS_CHECKSUM=3918cd9ab42c9a22aa3934463fdb536485c84e6876e9aaab74003deb43a08a36
-       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-windows-amd64-2.0.2.zip
-       - GIT_LFS_CHECKSUM=1b33c8cb6e2e3238b48c639738d22d755a98f7cb62a994d026bb73c158508689
+       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.13.0.windows.1/MinGit-2.13.0-64-bit.zip
+       - GIT_FOR_WINDOWS_CHECKSUM=20acda973eca1df056ad08bec6e05c3136f40a1b90e2a290260dfc36e9c2c800
+       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.0/git-lfs-windows-amd64-2.1.0.zip
+       - GIT_LFS_CHECKSUM=a40adc489a99d1b7809aab89fa78b6dee2399af6542e4b9faae552a7a248c1ce
 
 compiler:
   - gcc
