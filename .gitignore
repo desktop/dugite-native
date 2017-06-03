@@ -1,2 +1,5 @@
 *.tar.gz
 /ssl
+
+node_modules
+build
