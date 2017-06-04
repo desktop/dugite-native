@@ -11,9 +11,24 @@ function writeEnvironmentToFile(os, env) {
 
 DIR="$( cd "$( dirname "\${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$DIR/.."
+SOURCE="$ROOT/git"
+DESTINATION="$ROOT/build/git"
 
 ${environmentVariables}
-. "$ROOT/script/${script}" "$ROOT/git" "$ROOT/build/git/"`
+. "$ROOT/script/${script}" $SOURCE $DESTINATION
+
+FILE="dugite-native-$VERSION-${os}-test.tar.gz"
+
+tar -czf $FILE -C $DESTINATION .
+
+echo "Archive contents:"
+cd $DESTINATION
+du -ah $DESTINATION
+cd - > /dev/null
+
+echo ""
+SIZE=$(du -h $FILE | cut -f1)
+echo "Package size: \${SIZE}"`
 
   const destination = path.resolve(__dirname, '..', `test/${os}.sh`)
   fs.writeFileSync(destination, fileContents, { encoding: 'utf-8', mode: '777' })
