@@ -5,8 +5,8 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.0/git-lfs-linux-amd64-2.1.0.tar.gz \
-GIT_LFS_CHECKSUM=0260d1908b097dcd703ef6cf83d9c32c1a418325d29b063bf03a165e3dd8e364 \
+GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.1/git-lfs-linux-amd64-2.1.1.tar.gz \
+GIT_LFS_CHECKSUM=ee41f7aa2e860ab2abf065bef71e7344b9777c5da25cde8a36891e4d8eb2bbdf \
 . "$ROOT/script/build-ubuntu.sh" $SOURCE $DESTINATION
 
 FILE="dugite-native-$VERSION-ubuntu-test.tar.gz"
