@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const YAML = require('node-yaml')
 
 function writeEnvironmentToFile(os, env) {
   const otherArgs = env.slice(1)
@@ -17,8 +18,6 @@ ${environmentVariables}
   const destination = path.resolve(__dirname, '..', `test/${os}.sh`)
   fs.writeFileSync(destination, fileContents, { encoding: 'utf-8', mode: '777' })
 }
-
-const YAML = require('node-yaml')
 
 const travisFile = path.resolve(__dirname, '..', '.travis.yml')
 
