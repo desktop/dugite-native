@@ -21,20 +21,25 @@ sudo yum install expat-devel
 
 ### Testing
 
-You should be able to emulate the behaviour of Travis by setting environment variables. For example, to package for macOS you could run this:
+After making change to the relevant build or package scripts, you can test these out locally by running one of the test scripts:
 
 ```
-GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.0.0/git-lfs-darwin-amd64-2.0.0.tar.gz \
-GIT_LFS_CHECKSUM=fde18661baef286f0a942adf541527282cf8cd87b955690e10b60b621f9b1671 \
-script/build-macos.sh ./git /tmp/build/git/
+$ test/macos.sh
+$ test/ubuntu.sh
+$ test/win32.sh
 ```
 
-**NOTE:** one potential way to tidy this up could be to have helper scripts read out the details of the `.travis.yml` file so you don't have to duplicate the work.
-
-For example, it could distill down to:
+This script will generate the package contents under `build` at the root of the repository and dump out some diagnostics, so you can see the package contents and file sizes.
 
 ```
-./test macOS /tmp/build/git
+...
+ 52K	/Users/shiftkey/src/desktop/dugite-native/test/../build/git/share
+ 37M	/Users/shiftkey/src/desktop/dugite-native/test/../build/git
+
+Package size:  16M
 ```
 
-This would mean the contributor doesn't need to care about changes to how the pipeline works, and can focus on the behaviour of the scripts.
+The two most interesting points to look at would be the uncompressed size of the folder on disk, and the package size (after compression).
+
+These scripts will perform the same setup that is performed on Travis, and have the same constraints (macOS and Ubuntu are built from source, requiring the necessary toolchains for those platforms).
+

@@ -1,0 +1,20 @@
+{
+  "name": "dugite-native",
+  "description": "ad-hoc scripts for helping to contribute",
+  "scripts": {
+    "update-test-harness": "node script/update-test-harness.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/desktop/dugite-native.git"
+  },
+  "author": "",
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/desktop/dugite-native/issues"
+  },
+  "homepage": "https://github.com/desktop/dugite-native#readme",
+  "dependencies": {
+    "node-yaml": "^3.1.0"
+  }
+}
