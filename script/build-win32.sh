@@ -87,5 +87,5 @@ if [ "$APPVEYOR" == "True" ]; then
 fi
 
 # removing global gitattributes file
-rm "$DESTINATION/mingw64/etc/giattributes"
-echo "removing global gitattributes for handling specific file extensions"
+rm "$DESTINATION/mingw64/etc/gitattributes"
+echo "-- Removing global gitattributes which handles certain file extensions"
