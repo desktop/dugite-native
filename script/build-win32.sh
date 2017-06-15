@@ -85,3 +85,7 @@ if [ "$APPVEYOR" == "True" ]; then
     echo "Verified curl dependency is using WinSSL"
   fi
 fi
+
+# removing global gitattributes file
+rm "$DESTINATION/mingw64/etc/gitattributes"
+echo "-- Removing global gitattributes which handles certain file extensions"
