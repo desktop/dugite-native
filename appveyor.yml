@@ -12,6 +12,6 @@ environment:
 
 build_script:
   - ps script\build-win32.ps1
-  - bash script\package.sh
+#  - bash script\package.sh
 
 test: off
