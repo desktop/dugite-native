@@ -32,6 +32,6 @@ $env:MSYSTEM = "MINGW64"
 
 $bash = ".\usr\bin\bash.exe"
 
-& $bash --login -c "mkdir -p /usr/src && cd /usr/src && for project in MINGW-packages MSYS2-packages build-extra git; do test ! -d `$project && (git clone -b master -c core.autocrlf=false https://github.com/git-for-windows/`$project); done"
-& $bash --login -c "cd /usr/src/git && make install"
-& $bash --login -c "/usr/src/build-extra/mingit/release.sh --output=/c/Users/Administrator/Documents/ $mingit_version"
+& $bash --login -c "mkdir -p /usr/src && cd /usr/src && for project in MINGW-packages MSYS2-packages build-extra git; do test ! -d `$project && (git clone -b master -c core.autocrlf=false https://github.com/git-for-windows/`$project); done" 2> $null
+& $bash --login -c "cd /usr/src/git && make install" 2> $null
+& $bash --login -c "/usr/src/build-extra/mingit/release.sh --output=/c/Users/Administrator/Documents/ $mingit_version" 2> $null
