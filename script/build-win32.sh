@@ -22,18 +22,11 @@ computeChecksum() {
 DESTINATION=$1
 mkdir -p $DESTINATION
 
-echo "-- Downloading MinGit"
+echo "-- Building MinGit"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
-curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
-COMPUTED_SHA256=$(computeChecksum $GIT_FOR_WINDOWS_FILE)
-if [ "$COMPUTED_SHA256" = "$GIT_FOR_WINDOWS_CHECKSUM" ]; then
-  echo "MinGit: checksums match"
-  unzip -qq $GIT_FOR_WINDOWS_FILE -d $DESTINATION
-else
-  echo "MinGit: expected checksum $GIT_FOR_WINDOWS_CHECKSUM but got $COMPUTED_SHA256"
-  echo "aborting..."
-  exit 1
-fi
+powershell build-win32.ps1
+unzip -qq $GIT_FOR_WINDOWS_FILE -d $DESTINATION
+
 
 # download Git LFS, verify its the right contents, and unpack it
 echo "-- Bundling Git LFS"
