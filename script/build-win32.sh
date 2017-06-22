@@ -24,7 +24,7 @@ mkdir -p $DESTINATION
 
 echo "-- Building MinGit"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
-powershell build-win32.ps1
+powershell script\build-win32.ps1
 unzip -qq $GIT_FOR_WINDOWS_FILE -d $DESTINATION
 
 
