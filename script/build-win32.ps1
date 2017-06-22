@@ -13,8 +13,6 @@ $git_sdk_tag="git-sdk-$git_sdk_version"
 $git_version="v2.13.1.windows.2"
 $mingit_version="2.13.1.2"
 
-#$patchesLocation = (Join-Path (Get-Location) "..\"
-
 Push-Location
 Set-Location -Path (New-TemporaryDirectory).FullName
 
