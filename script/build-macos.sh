@@ -25,7 +25,7 @@ computeChecksum() {
 echo "-- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
-git am ../patches/*
+git apply ../patches/*
 make clean
 DESTDIR="$DESTINATION" make install prefix=/ \
     NO_PERL=1 \
