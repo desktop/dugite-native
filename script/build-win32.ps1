@@ -10,7 +10,7 @@ function New-TemporaryDirectory {
 
 $git_sdk_version="1.0.3"
 $git_sdk_tag="git-sdk-$git_sdk_version"
-$git_version="v2.13.1"
+$git_version="2.13.1"
 $mingit_version="2.13.1.2"
 
 Push-Location
