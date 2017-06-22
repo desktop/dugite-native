@@ -22,8 +22,6 @@ Invoke-WebRequest -Uri "https://github.com/git-for-windows/build-extra/releases/
 & .\7za.exe x -oC:\git-sdk-64 git-sdk-installer.7z.exe
 
 Set-Location -Path c:\git-sdk-64
-Copy-Item $patchDirectory tmp
-
 # Setting this will prevent the setup-git-sdk script from actually cloning and building
 # the source. We'll do that ourselves as we need to do some patching.
 $env:JENKINS_URL="http://127.0.0.1"
@@ -35,8 +33,11 @@ $env:MSYSTEM = "MINGW64"
 
 $bash = ".\usr\bin\bash.exe"
 
+Write-Output "Copying patches to accessible location"
+Copy-Item $patchDirectory ".\tmp" -Verbose -Recurse
+
 & $bash --login -c "mkdir -p /usr/src && cd /usr/src && for project in MINGW-packages MSYS2-packages build-extra git; do test ! -d `$project && (git clone -b master -c core.autocrlf=false https://github.com/git-for-windows/`$project); done"
-& $bash --login -c "cd /usr/src/git && git apply /c/git-sdk-64/tmp/patches/*"
+& $bash --login -c "(cd /usr/src/git && git apply /c/git-sdk-64/tmp/patches/*) 2>&1"
 & $bash --login -c "cd /usr/src/git && make all strip install NO_PERL=1 NO_TCLTK=1 NO_GETTEXT=1 NO_INSTALL_HARDLINKS=1"
 & $bash --login -c "/usr/src/build-extra/mingit/release.sh --output=/c/git-sdk-64/tmp $mingit_version"
 
