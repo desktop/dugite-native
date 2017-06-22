@@ -11,7 +11,7 @@ function New-TemporaryDirectory {
 $git_sdk_version="1.0.3"
 $git_sdk_tag="git-sdk-$git_sdk_version"
 $git_version="2.13.1"
-$mingit_version="2.13.1.2"
+$mingit_version="v2.13.1.windows.2"
 
 Push-Location
 Set-Location -Path (New-TemporaryDirectory).FullName
@@ -36,7 +36,9 @@ $bash = ".\usr\bin\bash.exe"
 Write-Output "Copying patches to accessible location"
 Copy-Item $patchDirectory ".\tmp" -Verbose -Recurse
 
-& $bash --login -c "mkdir -p /usr/src && cd /usr/src && for project in MINGW-packages MSYS2-packages build-extra git; do test ! -d `$project && (git clone -b master -c core.autocrlf=false https://github.com/git-for-windows/`$project); done"
+& $bash --login -c "mkdir -p /usr/src"
+& $bash --login -c "git clone -b master -c core.autocrlf=false https://github.com/git-for-windows/build-extra /usr/src/build-extra"
+& $bash --login -c "git clone -b $mingit_version -c core.autocrlf=false https://github.com/git-for-windows/git /usr/src/build-extra"
 & $bash --login -c "(cd /usr/src/git && git apply /c/git-sdk-64/tmp/patches/*) 2>&1"
 & $bash --login -c "cd /usr/src/git && make all strip install NO_PERL=1 NO_TCLTK=1 NO_GETTEXT=1 NO_INSTALL_HARDLINKS=1"
 & $bash --login -c "/usr/src/build-extra/installer/release.sh $git_version"
