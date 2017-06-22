@@ -36,9 +36,9 @@ $env:MSYSTEM = "MINGW64"
 $bash = ".\usr\bin\bash.exe"
 
 & $bash --login -c "mkdir -p /usr/src && cd /usr/src && for project in MINGW-packages MSYS2-packages build-extra git; do test ! -d `$project && (git clone -b master -c core.autocrlf=false https://github.com/git-for-windows/`$project); done" 2> $null
-& $bash --login -c "cd /usr/src/git && git apply /tmp/patches/*" 2> $null
+& $bash --login -c "cd /usr/src/git && git apply /c/git-sdk-64/tmp/patches/*" 2> $null
 & $bash --login -c "cd /usr/src/git && make && make strip && make install NO_PERL=1 NO_TCLTK=1 NO_GETTEXT=1 NO_INSTALL_HARDLINKS=1" 2> $null
-& $bash --login -c "/usr/src/build-extra/mingit/release.sh --output=/tmp $mingit_version" 2> $null
+& $bash --login -c "/usr/src/build-extra/mingit/release.sh --output=/c/git-sdk-64/tmp $mingit_version" 2> $null
 
 $mingitPackagePath = (Join-Path (Get-Location) "tmp\MinGit-$mingit_version-64-bit.zip")
 
