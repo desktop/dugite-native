@@ -27,7 +27,6 @@ GIT_FOR_WINDOWS_FILE=git-for-windows.zip
 powershell script\build-win32.ps1
 unzip -qq $GIT_FOR_WINDOWS_FILE -d $DESTINATION
 
-
 # download Git LFS, verify its the right contents, and unpack it
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.zip
