@@ -9,11 +9,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 SOURCE="./git"
-
-if [ "$TARGET_PLATFORM" == "win32" ]; then
-  SOURCE="/c/git-sdk-64/usr/src/git"
-fi
-
 DESTINATION="/tmp/build/git"
 BUILD="$TRAVIS_BUILD_NUMBER"
 
