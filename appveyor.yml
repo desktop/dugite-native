@@ -9,6 +9,9 @@ environment:
   GIT_LFS_URL: https://github.com/git-lfs/git-lfs/releases/download/v2.0.2/git-lfs-windows-amd64-2.0.2.zip
   GIT_LFS_CHECKSUM: 1b33c8cb6e2e3238b48c639738d22d755a98f7cb62a994d026bb73c158508689
 
+install:
+  - ps: Install-Product node 7
+
 build_script:
   - bash script\build.sh
   - bash script\package.sh

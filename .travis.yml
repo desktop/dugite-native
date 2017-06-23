@@ -6,6 +6,8 @@ matrix:
         - TARGET_PLATFORM=ubuntu
         - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.1/git-lfs-linux-amd64-2.1.1.tar.gz
         - GIT_LFS_CHECKSUM=ee41f7aa2e860ab2abf065bef71e7344b9777c5da25cde8a36891e4d8eb2bbdf
+      install:
+        - nvm install 7
 
     - os: osx
       language: c
@@ -13,6 +15,8 @@ matrix:
        - TARGET_PLATFORM=macOS
        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.1/git-lfs-darwin-amd64-2.1.1.tar.gz
        - GIT_LFS_CHECKSUM=acefceb077d77d69e35f0017de91b8ea42cf980315226446b5c1dcafd9328e53
+      install:
+       - brew outdated node || brew upgrade node
 
 compiler:
   - gcc
