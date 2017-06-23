@@ -62,6 +62,7 @@ echo "Package created: ${FILE}"
 echo "Size: ${SIZE}"
 echo "SHA256: ${CHECKSUM}"
 
-if [ "$CI" == "True" ]; then
+# AppVeyor and travis case these differently :/
+if [ "$CI" == "True" ] || [ "$CI" == "true" ]; then
   node script/upload-build-asset.js $FILE
 fi
