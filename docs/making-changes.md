@@ -28,12 +28,6 @@ Git for each platform:
 Ideally we should be using the same flags wherever possible, but sometimes we
 need to do platform-specific things.
 
-Windows doesn't need to be built from source, however it should be updated in
-step with the other Git releases. When a new [Git for Windows](https://github.com/git-for-windows/git)
-release is made available, just update the `GIT_FOR_WINDOWS_URL` and
-`GIT_FOR_WINDOWS_CHECKSUM` variables in `.travis.yml` and `appveyor.yml` to use
-their MinGit build.
-
 ## Update Git LFS
 
 Packages are published for each platform from the [Git LFS](https://github.com/git-lfs/git-lfs)
