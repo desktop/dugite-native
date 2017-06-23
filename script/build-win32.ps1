@@ -40,7 +40,7 @@ Copy-Item $patchDirectory ".\tmp" -Verbose -Recurse
 & $bash --login -c "git clone -b master -c core.autocrlf=false https://github.com/git-for-windows/build-extra /usr/src/build-extra"
 & $bash --login -c "git clone -b $mingit_version -c core.autocrlf=false https://github.com/git-for-windows/git /usr/src/git"
 & $bash --login -c "(cd /usr/src/git && git apply /c/git-sdk-64/tmp/patches/*) 2>&1"
-& $bash --login -c "cd /usr/src/git && make all strip install NO_PERL=1 NO_TCLTK=1 NO_GETTEXT=1 NO_INSTALL_HARDLINKS=1"
+& $bash --login -c "cd /usr/src/git && make all strip install"
 & $bash --login -c "/usr/src/build-extra/installer/release.sh $git_version"
 & $bash --login -c "/usr/src/build-extra/mingit/release.sh --output=/c/git-sdk-64/tmp $mingit_version"
 
