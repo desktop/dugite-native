@@ -48,6 +48,17 @@ function upload (assetPath, assetKey) {
   })
 }
 
+const travis = process.env['TRAVIS'] === 'true'
+const appVeyor = process.env['APPVEYOR'] == 'True'
+
+if ((!travis && !appVeyor) || (travis === appVeyor)) {
+  console.error('Could not determine CI provider, exiting')
+  process.exit(1)
+  return
+}
+
+const provider = travis ? 'travis' : 'appveyor'
+
 const buildNo = process.env['TRAVIS_BUILD_NUMBER'] || process.env['APPVEYOR_BUILD_NUMBER']
 
 if (!/\d+/.test(buildNo)) {
@@ -56,7 +67,7 @@ if (!/\d+/.test(buildNo)) {
 
 const assetPath = process.argv[2]
 const assetName = Path.basename(assetPath)
-const key = `dugite-native/builds/${buildNo}/${assetName}`
+const key = `dugite-native/builds/${provider}/${buildNo}/${assetName}`
 const url = `https://s3.amazonaws.com/${BucketName}/${key}`
 
 if (!Fs.existsSync(assetPath)) {
