@@ -13,6 +13,7 @@ install:
   - ps: Install-Product node 7
 
 build_script:
+  - bash npm install
   - bash script\build.sh
   - bash script\package.sh
 

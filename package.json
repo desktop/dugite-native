@@ -15,6 +15,7 @@
   },
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "dependencies": {
+    "aws-sdk": "^2.76.0",
     "node-yaml": "^3.1.0"
   }
 }

@@ -22,6 +22,7 @@ compiler:
   - gcc
 
 script:
+  - npm install
   - script/build.sh
   - script/package.sh
 
