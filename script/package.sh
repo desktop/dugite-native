@@ -8,11 +8,17 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-SOURCE="./git"
+if [ "$TARGET_PLATFORM" == "WIN32" ]; then
+  SOURCE="/c/git-sdk-64/usr/src/git"
+else
+  SOURCE="./git"
+fi
+
 DESTINATION="/tmp/build/git"
 BUILD="$TRAVIS_BUILD_NUMBER"
 
 cd $SOURCE
+
 VERSION=$(git describe --exact-match HEAD)
 EXIT_CODE=$?
 
