@@ -61,3 +61,7 @@ SIZE=$(du -h $FILE | cut -f1)
 echo "Package created: ${FILE}"
 echo "Size: ${SIZE}"
 echo "SHA256: ${CHECKSUM}"
+
+if [ "$CI" == "True" ]; then
+  node script/upload-build-asset.js $FILE
+fi
