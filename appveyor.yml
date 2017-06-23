@@ -11,9 +11,10 @@ environment:
 
 install:
   - ps: Install-Product node 7
+  - npm install -g npm@4.6.1
+  - npm install
 
 build_script:
-  - bash npm install
   - bash script\build.sh
   - bash script\package.sh
 
