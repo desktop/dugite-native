@@ -26,7 +26,7 @@ echo "-- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
 make clean
-DESTDIR="$DESTINATION" make install prefix=/ \
+DESTDIR="$DESTINATION" make strip install prefix=/ \
     NO_PERL=1 \
     NO_TCLTK=1 \
     NO_GETTEXT=1 \
