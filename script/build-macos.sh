@@ -26,7 +26,7 @@ echo "-- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
 make clean
-DESTDIR="$DESTINATION" make install prefix=/ \
+DESTDIR="$DESTINATION" make strip install prefix=/ \
     NO_PERL=1 \
     NO_TCLTK=1 \
     NO_GETTEXT=1 \
@@ -49,3 +49,10 @@ else
   echo "aborting..."
   exit 1
 fi
+
+echo "-- Removing server-side programs"
+rm "$DESTINATION/bin/git-cvsserver"
+rm "$DESTINATION/bin/git-receive-pack"
+rm "$DESTINATION/bin/git-upload-archive"
+rm "$DESTINATION/bin/git-upload-pack"
+rm "$DESTINATION/bin/git-shell"

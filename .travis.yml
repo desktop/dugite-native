@@ -4,24 +4,24 @@ matrix:
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
-        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.1/git-lfs-linux-amd64-2.1.1.tar.gz
-        - GIT_LFS_CHECKSUM=ee41f7aa2e860ab2abf065bef71e7344b9777c5da25cde8a36891e4d8eb2bbdf
+        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.2.1/git-lfs-linux-amd64-2.2.1.tar.gz
+        - GIT_LFS_CHECKSUM=95bcdab9897338fd923ad3a792010d6e817114e8c3b444e1e245889b6cd68888
 
     - os: osx
       language: c
       env:
        - TARGET_PLATFORM=macOS
-       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.1/git-lfs-darwin-amd64-2.1.1.tar.gz
-       - GIT_LFS_CHECKSUM=acefceb077d77d69e35f0017de91b8ea42cf980315226446b5c1dcafd9328e53
+       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.2.1/git-lfs-darwin-amd64-2.2.1.tar.gz
+       - GIT_LFS_CHECKSUM=1da31fa2cc75fe56486cbaf371ca4d233889a8105cc9d9435284a0a7a3c87bec
 
     - os: linux
       language: c
       env:
        - TARGET_PLATFORM=win32
-       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.13.0.windows.1/MinGit-2.13.0-64-bit.zip
-       - GIT_FOR_WINDOWS_CHECKSUM=20acda973eca1df056ad08bec6e05c3136f40a1b90e2a290260dfc36e9c2c800
-       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.1.1/git-lfs-windows-amd64-2.1.1.zip
-       - GIT_LFS_CHECKSUM=0866259d6b097f8ff379326f798a93034b61952382011671b80ecf4cc733de57
+       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.13.3.windows.1/MinGit-2.13.3-64-bit.zip
+       - GIT_FOR_WINDOWS_CHECKSUM=97063e2139cac40f3c8f547b85f031765062581101d69ad468188c9de0b1dca3
+       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.2.1/git-lfs-windows-amd64-2.2.1.zip
+       - GIT_LFS_CHECKSUM=35e120c03061c7a3de8348b970da2278a2e0a865d4c67179801266a2d7674d2d
 
 compiler:
   - gcc
@@ -37,8 +37,7 @@ branches:
 
 deploy:
   provider: releases
-  api_key:
-    secure: PZYs7hghA8bk+a9B9dsT4TcbmrGgPjVSKIXG+FGEX4ndd7thvYIuVNvGwY2qzw3QNPIaS8bsaR4u0OzO5PQ04maRcYBvkk3xWhB1VxMreokrz1lD0ee5UBzZcuKMuXpBatMJHQfbzRpJxD6c9ipP56lNeTB+ZZnKoGeTUO6BA2neDSHmTwU5Ps3aDRQ8VjK9/A6TzSQqczKBmM7t4g2RdC2+b0qH+2Waw2Rdsvf34SQiIixomXXE3sJaxGSXGtFg1+IOSnirJ/qT8sTcTwVRfCLzuQdbVfNbWPPRkBpKNOMxY8qJeEEa3TNu2yKstWva+JDLuDwQ/D5Lxl1YN7yFBSdiTODbfLRaunvbphrLMiho3QGcSYTqclNxrcjB5cuqq58jC6PR5bK/LGQd6jgUhRkuJOhcxpj5eL9hmho8Yr66laROYxCnPlCENfqlXxcpCuqwMDvwxoD8U9u6hViDU2FtMS/9QwNrgkKBOCiOmiWm29NZR1S9o68DZ3trNn63F/IVaZpkfQhLg+waLKoqL54xtOmhQwEzUyyTWF3jcuLLluCpWAj6Vcttj9zLFQ0sdUWEJiuqhpmOZcgicoFd+j5eNZz7Q9l3UoyAtOowuNLHCqK0IO1Cb9Ib6+L7PscUKAlgLVMDSHe1RxuJ4EhwraqTUrXUs+aq57qyEBn9AV8=
+  api_key: $GITHUB_TOKEN
   file_glob: true
   file: ${TRAVIS_BUILD_DIR}/dugite-native-v*.tar.gz
   skip_cleanup: true
