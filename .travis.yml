@@ -37,8 +37,7 @@ branches:
 
 deploy:
   provider: releases
-  api_key:
-    secure: "sM9aO9aoVyNzQ6E0II4mzKjZZEVjO42QXOQgPCAlPkdc4AD0QEeq4cwgOud7wHMs9TYHoWLDDJYTGDYrROMExg+mmSGH7dss8K1lPt0eGnQ0sJ6/iOb9XU3YZke8FKbwkdeuodpX/OTdbPjwvUQII79Cl+sLoE4iwp4xsU1evrT/BtQHZArvfgayTHdv7ys0EbdfD7/oZM1jsXVTXHchwpX8hI/r4XqD83zrXhkJDoQs1L61gI5zLIwxrAZ2FqIHs1KmUrgqx/9ZE2uTgV8mGz8Q3gGVeZ5pNRLV7r1VBP2/LJamrxpAb63Jxq6dvRu2wA3dGGgPaxpwV/3h4j5x1FwnhddocAf+DajxMu5MpbMbC1pGMzEFK+SQy9wvjT5ApYCTreyYyki13yxgp17AU6xUso7zm29JXXL6O4XsdBkKZjKDiL4o/ELBWumcs7HyWrHgo23X4nPTXrC1YqmE613obuzKjZIE11+7XsmFD0WmTxKCh7MFWJPhq7S0hto6DuQpy7xDMqUPSURqKng87Kz7qbBShiSfQck0hGtX1YYy285o921++CB0rgER9YYBoxdMd3bXeNQn9QYjseOmvs+FFlmZ++WU/IdPHa9fJwzb7+MaYv9JW3if1aQXcdKBVnih1l+8OsNlwxajp7TYpzh/gE45I47PYoIoL83XAhA="
+  api_key: $GITHUB_TOKEN
   file_glob: true
   file: ${TRAVIS_BUILD_DIR}/dugite-native-v*.tar.gz
   skip_cleanup: true
