@@ -50,41 +50,10 @@ else
   exit 1
 fi
 
-# replace OpenSSL curl with the WinSSL variant
-# this was recently incorporated into MinGit, so let's just move the file over and cleanup
-echo "-- Switching curl to use S-Channel"
-ORIGINAL_CURL_LIBRARY="$DESTINATION/mingw64/bin/libcurl-4.dll"
-WINSSL_CURL_LIBRARY="$DESTINATION/mingw64/bin/curl-winssl/libcurl-4.dll"
-mv $WINSSL_CURL_LIBRARY $ORIGINAL_CURL_LIBRARY
-rm -rf "$DESTINATION/mingw64/bin/curl-winssl/"
+SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
 
-if [ "$APPVEYOR" == "True" ]; then
-  # find the version of libcurl that was bundled
-  PACKAGE_ENTRY=$(grep -o 'curl [0-9].[0-9]\{2\}.[0-9]-[0-9]' /tmp/build/git/etc/package-versions.txt)
-  PACKAGE_VERSION=${PACKAGE_ENTRY/curl /}
-
-  echo "Using curl version version $PACKAGE_VERSION"
-  CURL_FILE="curl.tar.xz"
-  CURL_BINARY_DOWNLOAD="https://dl.bintray.com/git-for-windows/pacman/x86_64/mingw-w64-x86_64-curl-$PACKAGE_VERSION-any.pkg.tar.xz"
-  curl -sL -o $CURL_FILE $CURL_BINARY_DOWNLOAD
-
-  # extract just the executable to test alongside our libcurl-4.dll change
-  7z e $CURL_FILE -aoa -ooutput > nul
-  7z e output/curl.tar -aoa -ooutput *.exe -r > nul
-  cp ./output/curl.exe "$DESTINATION/mingw64/bin/"
-  rm -rf ./output
-
-  $DESTINATION/mingw64/bin/curl.exe --version | grep 'WinSSL'
-  EXIT_CODE=$?
-  rm $DESTINATION/mingw64/bin/curl.exe
-
-  if [ "$EXIT_CODE" == "1" ]; then
-    echo "curl not able to resolve WinSSL dependency. Failing the build..."
-    exit 1
-  else
-    echo "Verified curl dependency is using WinSSL"
-  fi
-fi
+git config --file $SYSTEM_CONFIG http.sslBackend "schannel"
+echo "-- Setting the system configuration to use SChannel for the SSL backend"
 
 # removing global gitattributes file
 rm "$DESTINATION/mingw64/etc/gitattributes"
