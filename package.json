@@ -15,6 +15,6 @@
   },
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "dependencies": {
-    "node-yaml": "^3.1.0"
+    "node-yaml": "^3.1.1"
   }
 }
