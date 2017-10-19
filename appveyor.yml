@@ -7,8 +7,8 @@ environment:
   TARGET_PLATFORM: win32
   GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.12.2.windows.2/MinGit-2.12.2.2-64-bit.zip
   GIT_FOR_WINDOWS_CHECKSUM: 3918cd9ab42c9a22aa3934463fdb536485c84e6876e9aaab74003deb43a08a36
-  GIT_LFS_URL: https://github.com/git-lfs/git-lfs/releases/download/v2.3.0/git-lfs-windows-amd64-2.3.0.zip
-  GIT_LFS_CHECKSUM: 0be7e8755e1c2d9a598f369ce1db63fd7f2a8985d1c078cb815a3e50961066c2
+  GIT_LFS_URL: https://github.com/git-lfs/git-lfs/releases/download/v2.3.4/git-lfs-windows-amd64-2.3.4.zip
+  GIT_LFS_CHECKSUM: 18c47fd2806659e81a40fbd6f6b0598ea1802635ce04fb2317d75973450a3fe5
 
 build_script:
   - cmd: git submodule update --init --recursive
