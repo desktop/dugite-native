@@ -5,8 +5,8 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.3.1/git-lfs-darwin-amd64-2.3.1.tar.gz \
-GIT_LFS_CHECKSUM=5b4f81f4afc1447776dcfeaf5ff63fb0b5ea522ccac587aa97942203ac977e0f \
+GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.3.4/git-lfs-darwin-amd64-2.3.4.tar.gz \
+GIT_LFS_CHECKSUM=b16d4b7469b1fa34e0e27bedb1b77cc425b8d7903264854e5f18b0bc73576edb \
 . "$ROOT/script/build-macos.sh" $SOURCE $DESTINATION
 
 FILE="dugite-native-$VERSION-macos-test.tar.gz"
