@@ -34,10 +34,10 @@ if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
   GZIP_FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-ubuntu-$BUILD.lzma"
 elif [ "$TARGET_PLATFORM" == "macOS" ]; then
-  GZIP_FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
+  GZIP_FILE="dugite-native-$VERSION-macOS-$BUILD.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-macOS-$BUILD.lzma"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
-  GZIP_FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
+  GZIP_FILE="dugite-native-$VERSION-win32-$BUILD.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-win32-$BUILD.lzma"
 else
   echo "Unable to package Git for platform $TARGET_PLATFORM"
