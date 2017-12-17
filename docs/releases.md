@@ -21,8 +21,11 @@ To speed up the manual work, here's the Markdown you should use for the release 
 | File | SHA256 checksum |
 | --- | --- |
 | dugite-native-v{version}-macOS-{build}.tar.gz | `{sha1}` |
-| dugite-native-v{version}-ubuntu-{build}.tar.gz | `{sha2}` |
-| dugite-native-v{version}-win32-{build}.tar.gz | `{sha3}` |
+| dugite-native-v{version}-macOS-{build}.lzma | `{sha2}` |
+| dugite-native-v{version}-ubuntu-{build}.tar.gz | `{sha3}` |
+| dugite-native-v{version}-ubuntu-{build}.lzma | `{sha4}` |
+| dugite-native-v{version}-win32-{build}.tar.gz | `{sha5}` |
+| dugite-native-v{version}-win32-{build}.lzma | `{sha6}` |
 ```
 
 ### Versioning Scheme
