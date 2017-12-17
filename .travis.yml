@@ -39,7 +39,9 @@ deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
   file_glob: true
-  file: ${TRAVIS_BUILD_DIR}/dugite-native-v*.tar.gz
+  file:
+    - ${TRAVIS_BUILD_DIR}/dugite-native-v*.tar.gz
+    - ${TRAVIS_BUILD_DIR}/dugite-native-v*.lzma
   skip_cleanup: true
   draft: true
   tag_name: $TRAVIS_TAG
