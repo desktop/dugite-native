@@ -41,6 +41,8 @@ else
   exit 1
 fi
 
+echo ""
+echo "Creating archive..."
 tar -cvzf $FILE -C $DESTINATION .
 if [ "$APPVEYOR" == "True" ]; then
   CHECKSUM=$(sha256sum $FILE | awk '{print $1;}')
@@ -48,6 +50,8 @@ else
   CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
 fi
 
+echo ""
+echo "Testing archive..."
 tar -tzf $FILE
 
 SIZE=$(du -h $FILE | cut -f1)
