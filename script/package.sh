@@ -31,27 +31,40 @@ if [ "$APPVEYOR" == "True" ]; then
 fi
 
 if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
-  FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
+  GZIP_FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-ubuntu-$BUILD.lzma"
 elif [ "$TARGET_PLATFORM" == "macOS" ]; then
-  FILE="dugite-native-$VERSION-macOS-$BUILD.tar.gz"
+  GZIP_FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-macOS-$BUILD.lzma"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
-  FILE="dugite-native-$VERSION-win32-$BUILD.tar.gz"
+  GZIP_FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-win32-$BUILD.lzma"
 else
   echo "Unable to package Git for platform $TARGET_PLATFORM"
   exit 1
 fi
 
 echo ""
-echo "Creating archive..."
-tar -cvzf $FILE -C $DESTINATION .
-if [ "$APPVEYOR" == "True" ]; then
-  CHECKSUM=$(sha256sum $FILE | awk '{print $1;}')
+echo "Creating archives..."
+if [ "$(uname -s)" == "Darwin" ]; then
+  tar -czf $GZIP_FILE -C $DESTINATION .
+  tar --lzma -cf $LZMA_FILE -C $DESTINATION .
 else
-  CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
+  tar -caf $GZIP_FILE -C $DESTINATION .
+  tar -caf $LZMA_FILE -C $DESTINATION .
 fi
 
-SIZE=$(du -h $FILE | cut -f1)
+if [ "$APPVEYOR" == "True" ]; then
+  GZIP_CHECKSUM=$(sha256sum $GZIP_FILE | awk '{print $1;}')
+  LZMA_CHECKSUM=$(sha256sum $LZMA_FILE | awk '{print $1;}')
+else
+  GZIP_CHECKSUM=$(shasum -a 256 $GZIP_FILE | awk '{print $1;}')
+  LZMA_CHECKSUM=$(shasum -a 256 $LZMA_FILE | awk '{print $1;}')
+fi
 
-echo "Package created: ${FILE}"
-echo "Size: ${SIZE}"
-echo "SHA256: ${CHECKSUM}"
+GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
+LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
+
+echo "Packages created:"
+echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
+echo "${LZMA_FILE} - ${LZMA_SIZE} - checksum: ${LZMA_CHECKSUM}"
