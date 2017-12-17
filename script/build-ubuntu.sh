@@ -72,3 +72,36 @@ echo "-- Removing unsupported features"
 rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
+
+
+checkStaticLinking() {
+   if [ -z "$1" ] ; then
+     # no parameter provided, fail hard
+     exit 1
+   fi
+
+   OUTPUT=$(readelf -d $1 2>/dev/null)
+   if [ "$?" == "0" ]; then
+      if echo $OUTPUT | grep -q 'Shared library'; then
+        echo "File: $file"
+        readelf -d $1 | grep 'Shared library'
+      fi
+   fi
+}
+
+echo "-- Static linking research"
+echo "-- in /bin"
+cd "$DESTINATION/bin"
+find . -maxdepth 1 -type f -perm -111 -print0 | while read -d $'\0' file
+do
+    checkStaticLinking $file
+done
+cd - > /dev/null
+
+echo "-- in /libexec/git-core"
+cd "$DESTINATION/libexec/git-core"
+find . -maxdepth 1 -type f -perm -111 -print0 | while read -d $'\0' file
+do
+    checkStaticLinking $file
+done
+cd - > /dev/null
