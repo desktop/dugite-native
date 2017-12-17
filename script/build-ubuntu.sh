@@ -80,7 +80,9 @@ checkStaticLinking() {
     exit 1
   fi
 
-  if file $1 | grep -q 'ELF 64-bit LSB executable'; then
+  # ermagherd there's two whitespace characters between 'LSB' and 'executable'
+  # when running this on Travis - why is everything so terrible?
+  if file $1 | grep -q 'ELF 64-bit LSB'; then
     if readelf -d $1 | grep -q 'Shared library'; then
       echo "File: $file"
       # this is done twice rather than storing in a bash variable because
