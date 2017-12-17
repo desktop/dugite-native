@@ -50,10 +50,6 @@ else
   CHECKSUM=$(shasum -a 256 $FILE | awk '{print $1;}')
 fi
 
-echo ""
-echo "Testing archive..."
-tar -tzf $FILE
-
 SIZE=$(du -h $FILE | cut -f1)
 
 echo "Package created: ${FILE}"
