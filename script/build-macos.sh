@@ -56,3 +56,8 @@ rm "$DESTINATION/bin/git-receive-pack"
 rm "$DESTINATION/bin/git-upload-archive"
 rm "$DESTINATION/bin/git-upload-pack"
 rm "$DESTINATION/bin/git-shell"
+
+echo "-- Removing unsupported features"
+rm "$DESTINATION/libexec/git-core/git-svn"
+rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
+rm "$DESTINATION/libexec/git-core/git-p4"
