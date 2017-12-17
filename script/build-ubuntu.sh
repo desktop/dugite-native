@@ -97,7 +97,6 @@ cd "$DESTINATION"
 # check all files for ELF exectuables
 find . -type f -print0 | while read -d $'\0' file
 do
-  file $file
   checkStaticLinking $file
 done
 cd - > /dev/null
