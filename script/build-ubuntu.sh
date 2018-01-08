@@ -60,6 +60,12 @@ mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd - > /dev/null
 
+mkdir "$DESTINATION/etc"
+SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
+touch $SYSTEM_CONFIG
+
+echo "-- Setting status.showUntrackedFiles=all to ensure all untracked files shown by default"
+git config --file $SYSTEM_CONFIG status.showUntrackedFiles all
 
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
@@ -72,7 +78,6 @@ echo "-- Removing unsupported features"
 rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
-
 
 checkStaticLinking() {
   if [ -z "$1" ] ; then

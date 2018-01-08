@@ -50,6 +50,13 @@ else
   exit 1
 fi
 
+mkdir "$DESTINATION/etc"
+SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
+touch $SYSTEM_CONFIG
+
+echo "-- Setting status.showUntrackedFiles=all to ensure all untracked files shown by default"
+git config --file $SYSTEM_CONFIG status.showUntrackedFiles all
+
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
 rm "$DESTINATION/bin/git-receive-pack"

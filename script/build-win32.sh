@@ -52,8 +52,11 @@ fi
 
 SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
 
-git config --file $SYSTEM_CONFIG http.sslBackend "schannel"
 echo "-- Setting the system configuration to use SChannel for the SSL backend"
+git config --file $SYSTEM_CONFIG http.sslBackend schannel
+
+echo "-- Setting status.showUntrackedFiles=all to ensure all untracked files shown by default"
+git config --file $SYSTEM_CONFIG status.showUntrackedFiles all
 
 # removing global gitattributes file
 rm "$DESTINATION/mingw64/etc/gitattributes"
