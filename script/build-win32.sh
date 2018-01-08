@@ -58,6 +58,13 @@ git config --file $SYSTEM_CONFIG http.sslBackend schannel
 echo "-- Setting status.showUntrackedFiles=all to ensure all untracked files shown by default"
 git config --file $SYSTEM_CONFIG status.showUntrackedFiles all
 
+
+if [ "$APPVEYOR" == "True" ]; then
+  cd "$DESTINATION"
+  ./cmd/git config --system -l --show-origin
+  cd - > /dev/null
+fi
+
 # removing global gitattributes file
 rm "$DESTINATION/mingw64/etc/gitattributes"
 echo "-- Removing global gitattributes which handles certain file extensions"
