@@ -60,12 +60,16 @@ mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd - > /dev/null
 
-mkdir "$DESTINATION/etc"
+mkdir -p "$DESTINATION/etc"
 SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
 touch $SYSTEM_CONFIG
 
 echo "-- Setting status.showUntrackedFiles=all to ensure all untracked files shown by default"
 git config --file $SYSTEM_CONFIG status.showUntrackedFiles all
+
+cd "$DESTINATION"
+PREFIX=$DESTINATION ./bin/git config --system -l --show-origin
+cd - > /dev/null
 
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
