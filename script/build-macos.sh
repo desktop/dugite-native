@@ -24,6 +24,8 @@ computeChecksum() {
 
 echo "-- Building git at $SOURCE to $DESTINATION"
 
+mkdir -p $DESTINATION
+
 cd $SOURCE
 make clean
 DESTDIR="$DESTINATION" make strip install prefix=/ \
