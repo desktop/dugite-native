@@ -1,5 +1,4 @@
 steps:
-- script: git submodule update --init --recursive
 
 - bash: script/build.sh
   displayName: Build step
