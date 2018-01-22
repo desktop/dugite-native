@@ -52,8 +52,12 @@ fi
 
 SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
 
+echo "-- Setting some system configuration values"
+git config --file $SYSTEM_CONFIG core.symlinks "false"
+git config --file $SYSTEM_CONFIG core.autocrlf "true"
+git config --file $SYSTEM_CONFIG core.fscache "true"
 git config --file $SYSTEM_CONFIG http.sslBackend "schannel"
-echo "-- Setting the system configuration to use SChannel for the SSL backend"
+
 
 # removing global gitattributes file
 rm "$DESTINATION/mingw64/etc/gitattributes"
