@@ -29,11 +29,7 @@ jobs:
           shell: /bin/bash
 
       - store_artifacts:
-          path: "*.tar.gz"
-
-      - store_artifacts:
-          path: "*.tar.gz"
-
+          path: "output"
 
   publish:
 

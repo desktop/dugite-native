@@ -44,6 +44,8 @@ fi
 
 echo ""
 echo "Creating archives..."
+mkdir output
+cd output
 if [ "$(uname -s)" == "Darwin" ]; then
   tar -czf $GZIP_FILE -C $DESTINATION .
   tar --lzma -cf $LZMA_FILE -C $DESTINATION .
@@ -66,3 +68,4 @@ LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
 echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
 echo "${LZMA_FILE} - ${LZMA_SIZE} - checksum: ${LZMA_CHECKSUM}"
+cd - > /dev/null
