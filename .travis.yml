@@ -1,3 +1,8 @@
+sudo: required
+
+services:
+  - docker
+
 matrix:
   include:
     - os: linux
@@ -22,6 +27,12 @@ matrix:
        - GIT_FOR_WINDOWS_CHECKSUM=14fde7abfa14f505605517b00c8b1bf09eec78e3653516f30dc43084d8df7ede
        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.3.4/git-lfs-windows-amd64-2.3.4.zip
        - GIT_LFS_CHECKSUM=18c47fd2806659e81a40fbd6f6b0598ea1802635ce04fb2317d75973450a3fe5
+
+    - os: linux
+      language: go
+      env:
+       - TARGET_PLATFORM=arm64
+       - GIT_LFS_VERSION=2.3.4
 
 compiler:
   - gcc
