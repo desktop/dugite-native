@@ -48,4 +48,4 @@ The [Git for Windows](https://git-for-windows.github.io) project already
 provides a minimal environment (called 'MinGit') with each release that covers
 most of the above requirements.
 
-[Travis](https://travis-ci.org/) provide the build infrastructure for compiling and packaging Git across all the necessary platforms. [AppVeyor](https://appveyor.com/) also provides build infrastructure for testing Windows-specific features.
+[Travis](https://travis-ci.org/) provide the build infrastructure for compiling and packaging Git for Windows, Linux and ARM. [CircleCI](https://circleci.com) provides the build infrastructure for compiling and packaging Git on macOS. [AppVeyor](https://appveyor.com/) also provides build infrastructure for testing Windows-specific features.

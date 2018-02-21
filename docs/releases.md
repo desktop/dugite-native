@@ -7,7 +7,7 @@ Here's how to release:
 0. `git tag {version}` from the current `master` commit
 0. `git push origin --tags`
 0. Wait a few minutes for the builds to start and finish
-0. Edit the release notes on the tagged GitHub release 
+0. Edit the release notes on the tagged GitHub release
 
 ### What Actually Happened?
 
@@ -20,12 +20,14 @@ To speed up the manual work, here's the Markdown you should use for the release 
 
 | File | SHA256 checksum |
 | --- | --- |
-| dugite-native-v{version}-macOS-{build}.tar.gz | `{sha1}` |
-| dugite-native-v{version}-macOS-{build}.lzma | `{sha2}` |
-| dugite-native-v{version}-ubuntu-{build}.tar.gz | `{sha3}` |
-| dugite-native-v{version}-ubuntu-{build}.lzma | `{sha4}` |
-| dugite-native-v{version}-win32-{build}.tar.gz | `{sha5}` |
-| dugite-native-v{version}-win32-{build}.lzma | `{sha6}` |
+| dugite-native-v{version}-macOS.tar.gz | `{sha1}` |
+| dugite-native-v{version}-macOS.lzma | `{sha2}` |
+| dugite-native-v{version}-ubuntu.tar.gz | `{sha3}` |
+| dugite-native-v{version}-ubuntu.lzma | `{sha4}` |
+| dugite-native-v{version}-win32.tar.gz | `{sha5}` |
+| dugite-native-v{version}-win32.lzma | `{sha6}` |
+| dugite-native-v{version}-arm64.tar.gz | `{sha7}` |
+| dugite-native-v{version}-arm64.lzma | `{sha8}` |
 ```
 
 ### Versioning Scheme

@@ -9,7 +9,6 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOURCE="./git"
 DESTINATION="/tmp/build/git"
-BUILD="$TRAVIS_BUILD_NUMBER"
 
 cd $SOURCE
 VERSION=$(git describe --exact-match HEAD)
@@ -26,22 +25,18 @@ if ! [ -d "$DESTINATION" ]; then
   exit 1
 fi
 
-if [ "$APPVEYOR" == "True" ]; then
-  BUILD=$APPVEYOR_BUILD_NUMBER
-fi
-
 if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
-  GZIP_FILE="dugite-native-$VERSION-ubuntu-$BUILD.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-ubuntu-$BUILD.lzma"
+  GZIP_FILE="dugite-native-$VERSION-ubuntu.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-ubuntu.lzma"
 elif [ "$TARGET_PLATFORM" == "macOS" ]; then
-  GZIP_FILE="dugite-native-$VERSION-macOS-$BUILD.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-macOS-$BUILD.lzma"
+  GZIP_FILE="dugite-native-$VERSION-macOS.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-macOS.lzma"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
-  GZIP_FILE="dugite-native-$VERSION-win32-$BUILD.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-win32-$BUILD.lzma"
+  GZIP_FILE="dugite-native-$VERSION-win32.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-win32.lzma"
 elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  GZIP_FILE="dugite-native-$VERSION-arm64-$BUILD.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-arm64-$BUILD.lzma"
+  GZIP_FILE="dugite-native-$VERSION-arm64.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-arm64.lzma"
 else
   echo "Unable to package Git for platform $TARGET_PLATFORM"
   exit 1
@@ -49,6 +44,8 @@ fi
 
 echo ""
 echo "Creating archives..."
+mkdir output
+cd output
 if [ "$(uname -s)" == "Darwin" ]; then
   tar -czf $GZIP_FILE -C $DESTINATION .
   tar --lzma -cf $LZMA_FILE -C $DESTINATION .
@@ -71,3 +68,4 @@ LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
 echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
 echo "${LZMA_FILE} - ${LZMA_SIZE} - checksum: ${LZMA_CHECKSUM}"
+cd - > /dev/null

@@ -1,0 +1,69 @@
+version: 2
+
+jobs:
+  build:
+    environment:
+      TARGET_PLATFORM: macOS
+      GIT_LFS_URL: https://github.com/git-lfs/git-lfs/releases/download/v2.3.4/git-lfs-darwin-amd64-2.3.4.tar.gz
+      GIT_LFS_CHECKSUM: b16d4b7469b1fa34e0e27bedb1b77cc425b8d7903264854e5f18b0bc73576edb
+
+    macos:
+      xcode: "8.3.3"
+
+    steps:
+      - checkout
+
+      - run:
+          name: Updating submodule
+          command: git submodule update --init --recursive
+          shell: /bin/bash
+
+      - run:
+          name: Building Git
+          command: script/build.sh
+          shell: /bin/bash
+
+      - run:
+          name: Packaging Git
+          command: script/package.sh
+          shell: /bin/bash
+
+      - store_artifacts:
+          path: "output"
+
+  publish:
+
+    macos:
+      xcode: "8.3.3"
+
+    steps:
+      - run:
+          name: Installing ghr
+          command: |
+            brew update
+            brew tap tcnksm/ghr
+            brew install ghr
+          shell: /bin/bash
+      - run:
+          name: Publish to GitHub
+          command: ghr -draft $CIRCLE_TAG output
+
+workflows:
+  version: 2
+  build-and-publish:
+    jobs:
+      # build job runs for all branches and all tags
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      # publish job only runs for release tags and no branches
+      - publish:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v[0-9]*.[0-9]*.[0.9]*.*$/
+            branches:
+              ignore: /.*/
+
