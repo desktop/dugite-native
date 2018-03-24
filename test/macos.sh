@@ -5,8 +5,8 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.3.4/git-lfs-darwin-amd64-2.3.4.tar.gz \
-GIT_LFS_CHECKSUM=b16d4b7469b1fa34e0e27bedb1b77cc425b8d7903264854e5f18b0bc73576edb \
+GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-darwin-amd64-2.4.0.tar.gz \
+GIT_LFS_CHECKSUM=ab5a1391316aa9b4fd53fc6e1a2650580b543105429548bb991d6688511f2273 \
 . "$ROOT/script/build-macos.sh" $SOURCE $DESTINATION
 
 echo "Archive contents:"

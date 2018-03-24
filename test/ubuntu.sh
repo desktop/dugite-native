@@ -5,8 +5,8 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.3.4/git-lfs-linux-amd64-2.3.4.tar.gz \
-GIT_LFS_CHECKSUM=6755e109a85ffd9a03aacc629ea4ab1cbb8e7d83e41bd1880bf44b41927f4cfe \
+GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-linux-amd64-2.4.0.tar.gz \
+GIT_LFS_CHECKSUM=56728ec9219c1a9339e1e6166f551459d74d300a29b51031851759cee4d7d710 \
 . "$ROOT/script/build-ubuntu.sh" $SOURCE $DESTINATION
 
 echo "Archive contents:"
