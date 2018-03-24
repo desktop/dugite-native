@@ -5,8 +5,8 @@ skip_branch_with_pr: true
 
 environment:
   TARGET_PLATFORM: win32
-  GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.16.3.windows.1/MinGit-2.16.3-64-bit.zip
-  GIT_FOR_WINDOWS_CHECKSUM: 74724a54a456be73df94a4ea44a62bee9b2ff00baafda2936bf5b4e61c79209d
+  GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.17.0-rc1.windows.1/MinGit-2.17.0.rc1.windows.1-64-bit.zip
+  GIT_FOR_WINDOWS_CHECKSUM: cf4e222bc6464845a415f0177d5a5ccbe3d12174f1420eaedfb7f8b98cffc70c
   GIT_LFS_URL: https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-windows-amd64-2.4.0.zip
   GIT_LFS_CHECKSUM: e3dec7cd1316ef3dc5f0e99161aa2fe77aea82e1dd57a74e3ecbb1e7e459b10e
 
