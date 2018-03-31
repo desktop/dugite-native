@@ -9,6 +9,7 @@ matrix:
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
+        - WIN_ARCH=none
         - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-linux-amd64-2.4.0.tar.gz
         - GIT_LFS_CHECKSUM=56728ec9219c1a9339e1e6166f551459d74d300a29b51031851759cee4d7d710
 
@@ -16,6 +17,7 @@ matrix:
       language: c
       env:
        - TARGET_PLATFORM=macOS
+       - WIN_ARCH=none
        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-darwin-amd64-2.4.0.tar.gz
        - GIT_LFS_CHECKSUM=ab5a1391316aa9b4fd53fc6e1a2650580b543105429548bb991d6688511f2273
 
@@ -23,6 +25,7 @@ matrix:
       language: c
       env:
        - TARGET_PLATFORM=win32
+       - WIN_ARCH=32
        - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.17.0-rc1.windows.1/MinGit-2.17.0.rc1.windows.1-64-bit.zip
        - GIT_FOR_WINDOWS_CHECKSUM=cf4e222bc6464845a415f0177d5a5ccbe3d12174f1420eaedfb7f8b98cffc70c
        - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-windows-amd64-2.4.0.zip
@@ -32,6 +35,7 @@ matrix:
       language: go
       env:
        - TARGET_PLATFORM=arm64
+       - WIN_ARCH=none
        - GIT_LFS_VERSION=2.4.0
 
 compiler:
