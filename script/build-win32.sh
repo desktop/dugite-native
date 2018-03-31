@@ -50,7 +50,13 @@ else
   exit 1
 fi
 
-SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
+if [ "$WIN_ARCH" == "64"]; then
+  echo "Using mingw64"
+  SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
+else
+  echo "Using mingw32"
+  SYSTEM_CONFIG="$DESTINATION/mingw32/etc/gitconfig"
+fi
 
 echo "-- Setting some system configuration values"
 git config --file $SYSTEM_CONFIG core.symlinks "false"
