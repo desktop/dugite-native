@@ -52,15 +52,15 @@ fi
 
 
 echo "--LSing \$DESTINATION"
-ls $DESTINATION
+bash "ls $DESTINATION"
 if [ "$WIN_ARCH" == "64" ]; then
   echo "--LSing \$DESTINATION/mingw64"
-  ls $DESTINATION/mingw64
+  bash "ls $DESTINATION/mingw64"
   echo "Using mingw64"
   SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
 else
   echo "--LSing \$DESTINATION/mingw32"
-  ls $DESTINATION/mingw32
+  bash "ls $DESTINATION/mingw32"
   echo "Using mingw32"
   SYSTEM_CONFIG="$DESTINATION/mingw32/etc/gitconfig"
 fi
