@@ -50,7 +50,7 @@ else
   exit 1
 fi
 
-if [ "$WIN_ARCH" == "64"]; then
+if [ "$WIN_ARCH" == "64" ]; then
   echo "Using mingw64"
   SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
 else
