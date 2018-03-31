@@ -13,7 +13,7 @@ if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
   bash "$DIR/build-ubuntu.sh" $SOURCE $DESTINATION
 elif [ "$TARGET_PLATFORM" == "macOS" ]; then
   bash "$DIR/build-macos.sh" $SOURCE $DESTINATION
-elif [ "$TARGET_PLATFORM" == "win32" ]; then
+elif [ "$TARGET_PLATFORM" == "win32" ] && [ "$WIN_ARCH" == "64"]; then
   bash "$DIR/build-win32.sh" $DESTINATION
 elif [ "$TARGET_PLATFORM" == "arm64" ]; then
   bash "$DIR/build-arm64.sh" $SOURCE $DESTINATION $BASEDIR
