@@ -22,7 +22,9 @@ computeChecksum() {
 DESTINATION=$1
 mkdir -p $DESTINATION
 
-echo "-- Downloading MinGit"
+if [ "$WIN_ARCH" -eq "64" ]; then MINGW_DIR="mingw64"; else MINGW_DIR="mingw32"; fi
+
+echo "-- Downloading MinGit from $GIT_FOR_WINDOWS_URL"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
 curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_FOR_WINDOWS_FILE)
@@ -38,13 +40,14 @@ fi
 # download Git LFS, verify its the right contents, and unpack it
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.zip
-GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-amd64-v${GIT_LFS_VERSION}.zip"
+if [ "$WIN_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
+GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
 echo "-- Downloading from $GIT_LFS_URL"
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
-  SUBFOLDER="$DESTINATION/mingw64/libexec/git-core"
+  SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
   unzip -j $GIT_LFS_FILE -x '*.md' -d $SUBFOLDER
 
   if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
@@ -58,7 +61,7 @@ else
   exit 1
 fi
 
-SYSTEM_CONFIG="$DESTINATION/mingw64/etc/gitconfig"
+SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
 
 echo "-- Setting some system configuration values"
 git config --file $SYSTEM_CONFIG core.symlinks "false"
@@ -81,9 +84,9 @@ git config --file $SYSTEM_CONFIG --unset http.sslCAInfo
 git config --file $SYSTEM_CONFIG http.schannelUseSSLCAInfo "false"
 
 # removing global gitattributes file
-rm "$DESTINATION/mingw64/etc/gitattributes"
+rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
 echo "-- Removing global gitattributes which handles certain file extensions"
 
-rm "$DESTINATION/mingw64/bin/git-credential-store.exe"
-rm "$DESTINATION/mingw64/bin/git-credential-wincred.exe"
+rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
+rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
 echo "-- Removing legacy credential helpers"
