@@ -37,7 +37,7 @@ matrix:
       - TARGET_PLATFORM=win32
       - WIN_ARCH=32
       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.17.0-rc2.windows.1/MinGit-2.17.0.rc1.windows.1-32-bit.zip
-      - GIT_FOR_WINDOWS_CHECKSUM=ee808d75cfc95205b7d211f3a551db3644fa190b979d7bebd5b104a48e2b2986
+      - GIT_FOR_WINDOWS_CHECKSUM=0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5
       - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.0/git-lfs-windows-386-2.4.0.zip
       - GIT_LFS_CHECKSUM=addc96bc4fac57090ef7ecb036778d38e0eb22c71d8926c02820f246b36ac4d6
 
