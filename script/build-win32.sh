@@ -63,6 +63,13 @@ git config --file $SYSTEM_CONFIG http.sslBackend "schannel"
 # http.sslBackend to openssl will still pick it up.
 git config --file $SYSTEM_CONFIG --unset http.sslCAInfo
 
+# Git for Windows 2.18.0 now supports controlling how curl uses any certificate
+# bundle - rather than just loading the bundle if http.useSSLCAInfo is set
+# For the moment we want to favour using the OS certificate store unless the
+# user has overriden this in their global configuration.
+#
+# details: https://github.com/dscho/git/commit/ffd4963bde17c11dfc2580d258a315964fa21378
+git config --file $SYSTEM_CONFIG http.schannel.useSSLCAInfo "false"
 # removing global gitattributes file
 rm "$DESTINATION/mingw64/etc/gitattributes"
 echo "-- Removing global gitattributes which handles certain file extensions"
