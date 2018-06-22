@@ -57,6 +57,7 @@ git config --file $SYSTEM_CONFIG core.symlinks "false"
 git config --file $SYSTEM_CONFIG core.autocrlf "true"
 git config --file $SYSTEM_CONFIG core.fscache "true"
 git config --file $SYSTEM_CONFIG http.sslBackend "schannel"
+
 # See https://github.com/desktop/desktop/issues/4817#issuecomment-393241303
 # Even though it's not set openssl will auto-discover the one we ship because
 # it sits in the right location already. So users manually switching
@@ -70,6 +71,7 @@ git config --file $SYSTEM_CONFIG --unset http.sslCAInfo
 #
 # details: https://github.com/dscho/git/commit/ffd4963bde17c11dfc2580d258a315964fa21378
 git config --file $SYSTEM_CONFIG http.schannel.useSSLCAInfo "false"
+
 # removing global gitattributes file
 rm "$DESTINATION/mingw64/etc/gitattributes"
 echo "-- Removing global gitattributes which handles certain file extensions"
