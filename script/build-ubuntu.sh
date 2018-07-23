@@ -30,7 +30,6 @@ DESTDIR="$DESTINATION" make strip install prefix=/ \
     NO_PERL=1 \
     NO_TCLTK=1 \
     NO_GETTEXT=1 \
-    NO_OPENSSL=1 \
     NO_INSTALL_HARDLINKS=1 \
     CC='gcc' \
     CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
