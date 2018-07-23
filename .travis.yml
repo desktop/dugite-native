@@ -11,6 +11,10 @@ matrix:
         - TARGET_PLATFORM=ubuntu
         - GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.2/git-lfs-linux-amd64-2.4.2.tar.gz
         - GIT_LFS_CHECKSUM=29529b6c7afb5f656860d5fad7c054baaeded95ecbda040592a58dbcdbb38fe0
+      addons:
+        apt:
+          packages:
+            - libcurl4-openssl-dev
 
     - os: osx
       language: c
