@@ -3,8 +3,7 @@ const path = require('path')
 const YAML = require('node-yaml')
 
 function writeEnvironmentToFile(os, env) {
-  const otherArgs = env.slice(1)
-  const environmentVariables = otherArgs.map(a => `${a} \\`).join('\n')
+  const environmentVariables = env.map(a => `${a} \\`).join('\n')
 
   const script = `build-${os}.sh`
   const fileContents = `#!/bin/bash
@@ -59,19 +58,23 @@ const travisFile = path.resolve(__dirname, '..', '.travis.yml')
 const yamlText = fs.readFileSync(travisFile)
 const yaml = YAML.parse(yamlText)
 
+const globalEnv = yaml['env']['global']
+
 const platforms = yaml['matrix']['include']
 
 for (const platform of platforms) {
-  const env = platform['env']
-  const target = env[0]
+  const platformEnv = platform['env']
+  const env = [ ... globalEnv, ...platformEnv ]
+
+  const target = platformEnv[0]
   const keys = target.split('=')
   const os = keys[1].toLowerCase()
 
-  if (os === 'ubuntu') {
-    writeEnvironmentToFile(os, env)
-  } else if (os === 'macos') {
-    writeEnvironmentToFile(os, env)
-  } else if (os === 'win32') {
-    writeEnvironmentToFile(os, env)
+  switch (os) {
+    case 'ubuntu':
+    case 'macos':
+    case 'win32':
+      writeEnvironmentToFile(os, env)
+      break
   }
 }

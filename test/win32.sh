@@ -5,9 +5,10 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.17.1.windows.2/MinGit-2.17.1.2-64-bit.zip \
-GIT_FOR_WINDOWS_CHECKSUM=52e611a411cd58eaaab8218bb917cb4410b0c5733f234be6e581c6a9821b30ea \
-GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.2/git-lfs-windows-amd64-2.4.2.zip \
+GIT_LFS_VERSION=2.4.2 \
+TARGET_PLATFORM=win32 \
+GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip \
+GIT_FOR_WINDOWS_CHECKSUM=1dfd05de1320d57f448ed08a07c0b9de2de8976c83840f553440689b5db6a1cf \
 GIT_LFS_CHECKSUM=4c95d8e842ef55013c8ac99c4ffcad2a20a41bc41bd8e0943a228a03e07cd976 \
 . "$ROOT/script/build-win32.sh" $SOURCE $DESTINATION
 

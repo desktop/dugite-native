@@ -37,6 +37,7 @@ cd - > /dev/null
 
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.tar.gz
+GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-darwin-amd64-${GIT_LFS_VERSION}.tar.gz"
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
