@@ -5,7 +5,8 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_URL=https://github.com/git-lfs/git-lfs/releases/download/v2.4.2/git-lfs-darwin-amd64-2.4.2.tar.gz \
+GIT_LFS_VERSION=2.4.2 \
+TARGET_PLATFORM=macOS \
 GIT_LFS_CHECKSUM=5efdad9722712c6fc039c1ee824c46b3f3c3f8794b2ef8a9776ff8083a3d5e97 \
 . "$ROOT/script/build-macos.sh" $SOURCE $DESTINATION
 
