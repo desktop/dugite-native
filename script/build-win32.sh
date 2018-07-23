@@ -38,7 +38,7 @@ fi
 # download Git LFS, verify its the right contents, and unpack it
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.zip
-curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
+curl -sL -o $GIT_LFS_FILE https://github.com/git-lfs/git-lfs/releases/download/v$GIT_LFS_VERSION/git-lfs-windows-amd64-$GIT_LFS_VERSION.zip
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
