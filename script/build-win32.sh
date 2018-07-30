@@ -38,7 +38,8 @@ fi
 # download Git LFS, verify its the right contents, and unpack it
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.zip
-GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-amd64-${GIT_LFS_VERSION}.zip"
+GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-amd64-v${GIT_LFS_VERSION}.zip"
+echo "-- Downloading from $GIT_LFS_URL"
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
