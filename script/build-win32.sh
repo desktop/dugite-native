@@ -47,7 +47,7 @@ if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   SUBFOLDER="$DESTINATION/mingw64/libexec/git-core/"
   unzip -j $GIT_LFS_FILE -x '*.md' -d $SUBFOLDER
 
-  if [[ ! -f "$DESTINATION/mingw64/libexec/git-core/git-lfs" ]]; then
+  if [[ ! -f "$DESTINATION/mingw64/libexec/git-core/git-lfs.exe" ]]; then
     echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
     echo "aborting..."
     exit 1
