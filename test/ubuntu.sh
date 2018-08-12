@@ -5,9 +5,9 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_VERSION=2.4.2 \
+GIT_LFS_VERSION=2.5.0 \
 TARGET_PLATFORM=ubuntu \
-GIT_LFS_CHECKSUM=29529b6c7afb5f656860d5fad7c054baaeded95ecbda040592a58dbcdbb38fe0 \
+GIT_LFS_CHECKSUM=d840829bca0827fb14537fbcd6fdba192dd74a67d0d5a6fb12d060c14a876ba7 \
 . "$ROOT/script/build-ubuntu.sh" $SOURCE $DESTINATION
 
 echo "Archive contents:"

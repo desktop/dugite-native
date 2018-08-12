@@ -5,11 +5,11 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_VERSION=2.4.2 \
+GIT_LFS_VERSION=2.5.0 \
 TARGET_PLATFORM=win32 \
 GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip \
 GIT_FOR_WINDOWS_CHECKSUM=1dfd05de1320d57f448ed08a07c0b9de2de8976c83840f553440689b5db6a1cf \
-GIT_LFS_CHECKSUM=4c95d8e842ef55013c8ac99c4ffcad2a20a41bc41bd8e0943a228a03e07cd976 \
+GIT_LFS_CHECKSUM=452375d3968491520df29cde989164c41c1c4ff12ba30dfb343872f6d24016f1 \
 . "$ROOT/script/build-win32.sh" $SOURCE $DESTINATION
 
 echo "Archive contents:"
