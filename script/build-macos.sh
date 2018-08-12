@@ -47,7 +47,7 @@ if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   # strip out any text files when extracting the Git LFS archive
   tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude='*.md'
 
-  if [[ ! -f "$DESTINATION/libexec/git-core/git-lfs" ]]; then
+  if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
     echo "After extracting Git LFS the file was not found under libexec/git-core/"
     echo "aborting..."
     exit 1
