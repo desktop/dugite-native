@@ -77,3 +77,7 @@ git config --file $SYSTEM_CONFIG http.schannelUseSSLCAInfo "false"
 # removing global gitattributes file
 rm "$DESTINATION/mingw64/etc/gitattributes"
 echo "-- Removing global gitattributes which handles certain file extensions"
+
+rm "$DESTINATION/mingw64/bin/git-credential-store.exe"
+rm "$DESTINATION/mingw64/bin/git-credential-wincred.exe"
+echo "-- Removing legacy credential helpers"
