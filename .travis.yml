@@ -29,9 +29,19 @@ matrix:
       language: c
       env:
        - TARGET_PLATFORM=win32
+       - WIN_ARCH=64
        - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-64-bit.zip
        - GIT_FOR_WINDOWS_CHECKSUM=1dfd05de1320d57f448ed08a07c0b9de2de8976c83840f553440689b5db6a1cf
        - GIT_LFS_CHECKSUM=452375d3968491520df29cde989164c41c1c4ff12ba30dfb343872f6d24016f1
+
+    - os: linux
+      language: c
+      env:
+       - TARGET_PLATFORM=win32
+       - WIN_ARCH=32
+       - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.18.0.windows.1/MinGit-2.18.0-32-bit.zip
+       - GIT_FOR_WINDOWS_CHECKSUM=c2f59c121d0f5aac31c959e5ba2878542b6cbca6604778566061d45585e70895
+       - GIT_LFS_CHECKSUM=408f95d919037b068318cb2affb450c17a46915fe6b3d9b10dfc15dc0df15bca
 
     - os: linux
       language: go
@@ -42,8 +52,7 @@ compiler:
   - gcc
 
 script:
-  - script/build.sh
-  - script/package.sh
+  - script/build.sh && script/package.sh
 
 branches:
   only:
