@@ -44,8 +44,14 @@ curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
-  SUBFOLDER="$DESTINATION/mingw64/libexec/git-core/"
-  unzip -qq -j $GIT_LFS_FILE -x '*.md' -d $SUBFOLDER
+  SUBFOLDER="$DESTINATION/mingw64/libexec/git-core"
+  unzip -j $GIT_LFS_FILE -x '*.md' -d $SUBFOLDER
+
+  if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
+    echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
+    echo "aborting..."
+    exit 1
+  fi
 else
   echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM and got $COMPUTED_SHA256"
   echo "aborting..."

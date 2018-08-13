@@ -45,7 +45,13 @@ if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   echo "Git LFS: checksums match"
   SUBFOLDER="$DESTINATION/libexec/git-core"
   # strip out any text files when extracting the Git LFS archive
-  tar -xf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude='*.md'  --strip-components=1
+  tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude='*.md'
+
+  if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
+    echo "After extracting Git LFS the file was not found under libexec/git-core/"
+    echo "aborting..."
+    exit 1
+  fi
 else
   echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM but got $COMPUTED_SHA256"
   echo "aborting..."
