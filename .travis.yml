@@ -66,6 +66,7 @@ deploy:
   file:
     - ${TRAVIS_BUILD_DIR}/output/dugite-native-v*.tar.gz
     - ${TRAVIS_BUILD_DIR}/output/dugite-native-v*.lzma
+    - ${TRAVIS_BUILD_DIR}/output/dugite-native-v*.sha256
   skip_cleanup: true
   draft: true
   tag_name: $TRAVIS_TAG
