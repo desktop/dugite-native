@@ -24,7 +24,7 @@ go get github.com/git-lfs/git-lfs
 GOPATH=`go env GOPATH`
 cd $GOPATH/src/github.com/git-lfs/git-lfs
 git checkout "v${GIT_LFS_VERSION}"
-$GOPATH/src/github.com/git-lfs/git-lfs/script/bootstrap -arch arm64 -os linux
+GOARCH=arm64 GOOS=linux make
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=$GOPATH/src/github.com/git-lfs/git-lfs/bin/releases/linux-arm64/git-lfs-$GIT_LFS_VERSION/git-lfs
 SUBFOLDER="$DESTINATION/libexec/git-core"
