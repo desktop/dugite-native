@@ -6,3 +6,4 @@ build
 
 *.zip
 *.lzma
+*.sha256
