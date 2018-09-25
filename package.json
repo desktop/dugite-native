@@ -17,6 +17,8 @@
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "dependencies": {
     "@octokit/rest": "^15.12.0",
-    "node-yaml": "^3.1.1"
+    "node-yaml": "^3.1.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   }
 }
