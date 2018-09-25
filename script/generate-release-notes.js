@@ -34,18 +34,22 @@ async function run() {
     `✅ token has 'public_scope' scope to make changes to releases...`
   );
 
-  const release = await octokit.repos.getLatestRelease({
+  const releases = await octokit.repos.getReleases({
     owner: "desktop",
-    repo: "dugite-native"
+    repo: "dugite-native",
+    per_page: 1,
+    page: 1
   });
 
-  console.log(`id: ${release.data.id}`);
-  console.log(`tag name: ${release.data.tag_name}`);
-  console.log(`draft: ${release.data.draft}`);
+  const release = releases.data[0];
 
-  const tag = release.data.tag_name;
+  console.log(`id: ${release.id}`);
+  console.log(`tag name: ${release.tag_name}`);
+  console.log(`draft: ${release.draft}`);
 
-  if (release.data.draft === false) {
+  const tag = release.tag_name;
+
+  if (release.draft === false) {
     throw new Error(
       `Latest published release ${tag} is not a draft. Aborting...`
     );
@@ -54,14 +58,14 @@ async function run() {
   const assets = await octokit.repos.getAssets({
     owner: "desktop",
     repo: "dugite-native",
-    release_id: release.data.id
+    release_id: release.id
   });
 
   if (assets.data.length !== SUCCESSFUL_RELEASE_FILE_COUNT) {
     throw new Error(
       `Latest draft release ${tag} has ${
         assets.data.length
-      } files, expected ${SUCCESSFUL_RELEASE_FILE_COUNT}. Aborting...`
+      } files, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. The builds are probably still going. Aborting...`
     );
   }
 
