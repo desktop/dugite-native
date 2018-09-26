@@ -34,11 +34,14 @@ async function run() {
     return;
   }
 
+  const owner = "desktop";
+  const repo = "dugite-native";
+
   console.log(`✅ token has 'public_scope' scope to make changes to releases`);
 
   const releases = await octokit.repos.getReleases({
-    owner: "desktop",
-    repo: "dugite-native",
+    owner,
+    repo,
     per_page: 1,
     page: 1
   });
@@ -54,8 +57,8 @@ async function run() {
   console.log(`✅ Latest release '${tag_name}' is a draft`);
 
   const assets = await octokit.repos.getAssets({
-    owner: "desktop",
-    repo: "dugite-native",
+    owner,
+    repo,
     release_id: id
   });
 
@@ -91,28 +94,62 @@ async function run() {
   }
 
   const latestRelease = await octokit.repos.getLatestRelease({
-    owner: "desktop",
-    repo: "dugite-native"
+    owner,
+    repo
   });
 
-  const latestReleaseTag = latestRelease.tag_name;
+  const latestReleaseTag = latestRelease.data.tag_name;
 
   console.log(
-    `✅ TODO: find merged PRs between '${tag_name}' and ${latestReleaseTag}`
+    `✅ TODO: find merged PRs between ${latestReleaseTag} and ${tag_name}`
   );
 
-  // TODO: find PRs merged between latest release and this one
+  const response = await octokit.repos.compareCommits({
+    owner,
+    repo,
+    base: latestReleaseTag,
+    head: tag_name
+  });
+
+  const commits = response.data.commits;
+
+  const mergeCommitRegex = /Merge pull request #(\d{1,}) /;
+
+  const mergeCommitMessages = commits
+    .filter(c => c.commit.message.match(mergeCommitRegex))
+    .map(c => c.commit.message);
+
+  const pullRequestIds = [];
+
+  for (const mergeCommitMessage of mergeCommitMessages) {
+    const match = mergeCommitRegex.exec(mergeCommitMessage);
+    if (match.length === 2) {
+      pullRequestIds.push(match[1]);
+    }
+  }
+
+  const releaseNotesEntries = [];
+
+  for (const pullRequestId of pullRequestIds) {
+    const result = await octokit.pullRequests.get({
+      owner,
+      repo,
+      number: pullRequestId
+    });
+    const { title, number, user } = result.data;
+    const entry = ` - ${title} - #${number} via @${user.login}`;
+    releaseNotesEntries.push(entry);
+  }
+  const changelogText = releaseNotesEntries.join("\n");
 
   const fileList = entries.map(e => `**${e.fileName}**\n${e.checksum}\n`);
   const fileListText = fileList.join("\n");
-  const draftReleaseNotes = `**TODO:** details about what's changed since the last release
+
+  const draftReleaseNotes = `${changelogText}
 
 ## SHA-256 hashes:
 
 ${fileListText}`;
-
-  console.log(`✅ Draft for latest release ${tag_name}:`);
-  console.log(draftReleaseNotes);
 
   const numberWithoutPrefix = tag_name.substring(1);
 
@@ -127,9 +164,8 @@ ${fileListText}`;
 
   const { html_url } = result.data;
 
-  console.log(
-    `✅ Draft for release ${tag_name} updated. Plase validate and publish: ${html_url}`
-  );
+  console.log(`✅ Draft for release ${tag_name} updated.`);
+  console.log(`Plase validate release and publish: ${html_url}`);
 }
 
 run();
