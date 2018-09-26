@@ -25,7 +25,7 @@ GOPATH=`go env GOPATH`
 cd $GOPATH/src/github.com/git-lfs/git-lfs
 git checkout "v${GIT_LFS_VERSION}"
 ls -l /tmp
-chmod 1777 /tmp
+chmod -R a+x /tmp
 ls -l /tmp
 GOARCH=arm64 GOOS=linux make
 echo "-- Bundling Git LFS"
