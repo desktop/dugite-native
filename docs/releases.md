@@ -29,7 +29,8 @@ of the release, to save you manually finding the checksums.
 This is the template we now use:
 
 ```
- - list of merged pull requests
+ - some merged pull request - #ABC via @author
+ - a different pull request - #XYZ via @author
 
 ## SHA-256 hashes:
 
@@ -42,7 +43,9 @@ This is the template we now use:
 ...
 ```
 
-The script requires a personal access token with `public_scope` set to the `GITHUB_ACCESS_TOKEN` environment variable, and you need to have `write` permissions to this repository for the script to succeed.
+The script requires a personal access token with `public_scope` set to the
+`GITHUB_ACCESS_TOKEN` environment variable, and you need to have `write`
+permissions to this repository for the script to succeed.
 
 A successful run will look like this:
 
@@ -59,8 +62,9 @@ A successful run will look like this:
 You should then browse to the URL, tweak the changelog entries if they are
 unclear, and then press **Publish** to make the release public.
 
-The script is very defensive and is designed to be run multiple times. If it
-encounters a problem it should stop and provide some helpful context:
+The script is very defensive and is designed to be run multiple times before you
+publish. If it encounters a problem it should stop and provide some helpful
+context:
 
 ```
 ✅ token found for shiftkey...
