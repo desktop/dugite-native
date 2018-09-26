@@ -165,7 +165,8 @@ ${fileListText}`;
   const { html_url } = result.data;
 
   console.log(`✅ Draft for release ${tag_name} updated.`);
-  console.log(`Plase validate release and publish: ${html_url}`);
+  console.log();
+  console.log(`🚨 Please validate release and publish: ${html_url}`);
 }
 
 run();
