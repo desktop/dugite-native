@@ -27,9 +27,16 @@ git checkout "v${GIT_LFS_VERSION}"
 # Make the 'mangen' target first, without setting GOOS/GOARCH.
 make mangen
 make GOARCH=arm64 GOOS=linux
+GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
+
+echo "-- Verifying built Git LFS"
+docker run -it \
+ --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
+ -w=$BASEDIR \
+ --rm multiarch/debian-debootstrap:arm64-jessie $GIT_LFS_OUTPUT_DIR/git-lfs --version
 
 echo "-- Bundling Git LFS"
-GIT_LFS_FILE=$GOPATH/src/github.com/git-lfs/git-lfs/bin/git-lfs
+GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs
 SUBFOLDER="$DESTINATION/libexec/git-core"
 cp $GIT_LFS_FILE $SUBFOLDER
 
