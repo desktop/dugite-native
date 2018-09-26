@@ -166,7 +166,7 @@ ${fileListText}`;
 
   console.log(`✅ Draft for release ${tag_name} updated.`);
   console.log();
-  console.log(`🚨 Please validate release and publish: ${html_url}`);
+  console.log(`🚨 Please review draft release and publish: ${html_url}`);
 }
 
 run();

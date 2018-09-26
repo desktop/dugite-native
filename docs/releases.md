@@ -48,7 +48,18 @@ The script requires a personal access token with `public_scope` set to the `GITH
 A successful run will look like this:
 
 ```
+✅ token found for shiftkey...
+✅ token has 'public_scope' scope to make changes to releases
+✅ Latest release 'v2.19.0-1' is a draft
+✅ TODO: find merged PRs between v2.19.0 and v2.19.0-1
+release notes: [
+  " - upgrade to Git 2.19.0 and Git LFS 2.5.1 - #110 via @shiftkey",
+  " - Add SHA256 checksums to uploaded artifacts - #111 via @shiftkey",
+  " - switch ARM64 agent over to use new build steps - #114 via @shiftkey"
+]
+✅ Draft for release v2.19.0-1 updated.
 
+🚨 Please review draft release and publish: https://github.com/desktop/dugite-native/releases/tag/untagged-3c3f4a202dd581133050
 ```
 
 A problem found will stop the script with some helpful context:
