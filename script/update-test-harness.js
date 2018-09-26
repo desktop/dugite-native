@@ -42,8 +42,11 @@ else
   LZMA_CHECKSUM=$(shasum -a 256 $LZMA_FILE | awk '{print $1;}')
 fi
 
-GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
-LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
+GZIP_SIZE=\$(du -h $GZIP_FILE | cut -f1)
+LZMA_SIZE=\$(du -h $LZMA_FILE | cut -f1)
+
+echo "$\{GZIP_CHECKSUM}" | tr -d '\\n' > "\${GZIP_FILE}.sha256"
+echo "$\{LZMA_CHECKSUM}" | tr -d '\\n' > "\${LZMA_FILE}.sha256"
 
 echo "Packages created:"
 echo "\${GZIP_FILE} - \${GZIP_SIZE} - checksum: \${GZIP_CHECKSUM}"
