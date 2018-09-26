@@ -5,12 +5,12 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_VERSION=2.5.1 \
+GIT_LFS_VERSION=2.5.2 \
 TARGET_PLATFORM=win32 \
 WIN_ARCH=32 \
 GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.0.windows.1/MinGit-2.19.0-32-bit.zip \
 GIT_FOR_WINDOWS_CHECKSUM=83cf018bd6f5c24e2b3088539bbeef9067fd632087d094d447a3a0ff676e7bd7 \
-GIT_LFS_CHECKSUM=64eb8782df371e5ef3b8cf07134a745be2b782920726ba2b924cc3d56b7c03ed \
+GIT_LFS_CHECKSUM=6cf7d4c169a17dd5b326f903708829e7471368b7e1235ab150ce77555f47b213 \
 . "$ROOT/script/build-win32.sh" $SOURCE $DESTINATION
 
 echo "Archive contents:"
@@ -41,6 +41,9 @@ fi
 
 GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
 LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
+
+echo "${GZIP_CHECKSUM}" | tr -d '\n' > "${GZIP_FILE}.sha256"
+echo "${LZMA_CHECKSUM}" | tr -d '\n' > "${LZMA_FILE}.sha256"
 
 echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
