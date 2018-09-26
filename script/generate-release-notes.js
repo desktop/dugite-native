@@ -13,7 +13,8 @@ process.on("unhandledRejection", reason => {
 async function run() {
   const token = process.env.GITHUB_ACCESS_TOKEN;
   if (token == null) {
-    throw new Error("No GITHUB_ACCESS_TOKEN environment variable set");
+    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set.`);
+    return;
   }
 
   octokit.authenticate({
@@ -27,14 +28,13 @@ async function run() {
   console.log(`✅ token found for ${me}...`);
   const foundScopes = user.headers["x-oauth-scopes"];
   if (foundScopes.indexOf("public_repo") === -1) {
-    throw new Error(
-      `Found GITHUB_ACCESS_TOKEN does not have required scope 'public_repo' which is required to read draft releases on dugite-native`
+    console.log(
+      `🔴 Found GITHUB_ACCESS_TOKEN does not have required scope 'public_repo' which is required to read draft releases on dugite-native`
     );
+    return;
   }
 
-  console.log(
-    `✅ token has 'public_scope' scope to make changes to releases...`
-  );
+  console.log(`✅ token has 'public_scope' scope to make changes to releases`);
 
   const releases = await octokit.repos.getReleases({
     owner: "desktop",
@@ -47,12 +47,11 @@ async function run() {
   const { tag_name, draft, id } = release;
 
   if (!draft) {
-    throw new Error(
-      `Latest published release ${tag_name} is not a draft. Aborting...`
-    );
+    console.log(`🔴 Latest published release '${tag_name}' is not a draft.`);
+    return;
   }
 
-  console.log(`✅ Latest release ${tag_name} is a draft...`);
+  console.log(`✅ Latest release '${tag_name}' is a draft`);
 
   const assets = await octokit.repos.getAssets({
     owner: "desktop",
@@ -61,11 +60,12 @@ async function run() {
   });
 
   if (assets.data.length !== SUCCESSFUL_RELEASE_FILE_COUNT) {
-    throw new Error(
-      `Draft has ${
+    console.log(
+      `🔴 Draft has ${
         assets.data.length
-      } assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going. Aborting...`
+      } assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going.`
     );
+    return;
   }
 
   const entries = [];
@@ -89,6 +89,19 @@ async function run() {
       entries.push({ fileName, checksum });
     }
   }
+
+  const latestRelease = await octokit.repos.getLatestRelease({
+    owner: "desktop",
+    repo: "dugite-native"
+  });
+
+  const latestReleaseTag = latestRelease.tag_name;
+
+  console.log(
+    `✅ TODO: find merged PRs between '${tag_name}' and ${latestReleaseTag}`
+  );
+
+  // TODO: find PRs merged between latest release and this one
 
   const fileList = entries.map(e => `| ${e.fileName} | ${e.checksum} |`);
   const fileListText = fileList.join("\n");
