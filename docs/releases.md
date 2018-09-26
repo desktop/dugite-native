@@ -57,13 +57,16 @@ A successful run will look like this:
 ✅ Token has 'public_scope' scope to make changes to releases
 ✅ Newest release 'v2.19.0-1' is a draft
 ✅ All agents have finished and uploaded artefacts
-✅ Draft for release v2.19.0-1 updated with changelog and artifacts.
+✅ Draft for release v2.19.0-1 updated with changelog and artifacts
 
 🚨 Please review draft release and publish: https://github.com/desktop/dugite-native/releases/tag/untagged-e0327b962d90374b8a57
 ```
 
-You should then browse to the URL, tweak the changelog entries if they are
-unclear, and then press **Publish** to make the release public.
+You should then browse to the URL and confirm the changelog makes sense. Feel
+free to remove any infrastructure changes from the changelog entries, as the
+release should be focused on user-facing changes.
+
+Once you're happy with the release, press **Publish** and you're done :tada:.
 
 The script is very defensive and is designed to be run multiple times before you
 publish. If it encounters a problem it should stop and provide some helpful
