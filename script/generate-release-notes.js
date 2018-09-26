@@ -103,18 +103,16 @@ async function run() {
 
   // TODO: find PRs merged between latest release and this one
 
-  const fileList = entries.map(e => `| ${e.fileName} | ${e.checksum} |`);
+  const fileList = entries.map(e => `**${e.fileName}**\n${e.checksum}\n`);
   const fileListText = fileList.join("\n");
   const draftReleaseNotes = `**TODO:** details about what's changed since the last release
 
-| File | SHA256 checksum |
-| --- | --- |
+## SHA-256 hashes:
+
 ${fileListText}`;
 
   console.log(`✅ Draft for latest release ${tag_name}:`);
   console.log(draftReleaseNotes);
-
-  // TODO: ask user if they want to update it on GitHub
 
   const numberWithoutPrefix = tag_name.substring(1);
 
@@ -130,7 +128,7 @@ ${fileListText}`;
   const { html_url } = result.data;
 
   console.log(
-    `✅ Draft for release ${tag_name} updated. Visit ${html_url} to add changelog and publish...`
+    `✅ Draft for release ${tag_name} updated. Plase validate and publish: ${html_url}`
   );
 }
 
