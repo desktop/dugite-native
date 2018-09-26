@@ -3,9 +3,10 @@
 All releases are published using GitHub releases. Anyone with push access to the
 repository can create a new release.
 
-### Versioning Scheme
+### Versioning
 
-We should follow Git's versioning scheme, and increment the build number for other changes like incremementing Git LFS or packaging changes
+We should follow Git's versioning scheme, and only increment the build number for
+other changes like incremementing Git LFS or packaging changes
 
 Examples:
 
@@ -14,17 +15,15 @@ Examples:
 
 ### Release Process
 
-Here's how to release:
-
-1. `git tag {version}` from the commit you wish to create a release
-1. `git push origin --tags`
+1. `git tag {version}` the version you wish to publish 
+1. `git push origin --tags` to start off the release build
 1. Wait a few minutes for the build to finish
 1. From your machine run this command: `npm run generate-release-notes`
 
 Pushing the tag triggers a new build for the platforms we need to support. As
 each of those builds completes, the artefacts are published to a draft release
-on GitHub. The `generate-release-notes` script handles generating the details
-of the release, to save you manually finding the checksums.
+on GitHub. The `generate-release-notes` script handles generating the changelog
+for the release, and saves you manually finding and adding the checksums.
 
 This is the template we now use:
 
