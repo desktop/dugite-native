@@ -50,13 +50,16 @@ permissions to this repository for the script to succeed.
 A successful run will look like this:
 
 ```
-✅ Token found for shiftkey...
-✅ Token has 'public_scope' scope to make changes to releases
-✅ Latest release 'v2.19.0-1' is a draft
-✅ Changelog has 4 entries
-✅ Draft for release v2.19.0-1 updated.
+> dugite-native@ generate-release-notes /Users/shiftkey/src/dugite-native
+> node script/generate-release-notes.js
 
-🚨 Please review draft release and publish: https://github.com/desktop/dugite-native/releases/tag/untagged-3c3f4a202dd581133050
+✅ Token found for shiftkey
+✅ Token has 'public_scope' scope to make changes to releases
+✅ Newest release 'v2.19.0-1' is a draft
+✅ All agents have finished and uploaded artefacts
+✅ Draft for release v2.19.0-1 updated with changelog and artifacts.
+
+🚨 Please review draft release and publish: https://github.com/desktop/dugite-native/releases/tag/untagged-e0327b962d90374b8a57
 ```
 
 You should then browse to the URL, tweak the changelog entries if they are
@@ -67,8 +70,8 @@ publish. If it encounters a problem it should stop and provide some helpful
 context:
 
 ```
-✅ token found for shiftkey...
-✅ token has 'public_scope' scope to make changes to releases...
-✅ Latest release 'v2.19.0-1' is a draft...
-🔴 Draft has 16 assets, expecting 20. This means the build agents are probably still going.
+✅ Token found for shiftkey
+✅ Token has 'public_scope' scope to make changes to releases
+✅ Latest release 'v2.19.0-1' is a draft
+🔴 Draft has 16 assets, expecting 20. This means the build agents are probably still going...
 ```

@@ -13,7 +13,7 @@ process.on("unhandledRejection", reason => {
 async function run() {
   const token = process.env.GITHUB_ACCESS_TOKEN;
   if (token == null) {
-    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set.`);
+    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`);
     return;
   }
 
@@ -25,7 +25,7 @@ async function run() {
   const user = await octokit.users.get();
   const me = user.data.login;
 
-  console.log(`✅ token found for ${me}...`);
+  console.log(`✅ Token found for ${me}`);
   const foundScopes = user.headers["x-oauth-scopes"];
   if (foundScopes.indexOf("public_repo") === -1) {
     console.log(
@@ -37,7 +37,7 @@ async function run() {
   const owner = "desktop";
   const repo = "dugite-native";
 
-  console.log(`✅ token has 'public_scope' scope to make changes to releases`);
+  console.log(`✅ Token has 'public_scope' scope to make changes to releases`);
 
   const releases = await octokit.repos.getReleases({
     owner,
@@ -50,11 +50,11 @@ async function run() {
   const { tag_name, draft, id } = release;
 
   if (!draft) {
-    console.log(`🔴 Latest published release '${tag_name}' is not a draft.`);
+    console.log(`🔴 Latest published release '${tag_name}' is not a draft`);
     return;
   }
 
-  console.log(`✅ Latest release '${tag_name}' is a draft`);
+  console.log(`✅ Newest release '${tag_name}' is a draft`);
 
   const assets = await octokit.repos.getAssets({
     owner,
@@ -66,10 +66,12 @@ async function run() {
     console.log(
       `🔴 Draft has ${
         assets.data.length
-      } assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going.`
+      } assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going...`
     );
     return;
   }
+
+  console.log(`✅ All agents have finished and uploaded artefacts`);
 
   const entries = [];
 
@@ -99,10 +101,6 @@ async function run() {
   });
 
   const latestReleaseTag = latestRelease.data.tag_name;
-
-  console.log(
-    `✅ TODO: find merged PRs between ${latestReleaseTag} and ${tag_name}`
-  );
 
   const response = await octokit.repos.compareCommits({
     owner,
@@ -164,7 +162,9 @@ ${fileListText}`;
 
   const { html_url } = result.data;
 
-  console.log(`✅ Draft for release ${tag_name} updated.`);
+  console.log(
+    `✅ Draft for release ${tag_name} updated with changelog and artifacts`
+  );
   console.log();
   console.log(`🚨 Please review draft release and publish: ${html_url}`);
 }
