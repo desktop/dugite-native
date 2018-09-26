@@ -5,7 +5,7 @@ services:
 
 env:
   global:
-    - GIT_LFS_VERSION=2.5.1
+    - GIT_LFS_VERSION=2.5.2
 
 matrix:
   include:
@@ -13,7 +13,7 @@ matrix:
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
-        - GIT_LFS_CHECKSUM=9565fa9c2442c3982567a3498c9352cda88e0f6a982648054de0440e273749e7
+        - GIT_LFS_CHECKSUM=624396e8994578ac38c3e5987889be56dba453c378c0675d56cffbc5b8972aa5
       addons:
         apt:
           packages:
@@ -23,7 +23,7 @@ matrix:
       language: c
       env:
         - TARGET_PLATFORM=macOS
-        - GIT_LFS_CHECKSUM=2ade1f42d51b012db0658838d6e1050af7e269d46c84d978bca82d74788e1c2e
+        - GIT_LFS_CHECKSUM=eedb80c79f1d3106aa5f1496ddc505e1c1c86c290293d81fb20c5358c615fd74
 
     - os: linux
       language: c
@@ -32,7 +32,7 @@ matrix:
         - WIN_ARCH=64
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.0.windows.1/MinGit-2.19.0-64-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=424d24b5fc185a9c5488d7872262464f2facab4f1d4693ea8008196f14a3c19b
-        - GIT_LFS_CHECKSUM=62ce983c2e4074b58bc88f20c12e15f00d2fb27acaf7219c860f1fd21af0f991
+        - GIT_LFS_CHECKSUM=d5276eb61dea32b3978c2f68c5cf3ad4a45bf70f1a245ddc86b555db7299c7c9
 
     - os: linux
       language: c
@@ -41,7 +41,7 @@ matrix:
         - WIN_ARCH=32
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.0.windows.1/MinGit-2.19.0-32-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=83cf018bd6f5c24e2b3088539bbeef9067fd632087d094d447a3a0ff676e7bd7
-        - GIT_LFS_CHECKSUM=64eb8782df371e5ef3b8cf07134a745be2b782920726ba2b924cc3d56b7c03ed
+        - GIT_LFS_CHECKSUM=6cf7d4c169a17dd5b326f903708829e7471368b7e1235ab150ce77555f47b213
 
     - os: linux
       language: go
