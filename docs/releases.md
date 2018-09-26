@@ -16,7 +16,7 @@ Examples:
 
 Here's how to release:
 
-0. `git tag {version}` from the commit you wish to create a release
+1. `git tag {version}` from the commit you wish to create a release
 1. `git push origin --tags`
 1. Wait a few minutes for the build to finish
 1. From your machine run this command: `npm run generate-release-notes`
@@ -26,21 +26,20 @@ each of those builds completes, the artefacts are published to a draft release
 on GitHub. The `generate-release-notes` script handles generating the details
 of the release, to save you manually finding the checksums.
 
-This is the template that we previously used:
+This is the template we now use:
 
 ```
-{details about what's changed since the last release}
+ - list of merged pull requests
 
-| File | SHA256 checksum |
-| --- | --- |
-| dugite-native-v{version}-macOS.tar.gz | `{sha1}` |
-| dugite-native-v{version}-macOS.lzma | `{sha2}` |
-| dugite-native-v{version}-ubuntu.tar.gz | `{sha3}` |
-| dugite-native-v{version}-ubuntu.lzma | `{sha4}` |
-| dugite-native-v{version}-win32.tar.gz | `{sha5}` |
-| dugite-native-v{version}-win32.lzma | `{sha6}` |
-| dugite-native-v{version}-arm64.tar.gz | `{sha7}` |
-| dugite-native-v{version}-arm64.lzma | `{sha8}` |
+## SHA-256 hashes:
+
+{filename}
+{checksum of file}
+
+{filename}
+{checksum of file}
+
+...
 ```
 
 The script requires a personal access token with `public_scope` set to the `GITHUB_ACCESS_TOKEN` environment variable, and you need to have `write` permissions to this repository for the script to succeed.
@@ -48,15 +47,10 @@ The script requires a personal access token with `public_scope` set to the `GITH
 A successful run will look like this:
 
 ```
-✅ token found for shiftkey...
-✅ token has 'public_scope' scope to make changes to releases
+✅ Token found for shiftkey...
+✅ Token has 'public_scope' scope to make changes to releases
 ✅ Latest release 'v2.19.0-1' is a draft
-✅ TODO: find merged PRs between v2.19.0 and v2.19.0-1
-release notes: [
-  " - upgrade to Git 2.19.0 and Git LFS 2.5.1 - #110 via @shiftkey",
-  " - Add SHA256 checksums to uploaded artifacts - #111 via @shiftkey",
-  " - switch ARM64 agent over to use new build steps - #114 via @shiftkey"
-]
+✅ Changelog has 4 entries
 ✅ Draft for release v2.19.0-1 updated.
 
 🚨 Please review draft release and publish: https://github.com/desktop/dugite-native/releases/tag/untagged-3c3f4a202dd581133050
