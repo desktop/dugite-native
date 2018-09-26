@@ -56,7 +56,11 @@ A successful run will look like this:
 🚨 Please review draft release and publish: https://github.com/desktop/dugite-native/releases/tag/untagged-3c3f4a202dd581133050
 ```
 
-A problem found will stop the script with some helpful context:
+You should then browse to the URL, tweak the changelog entries if they are
+unclear, and then press **Publish** to make the release public.
+
+The script is very defensive and is designed to be run multiple times. If it
+encounters a problem it should stop and provide some helpful context:
 
 ```
 ✅ token found for shiftkey...
@@ -64,5 +68,3 @@ A problem found will stop the script with some helpful context:
 ✅ Latest release 'v2.19.0-1' is a draft...
 🔴 Draft has 16 assets, expecting 20. This means the build agents are probably still going.
 ```
-
-You can then look at the URL specified in the build script, verify it's good, and hit Publish to create the release.
