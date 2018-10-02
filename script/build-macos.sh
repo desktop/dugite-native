@@ -58,6 +58,28 @@ else
   exit 1
 fi
 
+echo "-- Bundling smimesign"
+SMIMESIGN_FILE=smimesign.tar.gz
+SMIMESIGN_URL="https://github.com/github/smimesign/releases/download/${SMIMESIGN_VERSION}/smimesign-${SMIMESIGN_VERSION}-macos.tgz"
+echo "-- Downloading from $SMIMESIGN_URL"
+curl -sL -o $SMIMESIGN_FILE $SMIMESIGN_URL
+COMPUTED_SHA256=$(computeChecksum $SMIMESIGN_FILE)
+if [ "$COMPUTED_SHA256" = "$SMIMESIGN_CHECKSUM" ]; then
+  echo "smimesign: checksums match"
+  SUBFOLDER="$DESTINATION/bin"
+  tar -xvf $SMIMESIGN_FILE -C $SUBFOLDER
+
+  if [[ ! -f "$SUBFOLDER/smimesign" ]]; then
+    echo "After extracting smimesign the file was not found under bin/"
+    echo "aborting..."
+    exit 1
+  fi
+else
+  echo "smimesign: expected checksum $SMIMESIGN_CHECKSUM but got $COMPUTED_SHA256"
+  echo "aborting..."
+  exit 1
+fi
+
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
 rm "$DESTINATION/bin/git-receive-pack"

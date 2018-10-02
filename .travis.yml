@@ -6,6 +6,7 @@ services:
 env:
   global:
     - GIT_LFS_VERSION=2.5.2
+    - SMIMESIGN_VERSION=0.0.6
 
 matrix:
   include:
@@ -24,6 +25,7 @@ matrix:
       env:
         - TARGET_PLATFORM=macOS
         - GIT_LFS_CHECKSUM=eedb80c79f1d3106aa5f1496ddc505e1c1c86c290293d81fb20c5358c615fd74
+        - SMIMESIGN_CHECKSUM=771790f685176b132cb287302a9374120184f7f7973038a0232efee145781906
 
     - os: linux
       language: c
@@ -33,6 +35,7 @@ matrix:
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.0.windows.1/MinGit-2.19.0-64-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=424d24b5fc185a9c5488d7872262464f2facab4f1d4693ea8008196f14a3c19b
         - GIT_LFS_CHECKSUM=d5276eb61dea32b3978c2f68c5cf3ad4a45bf70f1a245ddc86b555db7299c7c9
+        - SMIMESIGN_CHECKSUM=2a2f946e31f2d74eadcdcd97b7bfc69298cee2f11cf7cb03c604d28fa1b34cd3
 
     - os: linux
       language: c
@@ -42,6 +45,7 @@ matrix:
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.0.windows.1/MinGit-2.19.0-32-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=83cf018bd6f5c24e2b3088539bbeef9067fd632087d094d447a3a0ff676e7bd7
         - GIT_LFS_CHECKSUM=6cf7d4c169a17dd5b326f903708829e7471368b7e1235ab150ce77555f47b213
+        - SMIMESIGN_CHECKSUM=9a13d00aa02c0a5d277c030297d09f10a467f31e6740f1520a08e09a23046323
 
     - os: linux
       language: go

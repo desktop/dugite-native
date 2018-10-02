@@ -37,11 +37,12 @@ else
   exit 1
 fi
 
+if [ "$WIN_ARCH" -eq "64" ]; then GO_ARCH="amd64"; else GO_ARCH="386"; fi
+
 # download Git LFS, verify its the right contents, and unpack it
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=git-lfs.zip
-if [ "$WIN_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
-GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
+GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GO_ARCH}-v${GIT_LFS_VERSION}.zip"
 echo "-- Downloading from $GIT_LFS_URL"
 curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
 COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
@@ -57,6 +58,29 @@ if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
   fi
 else
   echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM and got $COMPUTED_SHA256"
+  echo "aborting..."
+  exit 1
+fi
+
+# download smimesign, verify its the right contents, and unpack it
+echo "-- Bundling smimesign"
+SMIMESIGN_FILE=smimesign.zip
+SMIMESIGN_URL="https://github.com/github/smimesign/releases/download/${SMIMESIGN_VERSION}/smimesign-windows-${GO_ARCH}-${SMIMESIGN_VERSION}.zip"
+echo "-- Downloading from $SMIMESIGN_URL"
+curl -sL -o $SMIMESIGN_FILE $SMIMESIGN_URL
+COMPUTED_SHA256=$(computeChecksum $SMIMESIGN_FILE)
+if [ "$COMPUTED_SHA256" = "$SMIMESIGN_CHECKSUM" ]; then
+  echo "smimesign: checksums match"
+  SUBFOLDER="$DESTINATION/$MINGW_DIR/bin"
+  unzip -j $SMIMESIGN_FILE -d $SUBFOLDER
+
+  if [[ ! -f "$SUBFOLDER/smimesign.exe" ]]; then
+    echo "After extracting smimesign the file was not found under /mingw64/bin/"
+    echo "aborting..."
+    exit 1
+  fi
+else
+  echo "smimesign: expected checksum $SMIMESIGN_CHECKSUM and got $COMPUTED_SHA256"
   echo "aborting..."
   exit 1
 fi
