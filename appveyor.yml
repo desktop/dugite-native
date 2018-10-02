@@ -10,6 +10,8 @@ environment:
   GIT_FOR_WINDOWS_CHECKSUM: 424d24b5fc185a9c5488d7872262464f2facab4f1d4693ea8008196f14a3c19b
   GIT_LFS_VERSION: 2.5.2
   GIT_LFS_CHECKSUM: d5276eb61dea32b3978c2f68c5cf3ad4a45bf70f1a245ddc86b555db7299c7c9
+  SMIMESIGN_VERSION: 0.0.6
+  SMIMESIGN_CHECKSUM: 2a2f946e31f2d74eadcdcd97b7bfc69298cee2f11cf7cb03c604d28fa1b34cd3
 
 build_script:
   - cmd: git submodule update --init --recursive
