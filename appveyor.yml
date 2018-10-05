@@ -6,8 +6,8 @@ skip_branch_with_pr: true
 environment:
   TARGET_PLATFORM: win32
   WIN_ARCH: 64
-  GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.19.0.windows.1/MinGit-2.19.0-64-bit.zip
-  GIT_FOR_WINDOWS_CHECKSUM: 424d24b5fc185a9c5488d7872262464f2facab4f1d4693ea8008196f14a3c19b
+  GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-64-bit.zip
+  GIT_FOR_WINDOWS_CHECKSUM: f89e103a41bda8e12efeaab198a8c20bb4a84804683862da518ee2cb66a5a5b3
   GIT_LFS_VERSION: 2.5.2
   GIT_LFS_CHECKSUM: d5276eb61dea32b3978c2f68c5cf3ad4a45bf70f1a245ddc86b555db7299c7c9
 
