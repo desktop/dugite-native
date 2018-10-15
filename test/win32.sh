@@ -8,8 +8,8 @@ DESTINATION="$ROOT/build/git"
 GIT_LFS_VERSION=2.5.2 \
 TARGET_PLATFORM=win32 \
 WIN_ARCH=32 \
-GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.0.windows.1/MinGit-2.19.0-32-bit.zip \
-GIT_FOR_WINDOWS_CHECKSUM=83cf018bd6f5c24e2b3088539bbeef9067fd632087d094d447a3a0ff676e7bd7 \
+GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-32-bit.zip \
+GIT_FOR_WINDOWS_CHECKSUM=9bde728fe03f66a022b3e41408902ccfceb56a34067db1f35d6509375b9be922 \
 GIT_LFS_CHECKSUM=6cf7d4c169a17dd5b326f903708829e7471368b7e1235ab150ce77555f47b213 \
 . "$ROOT/script/build-win32.sh" $SOURCE $DESTINATION
 
