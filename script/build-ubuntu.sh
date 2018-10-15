@@ -93,7 +93,12 @@ checkStaticLinking() {
       echo "File: $file"
       # this is done twice rather than storing in a bash variable because
       # it's easier than trying to preserve the line endings
+      echo "readelf output:"
       readelf -d $1 | grep 'Shared library'
+      # get a list of glibc versions required by the binary
+      echo "objdump output:"
+      objdump -T $1 | grep -oEi 'GLIBC_[0-9]*.[0-9]*.[0-9]*'| sort | uniq
+      echo ""
     fi
   fi
 }
