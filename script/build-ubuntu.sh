@@ -117,6 +117,10 @@ cd - > /dev/null
 bold=$(tput bold)
 normal=$(tput sgr0)
 
+if [[ ! -f "ssl/cacert.pem" ]]; then
+  echo "${bold}warning:${normal} Skipped bundling of CA certificates (failed to download them)"
+fi
+
 if [[ ! "$GIT_LFS_VERSION" ]]; then
   echo "${bold}warning:${normal} Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
