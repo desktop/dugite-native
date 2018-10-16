@@ -36,27 +36,33 @@ DESTDIR="$DESTINATION" make strip install prefix=/ \
     LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro'
 cd - > /dev/null
 
-echo "-- Bundling Git LFS"
-GIT_LFS_FILE=git-lfs.tar.gz
-GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz"
-echo "-- Downloading from $GIT_LFS_URL"
-curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
-if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
-  echo "Git LFS: checksums match"
-  SUBFOLDER="$DESTINATION/libexec/git-core"
-  tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude="*.md"
 
-  if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
-    echo "After extracting Git LFS the file was not found under libexec/git-core/"
+if [[ "$GIT_LFS_VERSION" ]]; then
+  echo "-- Bundling Git LFS"
+  GIT_LFS_FILE=git-lfs.tar.gz
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz"
+  echo "-- Downloading from $GIT_LFS_URL"
+  curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
+  COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
+  if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
+    echo "Git LFS: checksums match"
+    SUBFOLDER="$DESTINATION/libexec/git-core"
+    tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude="*.md"
+
+    if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
+      echo "After extracting Git LFS the file was not found under libexec/git-core/"
+      echo "aborting..."
+      exit 1
+    fi
+  else
+    echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM but got $COMPUTED_SHA256"
     echo "aborting..."
     exit 1
   fi
 else
-  echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM but got $COMPUTED_SHA256"
-  echo "aborting..."
-  exit 1
+  echo "-- Skipping Git LFS"
 fi
+
 
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html
