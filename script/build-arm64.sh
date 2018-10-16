@@ -81,3 +81,11 @@ do
   checkStaticLinking $file
 done
 cd - > /dev/null
+
+
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+if [[ ! "$GIT_LFS_VERSION" ]]; then
+  echo "${bold}warning:${normal} Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
+fi
