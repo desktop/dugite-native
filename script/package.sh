@@ -63,8 +63,8 @@ else
   LZMA_CHECKSUM=$(shasum -a 256 $LZMA_FILE | awk '{print $1;}')
 fi
 
-echo "$GZIP_CHECKSUM" > "${GZIP_FILE}.sha256"
-echo "$LZMA_CHECKSUM" > "${LZMA_FILE}.sha256"
+echo "$GZIP_CHECKSUM" | tr -d '\n' > "${GZIP_FILE}.sha256"
+echo "$LZMA_CHECKSUM" | tr -d '\n' > "${LZMA_FILE}.sha256"
 
 GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
 LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
