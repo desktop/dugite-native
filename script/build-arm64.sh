@@ -86,7 +86,7 @@ cd - > /dev/null
 bold=$(tput bold)
 normal=$(tput sgr0)
 
-if [[ ! -f "ssl/cacert.pem" ]]; then
+if [[ ! -f "$SOURCE/ssl/cacert.pem" ]]; then
   echo "${bold}warning:${normal} Skipped bundling of CA certificates (failed to download them)"
 fi
 
