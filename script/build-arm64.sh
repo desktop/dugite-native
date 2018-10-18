@@ -54,6 +54,10 @@ mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd - > /dev/null
 
+if [[ ! -f "$SOURCE/ssl/cacert.pem" ]]; then
+  echo "-- Skipped bundling of CA certificates (failed to download them)"
+fi
+
 
 checkStaticLinking() {
   if [ -z "$1" ] ; then
@@ -82,10 +86,6 @@ do
 done
 cd - > /dev/null
 
-
-if [[ ! -f "$SOURCE/ssl/cacert.pem" ]]; then
-  echo "warning: Skipped bundling of CA certificates (failed to download them)"
-fi
 
 if [[ ! "$GIT_LFS_VERSION" ]]; then
   echo "warning: Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
