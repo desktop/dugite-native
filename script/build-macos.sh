@@ -77,10 +77,6 @@ rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
 
 
-if [[ ! -f "$SOURCE/ssl/cacert.pem" ]]; then
-  echo "warning: Skipped bundling of CA certificates (failed to download them)"
-fi
-
 if [[ ! "$GIT_LFS_VERSION" ]]; then
   echo "warning: Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
