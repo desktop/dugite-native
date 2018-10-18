@@ -42,7 +42,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   SUBFOLDER="$DESTINATION/libexec/git-core"
   cp $GIT_LFS_FILE $SUBFOLDER
 else
-  echo "-- Skipping Git LFS"
+  echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
 
 
