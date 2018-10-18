@@ -16,7 +16,7 @@ docker run -it \
 -e "SOURCE=$SOURCE" \
 -e "DESTINATION=$DESTINATION" \
 -w=$BASEDIR \
---rm multiarch/debian-debootstrap:arm64-jessie sh $BASEDIR/script/build-arm64-git.sh
+--rm shiftkey/dugite-native:arm64-jessie-git sh $BASEDIR/script/build-arm64-git.sh
 cd - > /dev/null
 
 echo "-- Building Git LFS"
@@ -33,7 +33,7 @@ echo "-- Verifying built Git LFS"
 docker run -it \
  --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
  -w=$BASEDIR \
- --rm multiarch/debian-debootstrap:arm64-jessie $GIT_LFS_OUTPUT_DIR/git-lfs --version
+ --rm shiftkey/dugite-native:arm64-jessie-git $GIT_LFS_OUTPUT_DIR/git-lfs --version
 
 echo "-- Bundling Git LFS"
 GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs

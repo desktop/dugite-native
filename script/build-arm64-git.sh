@@ -1,6 +1,4 @@
 echo " -- Building git at $SOURCE to $DESTINATION"
-apt-get update
-apt-get install -y build-essential libexpat-dev libcurl4-openssl-dev zlib1g-dev libssl-dev
 
 cd $SOURCE
 make clean
