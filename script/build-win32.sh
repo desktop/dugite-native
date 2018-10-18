@@ -37,29 +37,35 @@ else
   exit 1
 fi
 
-# download Git LFS, verify its the right contents, and unpack it
-echo "-- Bundling Git LFS"
-GIT_LFS_FILE=git-lfs.zip
-if [ "$WIN_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
-GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
-echo "-- Downloading from $GIT_LFS_URL"
-curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
-if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
-  echo "Git LFS: checksums match"
-  SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
-  unzip -j $GIT_LFS_FILE -x '*.md' -d $SUBFOLDER
 
-  if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
-    echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
+if [[ "$GIT_LFS_VERSION" ]]; then
+  # download Git LFS, verify its the right contents, and unpack it
+  echo "-- Bundling Git LFS"
+  GIT_LFS_FILE=git-lfs.zip
+  if [ "$WIN_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
+  echo "-- Downloading from $GIT_LFS_URL"
+  curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
+  COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
+  if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
+    echo "Git LFS: checksums match"
+    SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
+    unzip -j $GIT_LFS_FILE -x '*.md' -d $SUBFOLDER
+
+    if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
+      echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
+      echo "aborting..."
+      exit 1
+    fi
+  else
+    echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM and got $COMPUTED_SHA256"
     echo "aborting..."
     exit 1
   fi
 else
-  echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM and got $COMPUTED_SHA256"
-  echo "aborting..."
-  exit 1
+  echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
+
 
 SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
 

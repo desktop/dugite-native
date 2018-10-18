@@ -19,26 +19,30 @@ docker run -it \
 --rm shiftkey/dugite-native:arm64-jessie-git sh $BASEDIR/script/build-arm64-git.sh
 cd - > /dev/null
 
-echo "-- Building Git LFS"
-go get github.com/git-lfs/git-lfs
-GOPATH=`go env GOPATH`
-cd $GOPATH/src/github.com/git-lfs/git-lfs
-git checkout "v${GIT_LFS_VERSION}"
-# Make the 'mangen' target first, without setting GOOS/GOARCH.
-make mangen
-make GOARCH=arm64 GOOS=linux
-GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
+if [[ "$GIT_LFS_VERSION" ]]; then
+  echo "-- Building Git LFS"
+  go get github.com/git-lfs/git-lfs
+  GOPATH=`go env GOPATH`
+  cd $GOPATH/src/github.com/git-lfs/git-lfs
+  git checkout "v${GIT_LFS_VERSION}"
+  # Make the 'mangen' target first, without setting GOOS/GOARCH.
+  make mangen
+  make GOARCH=arm64 GOOS=linux
+  GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
+  
+  echo "-- Verifying built Git LFS"
+  docker run -it \
+    --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
+    -w=$BASEDIR \
+    --rm shiftkey/dugite-native:arm64-jessie-git $GIT_LFS_OUTPUT_DIR/git-lfs --version
 
-echo "-- Verifying built Git LFS"
-docker run -it \
- --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
- -w=$BASEDIR \
- --rm shiftkey/dugite-native:arm64-jessie-git $GIT_LFS_OUTPUT_DIR/git-lfs --version
-
-echo "-- Bundling Git LFS"
-GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs
-SUBFOLDER="$DESTINATION/libexec/git-core"
-cp $GIT_LFS_FILE $SUBFOLDER
+  echo "-- Bundling Git LFS"
+  GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs
+  SUBFOLDER="$DESTINATION/libexec/git-core"
+  cp $GIT_LFS_FILE $SUBFOLDER
+else
+  echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
+fi
 
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html
@@ -47,6 +51,10 @@ cd $DESTINATION
 mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd - > /dev/null
+
+if [[ ! -f "$SOURCE/ssl/cacert.pem" ]]; then
+  echo "-- Skipped bundling of CA certificates (failed to download them)"
+fi
 
 
 checkStaticLinking() {
