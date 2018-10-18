@@ -98,10 +98,6 @@ rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
 echo "-- Removing legacy credential helpers"
 
 
-if [[ ! -f "$SOURCE/ssl/cacert.pem" ]]; then
-  echo "warning: Skipped bundling of CA certificates (failed to download them)"
-fi
-
 if [[ ! "$GIT_LFS_VERSION" ]]; then
   echo "warning: Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
