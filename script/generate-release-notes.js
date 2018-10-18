@@ -166,7 +166,7 @@ ${fileListText}`;
     `✅ Draft for release ${tag_name} updated with changelog and artifacts`
   );
   console.log();
-  console.log(`🚨 Please review draft release and publish: ${html_url}`);
+  console.log(`💚 Please review draft release and publish: ${html_url}`);
 }
 
 run();
