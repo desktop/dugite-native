@@ -20,24 +20,26 @@ if [ "$EXIT_CODE" == "128" ]; then
 fi
 cd - > /dev/null
 
+BUILD_HASH=$(git rev-parse --short HEAD)
+
 if ! [ -d "$DESTINATION" ]; then
   echo "No output found, exiting..."
   exit 1
 fi
 
 if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
-  GZIP_FILE="dugite-native-$VERSION-ubuntu.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-ubuntu.lzma"
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-ubuntu.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-ubuntu.lzma"
 elif [ "$TARGET_PLATFORM" == "macOS" ]; then
-  GZIP_FILE="dugite-native-$VERSION-macOS.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-macOS.lzma"
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.lzma"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
   if [ "$WIN_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
-  GZIP_FILE="dugite-native-$VERSION-windows-$ARCH.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-windows-$ARCH.lzma"
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.lzma"
 elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  GZIP_FILE="dugite-native-$VERSION-arm64.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-arm64.lzma"
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.lzma"
 else
   echo "Unable to package Git for platform $TARGET_PLATFORM"
   exit 1
@@ -63,8 +65,8 @@ else
   LZMA_CHECKSUM=$(shasum -a 256 $LZMA_FILE | awk '{print $1;}')
 fi
 
-echo "$GZIP_CHECKSUM" > "${GZIP_FILE}.sha256"
-echo "$LZMA_CHECKSUM" > "${LZMA_FILE}.sha256"
+echo "$GZIP_CHECKSUM" | tr -d '\n' > "${GZIP_FILE}.sha256"
+echo "$LZMA_CHECKSUM" | tr -d '\n' > "${LZMA_FILE}.sha256"
 
 GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
 LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)

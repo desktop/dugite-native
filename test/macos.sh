@@ -5,9 +5,9 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_VERSION=2.5.1 \
+GIT_LFS_VERSION=2.5.2 \
 TARGET_PLATFORM=macOS \
-GIT_LFS_CHECKSUM=2ade1f42d51b012db0658838d6e1050af7e269d46c84d978bca82d74788e1c2e \
+GIT_LFS_CHECKSUM=eedb80c79f1d3106aa5f1496ddc505e1c1c86c290293d81fb20c5358c615fd74 \
 . "$ROOT/script/build-macos.sh" $SOURCE $DESTINATION
 
 echo "Archive contents:"
@@ -38,6 +38,9 @@ fi
 
 GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
 LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
+
+echo "${GZIP_CHECKSUM}" | tr -d '\n' > "${GZIP_FILE}.sha256"
+echo "${LZMA_CHECKSUM}" | tr -d '\n' > "${LZMA_FILE}.sha256"
 
 echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"

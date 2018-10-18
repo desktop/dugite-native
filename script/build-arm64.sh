@@ -16,9 +16,8 @@ docker run -it \
 -e "SOURCE=$SOURCE" \
 -e "DESTINATION=$DESTINATION" \
 -w=$BASEDIR \
---rm multiarch/debian-debootstrap:arm64-jessie sh $BASEDIR/script/build-arm64-git.sh
+--rm shiftkey/dugite-native:arm64-jessie-git sh $BASEDIR/script/build-arm64-git.sh
 cd - > /dev/null
-
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Building Git LFS"
@@ -30,12 +29,12 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   make mangen
   make GOARCH=arm64 GOOS=linux
   GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
-
+  
   echo "-- Verifying built Git LFS"
   docker run -it \
-   --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
-   -w=$BASEDIR \
-   --rm multiarch/debian-debootstrap:arm64-jessie $GIT_LFS_OUTPUT_DIR/git-lfs --version
+    --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
+    -w=$BASEDIR \
+    --rm shiftkey/dugite-native:arm64-jessie-git $GIT_LFS_OUTPUT_DIR/git-lfs --version
 
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs
@@ -44,7 +43,6 @@ if [[ "$GIT_LFS_VERSION" ]]; then
 else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
-
 
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html

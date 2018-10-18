@@ -5,9 +5,9 @@ ROOT="$DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_VERSION=2.5.1 \
+GIT_LFS_VERSION=2.5.2 \
 TARGET_PLATFORM=ubuntu \
-GIT_LFS_CHECKSUM=9565fa9c2442c3982567a3498c9352cda88e0f6a982648054de0440e273749e7 \
+GIT_LFS_CHECKSUM=624396e8994578ac38c3e5987889be56dba453c378c0675d56cffbc5b8972aa5 \
 . "$ROOT/script/build-ubuntu.sh" $SOURCE $DESTINATION
 
 echo "Archive contents:"
@@ -38,6 +38,9 @@ fi
 
 GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
 LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
+
+echo "${GZIP_CHECKSUM}" | tr -d '\n' > "${GZIP_FILE}.sha256"
+echo "${LZMA_CHECKSUM}" | tr -d '\n' > "${LZMA_FILE}.sha256"
 
 echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
