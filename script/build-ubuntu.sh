@@ -116,8 +116,3 @@ do
   checkStaticLinking $file
 done
 cd - > /dev/null
-
-
-if [[ ! "$GIT_LFS_VERSION" ]]; then
-  echo "warning: Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
-fi

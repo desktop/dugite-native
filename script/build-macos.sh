@@ -75,8 +75,3 @@ echo "-- Removing unsupported features"
 rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
-
-
-if [[ ! "$GIT_LFS_VERSION" ]]; then
-  echo "warning: Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
-fi

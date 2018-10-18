@@ -96,8 +96,3 @@ echo "-- Removing global gitattributes which handles certain file extensions"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
 echo "-- Removing legacy credential helpers"
-
-
-if [[ ! "$GIT_LFS_VERSION" ]]; then
-  echo "warning: Skipped bundling of Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
-fi
