@@ -29,7 +29,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   make mangen
   make GOARCH=arm64 GOOS=linux
   GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
-  
+
   echo "-- Verifying built Git LFS"
   docker run -it \
     --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
@@ -70,7 +70,15 @@ checkStaticLinking() {
       echo "File: $file"
       # this is done twice rather than storing in a bash variable because
       # it's easier than trying to preserve the line endings
+      echo "readelf output:"
       readelf -d $1 | grep 'Shared library'
+      # get a list of glibc versions required by the binary
+      echo "objdump output:"
+      objdump -T $1 | grep -oEi 'GLIBC_[0-9]*.[0-9]*.[0-9]*'| sort | uniq
+      # confirm what version of curl is expected
+      echo "strings output:"
+      strings $1 | grep -e "^CURL"
+      echo ""
     fi
   fi
 }

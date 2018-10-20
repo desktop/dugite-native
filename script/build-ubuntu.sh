@@ -108,7 +108,11 @@ checkStaticLinking() {
       # get a list of glibc versions required by the binary
       echo "objdump output:"
       objdump -T $1 | grep -oEi 'GLIBC_[0-9]*.[0-9]*.[0-9]*'| sort | uniq
+      # confirm what version of curl is expected
+      echo "strings output:"
+      strings $1 | grep -e "^CURL"
       echo ""
+
     fi
   fi
 }
