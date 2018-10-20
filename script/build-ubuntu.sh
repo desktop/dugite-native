@@ -111,8 +111,6 @@ checkStaticLinking() {
       # confirm what version of curl is expected
       echo "objdump curl output:"
       objdump -T $1 | grep -oEi " curl.*" | sort | uniq
-      echo "strings output:"
-      strings $1 | grep -e "^CURL"
       echo ""
     fi
   fi
