@@ -73,9 +73,11 @@ checkStaticLinking() {
       echo "readelf output:"
       readelf -d $1 | grep 'Shared library'
       # get a list of glibc versions required by the binary
-      echo "objdump output:"
+      echo "objdump GLIBC output:"
       objdump -T $1 | grep -oEi 'GLIBC_[0-9]*.[0-9]*.[0-9]*'| sort | uniq
       # confirm what version of curl is expected
+      echo "objdump curl output:"
+      objdump -T $1 | grep -oEi " curl.*" | sort | uniq
       echo "strings output:"
       strings $1 | grep -e "^CURL"
       echo ""
