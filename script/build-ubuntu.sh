@@ -75,7 +75,7 @@ mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
 cd - > /dev/null
 
-if [[ ! -f "$SOURCE/ssl/cacert.pem" ]]; then
+if [[ ! -f "$DESTINATION/ssl/cacert.pem" ]]; then
   echo "-- Skipped bundling of CA certificates (failed to download them)"
 fi
 
