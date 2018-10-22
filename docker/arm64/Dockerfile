@@ -4,6 +4,7 @@ FROM multiarch/debian-debootstrap:arm64-jessie
 RUN apt-get update
 RUN apt-get install -y \
     build-essential \
+    autoconf \
     libexpat-dev \
     curl \
     libcurl4-openssl-dev \
