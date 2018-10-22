@@ -2,14 +2,19 @@ echo " -- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
 make clean
-DESTDIR="$DESTINATION" make strip install prefix=/ \
+make configure
+CC='gcc' \
+  CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
+  LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
+  ./configure \
+  --prefix=/
+
+DESTDIR="$DESTINATION" \
     NO_PERL=1 \
     NO_TCLTK=1 \
     NO_GETTEXT=1 \
     NO_INSTALL_HARDLINKS=1 \
-    CC='gcc' \
-    CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
-    LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro'
+    make strip install
 
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
