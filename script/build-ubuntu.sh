@@ -5,6 +5,7 @@
 
 SOURCE=$1
 DESTINATION=$2
+CURL_INSTALL_DIR=$3
 
 # i want to centralize this function but everything is terrible
 # go read https://github.com/desktop/dugite-native/issues/38
@@ -21,6 +22,19 @@ computeChecksum() {
     echo $(shasum -a 256 $1 | awk '{print $1;}')
   fi
 }
+
+echo " -- Building vanilla curl at $CURL_INSTALL_DIR instead of distro-specific version"
+
+CURL_FILE_NAME="curl-7.61.1"
+CURL_FILE="$CURL_FILE_NAME.tar.gz"
+
+cd /tmp
+curl -LO "https://curl.haxx.se/download/$CURL_FILE"
+tar -xf $CURL_FILE
+cd $CURL_FILE_NAME
+./configure --prefix=$CURL_INSTALL_DIR
+make install
+cd - > /dev/null
 
 echo " -- Building git at $SOURCE to $DESTINATION"
 
