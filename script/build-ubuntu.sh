@@ -5,6 +5,7 @@
 
 SOURCE=$1
 DESTINATION=$2
+CURL_INSTALL_DIR=$3
 
 # i want to centralize this function but everything is terrible
 # go read https://github.com/desktop/dugite-native/issues/38
@@ -22,6 +23,19 @@ computeChecksum() {
   fi
 }
 
+echo " -- Building vanilla curl at $CURL_INSTALL_DIR instead of distro-specific version"
+
+CURL_FILE_NAME="curl-7.61.1"
+CURL_FILE="$CURL_FILE_NAME.tar.gz"
+
+cd /tmp
+curl -LO "https://curl.haxx.se/download/$CURL_FILE"
+tar -xf $CURL_FILE
+cd $CURL_FILE_NAME
+./configure --prefix=$CURL_INSTALL_DIR
+make install
+cd - > /dev/null
+
 echo " -- Building git at $SOURCE to $DESTINATION"
 
 cd $SOURCE
@@ -31,11 +45,13 @@ CC='gcc' \
   CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
   LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
   ./configure \
+  --with-curl=$CURL_INSTALL_DIR \
   --prefix=/
 DESTDIR="$DESTINATION" \
   NO_TCLTK=1 \
   NO_GETTEXT=1 \
   NO_INSTALL_HARDLINKS=1 \
+  NO_R_TO_GCC_LINKER=1 \
   make strip install
 cd - > /dev/null
 
@@ -126,4 +142,21 @@ find . -type f -print0 | while read -d $'\0' file
 do
   checkStaticLinking $file
 done
+cd - > /dev/null
+
+echo "-- Testing clone operation with generated binary"
+
+rm -rf $CURL_OUTPUT_DIR
+
+TEMP_CLONE_DIR=/tmp/clones
+mkdir -p $TEMP_CLONE_DIR
+
+cd "$DESTINATION/bin"
+./git --version
+GIT_CURL_VERBOSE=1 \
+  GIT_TEMPLATE_DIR="$DESTINATION/share/git-core/templates" \
+  GIT_SSL_CAINFO="$DESTINATION/ssl/cacert.pem" \
+  GIT_EXEC_PATH="$DESTINATION/libexec/git-core" \
+  PREFIX="$DESTINATION" \
+  ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
 cd - > /dev/null

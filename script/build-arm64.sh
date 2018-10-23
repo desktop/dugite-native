@@ -5,7 +5,8 @@
 
 SOURCE=$1
 DESTINATION=$2
-BASEDIR=$3
+CURL_INSTALL_DIR=$3
+BASEDIR=$4
 
 mkdir -p $DESTINATION
 
@@ -15,8 +16,9 @@ docker run -it \
 --mount type=bind,source=$DESTINATION,target=$DESTINATION \
 -e "SOURCE=$SOURCE" \
 -e "DESTINATION=$DESTINATION" \
+-e "CURL_INSTALL_DIR=$CURL_INSTALL_DIR" \
 -w=$BASEDIR \
---rm shiftkey/dugite-native:arm64-jessie-git sh $BASEDIR/script/build-arm64-git.sh
+--rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh $BASEDIR/script/build-arm64-git.sh
 cd - > /dev/null
 
 if [[ "$GIT_LFS_VERSION" ]]; then
@@ -29,12 +31,6 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   make mangen
   make GOARCH=arm64 GOOS=linux
   GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
-
-  echo "-- Verifying built Git LFS"
-  docker run -it \
-    --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
-    -w=$BASEDIR \
-    --rm shiftkey/dugite-native:arm64-jessie-git $GIT_LFS_OUTPUT_DIR/git-lfs --version
 
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs
@@ -56,6 +52,13 @@ if [[ ! -f "$DESTINATION/ssl/cacert.pem" ]]; then
   echo "-- Skipped bundling of CA certificates (failed to download them)"
 fi
 
+echo "-- Verifying environment"
+docker run -it \
+  --mount type=bind,source=$BASEDIR,target=$BASEDIR \
+  --mount type=bind,source=$DESTINATION,target=$DESTINATION \
+  -e "DESTINATION=$DESTINATION" \
+  -w=$BASEDIR \
+  --rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh $BASEDIR/script/verify-arm64-git.sh
 
 checkStaticLinking() {
   if [ -z "$1" ] ; then
