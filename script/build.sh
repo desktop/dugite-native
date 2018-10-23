@@ -17,7 +17,7 @@ elif [ "$TARGET_PLATFORM" == "macOS" ]; then
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
   bash "$DIR/build-win32.sh" $DESTINATION
 elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  bash "$DIR/build-arm64.sh" $SOURCE $DESTINATION $BASEDIR
+  bash "$DIR/build-arm64.sh" $SOURCE $DESTINATION $CURL_INSTALL_DIR $BASEDIR
 else
   echo "Unable to build Git for platform $TARGET_PLATFORM"
   exit 1

@@ -5,7 +5,8 @@
 
 SOURCE=$1
 DESTINATION=$2
-BASEDIR=$3
+CURL_INSTALL_DIR=$3
+BASEDIR=$4
 
 mkdir -p $DESTINATION
 
@@ -15,8 +16,9 @@ docker run -it \
 --mount type=bind,source=$DESTINATION,target=$DESTINATION \
 -e "SOURCE=$SOURCE" \
 -e "DESTINATION=$DESTINATION" \
+-e "CURL_INSTALL_DIR=$CURL_INSTALL_DIR" \
 -w=$BASEDIR \
---rm shiftkey/dugite-native:arm64-jessie-git sh $BASEDIR/script/build-arm64-git.sh
+--rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh $BASEDIR/script/build-arm64-git.sh
 cd - > /dev/null
 
 if [[ "$GIT_LFS_VERSION" ]]; then
