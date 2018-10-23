@@ -14,10 +14,6 @@ matrix:
       env:
         - TARGET_PLATFORM=ubuntu
         - GIT_LFS_CHECKSUM=624396e8994578ac38c3e5987889be56dba453c378c0675d56cffbc5b8972aa5
-      addons:
-        apt:
-          packages:
-            - libcurl4-openssl-dev
 
     - os: osx
       language: c
