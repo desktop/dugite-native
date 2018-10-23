@@ -10,6 +10,36 @@ process.on("unhandledRejection", reason => {
   console.log(reason);
 });
 
+async function getBuildUrl(octokit, owner, repo, ref) {
+  const response = await octokit.repos.getStatuses({
+    owner,
+    repo,
+    ref
+  });
+
+  // Travis kicks off this build after a tag is pushed to the repository
+  const statuses = response.data;
+  const travisStatus = statuses.find(
+    s => s.context === "continuous-integration/travis-ci/push"
+  );
+
+  if (travisStatus == null) {
+    const contexts = statuses.map(s => s.context);
+    console.log(
+      `👀 Uh-oh, I couldn't find the right commit status. Found these contexts: ${JSON.stringify(
+        contexts
+      )}`
+    );
+    console.log(
+      `Please open an issue against https://github.com/desktop/dugite-native so it can be fixed!`
+    );
+  } else {
+    console.log(
+      `👀 Follow along with the build here: ${travisStatus.target_url}`
+    );
+  }
+}
+
 async function run() {
   const token = process.env.GITHUB_ACCESS_TOKEN;
   if (token == null) {
@@ -68,6 +98,8 @@ async function run() {
         assets.data.length
       } assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going...`
     );
+
+    await getBuildUrl(octokit, owner, repo, tag_name);
     return;
   }
 
@@ -166,7 +198,7 @@ ${fileListText}`;
     `✅ Draft for release ${tag_name} updated with changelog and artifacts`
   );
   console.log();
-  console.log(`🚨 Please review draft release and publish: ${html_url}`);
+  console.log(`💚 Please review draft release and publish: ${html_url}`);
 }
 
 run();
