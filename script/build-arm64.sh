@@ -32,12 +32,6 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   make GOARCH=arm64 GOOS=linux
   GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
 
-  echo "-- Verifying built Git LFS"
-  docker run -it \
-    --mount type=bind,source=$GIT_LFS_OUTPUT_DIR,target=$GIT_LFS_OUTPUT_DIR \
-    -w=$BASEDIR \
-    --rm shiftkey/dugite-native:arm64-jessie-git $GIT_LFS_OUTPUT_DIR/git-lfs --version
-
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs
   SUBFOLDER="$DESTINATION/libexec/git-core"
@@ -58,6 +52,13 @@ if [[ ! -f "$DESTINATION/ssl/cacert.pem" ]]; then
   echo "-- Skipped bundling of CA certificates (failed to download them)"
 fi
 
+echo "-- Verifying environment"
+docker run -it \
+  --mount type=bind,source=$BASEDIR,target=$BASEDIR \
+  --mount type=bind,source=$DESTINATION,target=$DESTINATION \
+  -e "DESTINATION=$DESTINATION" \
+  -w=$BASEDIR \
+  --rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh $BASEDIR/script/verify-arm64-git.sh
 
 checkStaticLinking() {
   if [ -z "$1" ] ; then
