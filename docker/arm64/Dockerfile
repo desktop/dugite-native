@@ -8,7 +8,8 @@ RUN apt-get install -y \
     libexpat-dev \
     curl \
     zlib1g-dev \
-    libssl-dev
+    libssl-dev \
+    gettext
 
 ENV CURL_INSTALL_DIR "/tmp/build/curl"
 ENV CURL_VERSION "curl-7.61.1"
