@@ -11,13 +11,14 @@ process.on("unhandledRejection", reason => {
 });
 
 async function getBuildUrl(octokit, owner, repo, ref) {
-  const statuses = await octokit.repos.getStatuses({
+  const response = await octokit.repos.getStatuses({
     owner,
     repo,
     ref
   });
 
   // Travis kicks off this build after a tag is pushed to the repository
+  const statuses = response.data;
   const travisStatus = statuses.find(
     s => s.context === "continuous-integration/travis-ci/push"
   );
