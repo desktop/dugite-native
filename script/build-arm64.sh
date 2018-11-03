@@ -21,24 +21,33 @@ docker run -it \
 --rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh $BASEDIR/script/build-arm64-git.sh
 cd - > /dev/null
 
-if [[ "$GIT_LFS_VERSION" ]]; then
-  echo "-- Building Git LFS"
-  go get github.com/git-lfs/git-lfs
-  GOPATH=`go env GOPATH`
-  cd $GOPATH/src/github.com/git-lfs/git-lfs
-  git checkout "v${GIT_LFS_VERSION}"
-  # Make the 'mangen' target first, without setting GOOS/GOARCH.
-  make mangen
-  make GOARCH=arm64 GOOS=linux
-  GIT_LFS_OUTPUT_DIR=$GOPATH/src/github.com/git-lfs/git-lfs/bin/
 
+if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
-  GIT_LFS_FILE=$GIT_LFS_OUTPUT_DIR/git-lfs
-  SUBFOLDER="$DESTINATION/libexec/git-core"
-  cp $GIT_LFS_FILE $SUBFOLDER
+  GIT_LFS_FILE=git-lfs.tar.gz
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-arm64-v${GIT_LFS_VERSION}.tar.gz"
+  echo "-- Downloading from $GIT_LFS_URL"
+  curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
+  COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
+  if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
+    echo "Git LFS: checksums match"
+    SUBFOLDER="$DESTINATION/libexec/git-core"
+    tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude="*.md"
+
+    if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
+      echo "After extracting Git LFS the file was not found under libexec/git-core/"
+      echo "aborting..."
+      exit 1
+    fi
+  else
+    echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM but got $COMPUTED_SHA256"
+    echo "aborting..."
+    exit 1
+  fi
 else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
+
 
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html
