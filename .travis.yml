@@ -40,7 +40,7 @@ matrix:
         - GIT_LFS_CHECKSUM=7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
 
     - os: linux
-      language: go
+      language: c
       env:
         - TARGET_PLATFORM=arm64
         - GIT_LFS_CHECKSUM=574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a
