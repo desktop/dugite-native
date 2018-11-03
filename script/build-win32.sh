@@ -52,6 +52,10 @@ if [[ "$GIT_LFS_VERSION" ]]; then
     SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
     unzip -j $GIT_LFS_FILE -x '*.md' -d $SUBFOLDER
 
+    # this is a workaround because Git LFS changed the names of the files in the archive
+    OLD_FILE_NAME="git-lfs-windows-$GIT_LFS_ARCH.exe"
+    mv "$SUBFOLDER/$OLD_FILE_NAME" "$SUBFOLDER/git-lfs.exe"
+
     if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
       echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
       echo "aborting..."
