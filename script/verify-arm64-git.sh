@@ -1,9 +1,11 @@
 #!/bin/bash
 #
 # Verify Git for ARM64 Linux (should be run inside a container)
-#
-# Required environment variables:
-# - DESTINATION
+
+if [[ -z "${DESTINATION}" ]]; then
+  echo "Required environment variable DESTINATION was not set"
+  exit 1
+fi
 
 echo "-- Test external Git LFS"
 
