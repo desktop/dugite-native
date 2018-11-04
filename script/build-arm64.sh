@@ -1,54 +1,42 @@
 #!/bin/bash
 #
-# Compiling Git for Linux and bundling Git LFS from upstream.
+# Building Git for ARM64 Linux and bundling Git LFS from upstream.
 #
-
-# i want to centralize this function but everything is terrible
-# go read https://github.com/desktop/dugite-native/issues/38
-computeChecksum() {
-   if [ -z "$1" ] ; then
-     # no parameter provided, fail hard
-     exit 1
-   fi
-
-  path_to_sha256sum=$(which sha256sum)
-  if [ -x "$path_to_sha256sum" ] ; then
-    echo $(sha256sum $1 | awk '{print $1;}')
-  else
-    echo $(shasum -a 256 $1 | awk '{print $1;}')
-  fi
-}
 
 SOURCE=$1
 DESTINATION=$2
 CURL_INSTALL_DIR=$3
 BASEDIR=$4
 
-mkdir -p $DESTINATION
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=script/compute-checksum.sh
+source "$CURRENT_DIR/compute-checksum.sh"
+# shellcheck source=script/check-static-linking.sh
+source "$CURRENT_DIR/check-static-linking.sh"
+
+mkdir -p "$DESTINATION"
 
 docker run --rm --privileged multiarch/qemu-user-static:register --reset
 docker run -it \
---mount type=bind,source=$BASEDIR,target=$BASEDIR \
---mount type=bind,source=$DESTINATION,target=$DESTINATION \
+--mount type=bind,source="$BASEDIR",target="$BASEDIR" \
+--mount type=bind,source="$DESTINATION",target="$DESTINATION" \
 -e "SOURCE=$SOURCE" \
 -e "DESTINATION=$DESTINATION" \
 -e "CURL_INSTALL_DIR=$CURL_INSTALL_DIR" \
--w=$BASEDIR \
---rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh $BASEDIR/script/build-arm64-git.sh
-cd - > /dev/null
-
+-w="$BASEDIR" \
+--rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh "$BASEDIR/script/build-arm64-git.sh"
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.tar.gz
   GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-arm64-v${GIT_LFS_VERSION}.tar.gz"
   echo "-- Downloading from $GIT_LFS_URL"
-  curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-  COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
+  curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
+  COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)
   if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/libexec/git-core"
-    tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude="*.md"
+    tar -xvf $GIT_LFS_FILE -C "$SUBFOLDER" --exclude='*.sh' --exclude="*.md"
 
     if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
       echo "After extracting Git LFS the file was not found under libexec/git-core/"
@@ -65,13 +53,14 @@ else
 fi
 
 
+(
 # download CA bundle and write straight to temp folder
 # for more information: https://curl.haxx.se/docs/caextract.html
 echo "-- Adding CA bundle"
-cd $DESTINATION
+cd "$DESTINATION" || exit 1
 mkdir -p ssl
 curl -sL -o ssl/cacert.pem https://curl.haxx.se/ca/cacert.pem
-cd - > /dev/null
+)
 
 if [[ ! -f "$DESTINATION/ssl/cacert.pem" ]]; then
   echo "-- Skipped bundling of CA certificates (failed to download them)"
@@ -79,43 +68,11 @@ fi
 
 echo "-- Verifying environment"
 docker run -it \
-  --mount type=bind,source=$BASEDIR,target=$BASEDIR \
-  --mount type=bind,source=$DESTINATION,target=$DESTINATION \
+  --mount type=bind,source="$BASEDIR",target="$BASEDIR" \
+  --mount type=bind,source="$DESTINATION",target="$DESTINATION" \
   -e "DESTINATION=$DESTINATION" \
-  -w=$BASEDIR \
-  --rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh $BASEDIR/script/verify-arm64-git.sh
-
-checkStaticLinking() {
-  if [ -z "$1" ] ; then
-    # no parameter provided, fail hard
-    exit 1
-  fi
-
-  # ermagherd there's two whitespace characters between 'LSB' and 'executable'
-  # when running this on Travis - why is everything so terrible?
-  if file $1 | grep -q 'ELF 64-bit LSB'; then
-    if readelf -d $1 | grep -q 'Shared library'; then
-      echo "File: $file"
-      # this is done twice rather than storing in a bash variable because
-      # it's easier than trying to preserve the line endings
-      echo "readelf output:"
-      readelf -d $1 | grep 'Shared library'
-      # get a list of glibc versions required by the binary
-      echo "objdump GLIBC output:"
-      objdump -T $1 | grep -oEi 'GLIBC_[0-9]*.[0-9]*.[0-9]*'| sort | uniq
-      # confirm what version of curl is expected
-      echo "objdump curl output:"
-      objdump -T $1 | grep -oEi " curl.*" | sort | uniq
-      echo ""
-    fi
-  fi
-}
+  -w="$BASEDIR" \
+  --rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh "$BASEDIR/script/verify-arm64-git.sh"
 
 echo "-- Static linking research"
-cd "$DESTINATION"
-# check all files for ELF exectuables
-find . -type f -print0 | while read -d $'\0' file
-do
-  checkStaticLinking $file
-done
-cd - > /dev/null
+check_static_linking "$DESTINATION"

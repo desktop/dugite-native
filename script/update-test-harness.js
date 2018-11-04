@@ -67,7 +67,11 @@ const platforms = yaml['matrix']['include']
 
 for (const platform of platforms) {
   const platformEnv = platform['env']
-  const env = [ ... globalEnv, ...platformEnv ]
+  if (platformEnv == null) {
+    continue
+  }
+
+  const env = [...globalEnv, ...platformEnv]
 
   const target = platformEnv[0]
   const keys = target.split('=')

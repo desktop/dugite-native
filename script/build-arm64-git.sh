@@ -1,13 +1,22 @@
+#!/bin/bash
+#
+# Compiling Git for ARM64 Linux (should be run inside a container)
+#
+# Required environment variables:
+# - SOURCE
+# - DESTINATION
+# - CURL_INSTALL_DIR
+
 echo " -- Building git at $SOURCE to $DESTINATION"
 
-cd $SOURCE
+cd "$SOURCE" || exit 1
 make clean
 make configure
 CC='gcc' \
   CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
   LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
   ./configure \
-  --with-curl=$CURL_INSTALL_DIR \
+  --with-curl="$CURL_INSTALL_DIR" \
   --prefix=/
 
 DESTDIR="$DESTINATION" \

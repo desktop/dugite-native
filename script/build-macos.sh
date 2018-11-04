@@ -6,25 +6,14 @@
 SOURCE=$1
 DESTINATION=$2
 
-# i want to centralize this function but everything is terrible
-# go read https://github.com/desktop/dugite-native/issues/38
-computeChecksum() {
-   if [ -z "$1" ] ; then
-     # no parameter provided, fail hard
-     exit 1
-   fi
-
-  path_to_sha256sum=$(which sha256sum)
-  if [ -x "$path_to_sha256sum" ] ; then
-    echo $(sha256sum $1 | awk '{print $1;}')
-  else
-    echo $(shasum -a 256 $1 | awk '{print $1;}')
-  fi
-}
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=script/compute-checksum.sh
+source "$CURRENT_DIR/compute-checksum.sh"
 
 echo "-- Building git at $SOURCE to $DESTINATION"
 
-cd $SOURCE
+(
+cd "$SOURCE" || exit 1
 make clean
 DESTDIR="$DESTINATION" make strip install prefix=/ \
     NO_PERL=1 \
@@ -33,7 +22,7 @@ DESTDIR="$DESTINATION" make strip install prefix=/ \
     NO_DARWIN_PORTS=1 \
     NO_INSTALL_HARDLINKS=1 \
     MACOSX_DEPLOYMENT_TARGET=10.9
-cd - > /dev/null
+)
 
 
 if [[ "$GIT_LFS_VERSION" ]]; then
@@ -41,13 +30,13 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   GIT_LFS_FILE=git-lfs.tar.gz
   GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-darwin-amd64-v${GIT_LFS_VERSION}.tar.gz"
   echo "-- Downloading from $GIT_LFS_URL"
-  curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-  COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
+  curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
+  COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)
   if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/libexec/git-core"
     # strip out any text files when extracting the Git LFS archive
-    tar -xvf $GIT_LFS_FILE -C $SUBFOLDER --exclude='*.sh' --exclude='*.md'
+    tar -xvf $GIT_LFS_FILE -C "$SUBFOLDER" --exclude='*.sh' --exclude='*.md'
 
     if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
       echo "After extracting Git LFS the file was not found under libexec/git-core/"
