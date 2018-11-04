@@ -51,10 +51,11 @@ fi
 
 (
 echo ""
-echo "Creating archives for platform ${OSTYPE}..."
+PLATFORM=$(uname -s)
+echo "Creating archives for $PLATFORM (${OSTYPE})..."
 mkdir output
 cd output || exit 1
-if [[ "$OSTYPE" == "darwin*" ]]; then
+if [ "$PLATFORM" == "Darwin" ]; then
   echo "Using bsdtar which has some different command flags"
   tar -czf "$GZIP_FILE" -C $DESTINATION .
   tar --lzma -cf "$LZMA_FILE" -C $DESTINATION .
