@@ -1,3 +1,12 @@
+#!/bin/bash
+#
+# Compiling Git for ARM64 Linux (should be run inside a container)
+#
+# Required environment variables:
+# - SOURCE
+# - DESTINATION
+# - CURL_INSTALL_DIR
+
 echo " -- Building git at $SOURCE to $DESTINATION"
 
 cd "$SOURCE" || exit 1
