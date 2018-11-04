@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Verify Git for ARM64 Linux (should be run inside a container)
 

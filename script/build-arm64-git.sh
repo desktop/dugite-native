@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Compiling Git for ARM64 Linux (should be run inside a container)
 

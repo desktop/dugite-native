@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Compiling Git for Linux and bundling Git LFS from upstream.
 #
+
 
 if [[ -z "${SOURCE}" ]]; then
   echo "Required environment variable SOURCE was not set"

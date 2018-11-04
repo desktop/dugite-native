@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Compiling Git for macOS and bundling Git LFS from upstream.
 #

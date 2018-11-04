@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # General purpose functions for inspecting generated ELF binaries to understand
 # static and dynamic linking details as part of the build process

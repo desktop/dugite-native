@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #

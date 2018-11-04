@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Entry point to build process to support different platforms.
 # Platforms have different ways to build Git and prepare the environment
 # for packaging, so defer to the `build-*` files for more details
-#
+
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck disable=SC2034
 SOURCE="${BASEDIR}/git"

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Building Git for ARM64 Linux and bundling Git LFS from upstream.
 #
