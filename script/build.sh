@@ -19,10 +19,10 @@ else
   exit 1
 fi
 
-BASEDIR=$(dirname $CURRENT_DIR)
+ROOT=$(dirname "$CURRENT_DIR")
 
-SOURCE="${BASEDIR}/git" \
+BASEDIR=$ROOT \
+  SOURCE="$ROOT/git" \
   DESTINATION="/tmp/build/git" \
   CURL_INSTALL_DIR="/tmp/build/curl" \
-  BASEDIR=$BASEDIR \
   bash "$SCRIPT"
