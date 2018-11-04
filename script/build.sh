@@ -19,8 +19,10 @@ else
   exit 1
 fi
 
+BASEDIR=$(dirname $CURRENT_DIR)
+
 SOURCE="${BASEDIR}/git" \
   DESTINATION="/tmp/build/git" \
   CURL_INSTALL_DIR="/tmp/build/curl" \
-  BASEDIR=$(pwd) \
+  BASEDIR=$BASEDIR \
   bash "$SCRIPT"
