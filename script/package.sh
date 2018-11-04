@@ -51,13 +51,19 @@ fi
 
 (
 echo ""
-echo "Creating archives..."
+echo "Creating archives for platform ${OSTYPE}..."
 mkdir output
 cd output || exit 1
-if [ "$(uname -s)" == "Darwin" ]; then
+if [[ "$OSTYPE" == "darwin*" ]]; then
+  echo "Using bsdtar which has some different command flags"
   tar -czf "$GZIP_FILE" -C $DESTINATION .
   tar --lzma -cf "$LZMA_FILE" -C $DESTINATION .
+elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+  echo "TODO: running on a Windows OS, need to use a different zip tool as lzma is missing"
+  7z --help
+  exit 1
 else
+  echo "Using unix tar by default"
   tar -caf "$GZIP_FILE" -C $DESTINATION .
   tar -caf "$LZMA_FILE" -C $DESTINATION .
 fi
