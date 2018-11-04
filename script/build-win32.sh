@@ -6,6 +6,7 @@
 DESTINATION=$1
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 
 mkdir -p $DESTINATION

@@ -9,7 +9,9 @@ CURL_INSTALL_DIR=$3
 BASEDIR=$4
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
+# shellcheck source=script/check-static-linking.sh
 source "$CURRENT_DIR/check-static-linking.sh"
 
 mkdir -p "$DESTINATION"
