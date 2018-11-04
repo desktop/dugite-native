@@ -1,4 +1,11 @@
-echo "-- Test compiled Git LFS"
+#!/bin/bash
+#
+# Verify Git for ARM64 Linux (should be run inside a container)
+#
+# Required environment variables:
+# - DESTINATION
+
+echo "-- Test external Git LFS"
 
 "$DESTINATION/libexec/git-core/git-lfs" --version
 
