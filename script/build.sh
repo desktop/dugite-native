@@ -5,12 +5,9 @@
 # for packaging, so defer to the `build-*` files for more details
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# shellcheck disable=SC2034
-SOURCE="${BASEDIR}/git"
-# shellcheck disable=SC2034
-DESTINATION="/tmp/build/git"
-# shellcheck disable=SC2034
-CURL_INSTALL_DIR="/tmp/build/curl"
+export SOURCE="${BASEDIR}/git"
+export DESTINATION="/tmp/build/git"
+export CURL_INSTALL_DIR="/tmp/build/curl"
 
 if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
   bash "$CURRENT_DIR/build-ubuntu.sh"
@@ -19,7 +16,7 @@ elif [ "$TARGET_PLATFORM" == "macOS" ]; then
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
   bash "$CURRENT_DIR/build-win32.sh"
 elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  BASEDIR=$(pwd)
+  export BASEDIR=$(pwd)
   bash "$CURRENT_DIR/build-arm64.sh"
 else
   echo "Unable to build Git for platform $TARGET_PLATFORM"
