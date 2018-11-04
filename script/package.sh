@@ -59,7 +59,8 @@ if [[ "$OSTYPE" == "darwin*" ]]; then
   tar -czf "$GZIP_FILE" -C $DESTINATION .
   tar --lzma -cf "$LZMA_FILE" -C $DESTINATION .
 elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
-  echo "TODO: running on a Windows OS, need to use a different zip tool as lzma is missing"
+  echo "Using 7z to generate the lzma file because the host doesn't have a working environment for tar to do this natively"
+  tar -caf "$GZIP_FILE" -C $DESTINATION .
   7z --help
   exit 1
 else
