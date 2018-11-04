@@ -1,3 +1,7 @@
+#!/bin/bash
+#
+# General purpose functions for inspecting generated ELF binaries to understand
+# static and dynamic linking details as part of the build process
 
 check_static_linking_file() {
   if [ -z "$1" ] ; then

@@ -1,6 +1,6 @@
 #!/bin/bash
-
-# general purpose function for obtaining the SHA256 checksum of a file
+#
+# General purpose function for obtaining the SHA256 checksum of a file
 #
 # path to the file should be the first argument
 
