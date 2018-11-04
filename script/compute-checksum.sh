@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # General purpose function for obtaining the SHA256 checksum of a file
 #

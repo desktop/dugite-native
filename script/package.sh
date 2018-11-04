@@ -1,10 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # Script for packaging artefacts into gzipped archive.
 # Build scripts should handle platform-specific differences, so this
 # script works off the assumption that everything at $DESTINATION is
 # intended to be part of the archive.
-#
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOURCE="./git"
