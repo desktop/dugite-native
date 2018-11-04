@@ -3,7 +3,10 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
-DESTINATION=$1
+if [[ -z "${DESTINATION}" ]]; then
+  echo "Required environment variable DESTINATION was not set"
+  exit 1
+fi
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=script/compute-checksum.sh

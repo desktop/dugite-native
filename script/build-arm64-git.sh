@@ -1,11 +1,21 @@
 #!/bin/bash
 #
 # Compiling Git for ARM64 Linux (should be run inside a container)
-#
-# Required environment variables:
-# - SOURCE
-# - DESTINATION
-# - CURL_INSTALL_DIR
+
+if [[ -z "${SOURCE}" ]]; then
+  echo "Required environment variable SOURCE was not set"
+  exit 1
+fi
+
+if [[ -z "${DESTINATION}" ]]; then
+  echo "Required environment variable DESTINATION was not set"
+  exit 1
+fi
+
+if [[ -z "${CURL_INSTALL_DIR}" ]]; then
+  echo "Required environment variable CURL_INSTALL_DIR was not set"
+  exit 1
+fi
 
 echo " -- Building git at $SOURCE to $DESTINATION"
 
