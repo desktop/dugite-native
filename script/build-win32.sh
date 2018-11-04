@@ -3,23 +3,11 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
-# i want to centralize this function but everything is terrible
-# go read https://github.com/desktop/dugite-native/issues/38
-computeChecksum() {
-   if [ -z "$1" ] ; then
-     # no parameter provided, fail hard
-     exit 1
-   fi
-
-  path_to_sha256sum=$(which sha256sum)
-  if [ -x "$path_to_sha256sum" ] ; then
-    echo $(sha256sum $1 | awk '{print $1;}')
-  else
-    echo $(shasum -a 256 $1 | awk '{print $1;}')
-  fi
-}
-
 DESTINATION=$1
+
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$CURRENT_DIR/compute-checksum.sh"
+
 mkdir -p $DESTINATION
 
 if [ "$WIN_ARCH" -eq "64" ]; then MINGW_DIR="mingw64"; else MINGW_DIR="mingw32"; fi
@@ -46,7 +34,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
   echo "-- Downloading from $GIT_LFS_URL"
   curl -sL -o $GIT_LFS_FILE $GIT_LFS_URL
-  COMPUTED_SHA256=$(computeChecksum $GIT_LFS_FILE)
+  COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)
   if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
