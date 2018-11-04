@@ -9,6 +9,7 @@ CURL_INSTALL_DIR=$3
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/compute-checksum.sh"
+source "$CURRENT_DIR/check-static-linking.sh"
 
 echo " -- Building vanilla curl at $CURL_INSTALL_DIR instead of distro-specific version"
 
@@ -122,13 +123,7 @@ checkStaticLinking() {
 }
 
 echo "-- Static linking research"
-cd "$DESTINATION"
-# check all files for ELF exectuables
-find . -type f -print0 | while read -d $'\0' file
-do
-  checkStaticLinking $file
-done
-cd - > /dev/null
+check_static_linking "$DESTINATION"
 
 echo "-- Testing clone operation with generated binary"
 

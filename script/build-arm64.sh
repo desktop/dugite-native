@@ -10,6 +10,7 @@ BASEDIR=$4
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/compute-checksum.sh"
+source "$CURRENT_DIR/check-static-linking.sh"
 
 mkdir -p "$DESTINATION"
 
@@ -71,38 +72,5 @@ docker run -it \
   -w="$BASEDIR" \
   --rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh "$BASEDIR/script/verify-arm64-git.sh"
 
-checkStaticLinking() {
-  if [ -z "$1" ] ; then
-    # no parameter provided, fail hard
-    exit 1
-  fi
-
-  # ermagherd there's two whitespace characters between 'LSB' and 'executable'
-  # when running this on Travis - why is everything so terrible?
-  if file "$1" | grep -q 'ELF 64-bit LSB'; then
-    if readelf -d "$1" | grep -q 'Shared library'; then
-      echo "File: $file"
-      # this is done twice rather than storing in a bash variable because
-      # it's easier than trying to preserve the line endings
-      echo "readelf output:"
-      readelf -d "$1" | grep 'Shared library'
-      # get a list of glibc versions required by the binary
-      echo "objdump GLIBC output:"
-      objdump -T "$1" | grep -oEi 'GLIBC_[0-9]*.[0-9]*.[0-9]*'| sort | uniq
-      # confirm what version of curl is expected
-      echo "objdump curl output:"
-      objdump -T "$1" | grep -oEi " curl.*" | sort | uniq
-      echo ""
-    fi
-  fi
-}
-
 echo "-- Static linking research"
-(
-cd "$DESTINATION" || exit 1
-# check all files for ELF exectuables
-find . -type f -print0 | while read -r -d $'\0' file
-do
-  checkStaticLinking "$file"
-done
-)
+check_static_linking "$DESTINATION"
