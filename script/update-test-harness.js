@@ -73,6 +73,7 @@ if [ "$PLATFORM" == "Darwin" ]; then
   tar -czf "$GZIP_FILE" -C $DESTINATION .
   tar --lzma -cf "$LZMA_FILE" -C $DESTINATION .
 elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+  echo "Using tar and 7z here because tar is unable to access lzma compression on Windows"
   tar -caf "$GZIP_FILE" -C $DESTINATION .
   # hacking around the fact that 7z refuses to write to LZMA files despite them
   # being the native format of 7z files
