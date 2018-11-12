@@ -1,43 +1,90 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT="$DIR/.."
+GIT_LFS_VERSION=2.6.0
+TARGET_PLATFORM=ubuntu
+GIT_LFS_CHECKSUM=43e9311bdded82d43c574b075aafaf56681a3450c1ccf59cce9d362acabf1362
+
+CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT="$CURRENT_DIR/.."
 SOURCE="$ROOT/git"
 DESTINATION="$ROOT/build/git"
 
-GIT_LFS_VERSION=2.5.2 \
-TARGET_PLATFORM=ubuntu \
-GIT_LFS_CHECKSUM=624396e8994578ac38c3e5987889be56dba453c378c0675d56cffbc5b8972aa5 \
 . "$ROOT/script/build-ubuntu.sh" $SOURCE $DESTINATION
 
-echo "Archive contents:"
+source "$ROOT/script/compute-checksum.sh"
+
+VERSION=$(
+  cd $SOURCE || exit 1
+  VERSION=$(git describe --exact-match HEAD)
+  EXIT_CODE=$?
+
+  if [ "$EXIT_CODE" == "128" ]; then
+    echo "Git commit does not have tag, cannot use version to build from"
+    exit 1
+  fi
+  echo "$VERSION"
+)
+
+(
+echo "Generated bits to package at $DESTINATION:"
 cd $DESTINATION
-du -ah $DESTINATION
-cd - > /dev/null
+find .
+)
 
-GZIP_FILE="dugite-native-$VERSION-ubuntu-test.tar.gz"
-LZMA_FILE="dugite-native-$VERSION-ubuntu-test.lzma"
+BUILD_HASH=$(git rev-parse --short HEAD)
 
+if ! [ -d "$DESTINATION" ]; then
+  echo "No output found, exiting..."
+  exit 1
+fi
+
+if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-ubuntu.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-ubuntu.lzma"
+elif [ "$TARGET_PLATFORM" == "macOS" ]; then
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.lzma"
+elif [ "$TARGET_PLATFORM" == "win32" ]; then
+  if [ "$WIN_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.lzma"
+elif [ "$TARGET_PLATFORM" == "arm64" ]; then
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.lzma"
+else
+  echo "Unable to package Git for platform $TARGET_PLATFORM"
+  exit 1
+fi
+
+(
 echo ""
-echo "Creating archives..."
-if [ "$(uname -s)" == "Darwin" ]; then
-  tar -czf $GZIP_FILE -C $DESTINATION .
-  tar --lzma -cf $LZMA_FILE -C $DESTINATION .
+PLATFORM=$(uname -s)
+echo "Creating archives for $PLATFORM (${OSTYPE})..."
+mkdir output
+cd output || exit 1
+if [ "$PLATFORM" == "Darwin" ]; then
+  echo "Using bsdtar which has some different command flags"
+  tar -czf "$GZIP_FILE" -C $DESTINATION .
+  tar --lzma -cf "$LZMA_FILE" -C $DESTINATION .
+elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+  echo "Using tar and 7z here because tar is unable to access lzma compression on Windows"
+  tar -caf "$GZIP_FILE" -C $DESTINATION .
+  # hacking around the fact that 7z refuses to write to LZMA files despite them
+  # being the native format of 7z files
+  NEW_LZMA_FILE="dugite-native-$VERSION-win32-test.7z"
+  7z u -t7z "$NEW_LZMA_FILE" $DESTINATION/*
+  mv $NEW_LZMA_FILE $LZMA_FILE
 else
-  tar -caf $GZIP_FILE -C $DESTINATION .
-  tar -caf $LZMA_FILE -C $DESTINATION .
+  echo "Using unix tar by default"
+  tar -caf "$GZIP_FILE" -C $DESTINATION .
+  tar -caf "$LZMA_FILE" -C $DESTINATION .
 fi
 
-if [ "$APPVEYOR" == "True" ]; then
-  GZIP_CHECKSUM=$(sha256sum $GZIP_FILE | awk '{print $1;}')
-  LZMA_CHECKSUM=$(sha256sum $LZMA_FILE | awk '{print $1;}')
-else
-  GZIP_CHECKSUM=$(shasum -a 256 $GZIP_FILE | awk '{print $1;}')
-  LZMA_CHECKSUM=$(shasum -a 256 $LZMA_FILE | awk '{print $1;}')
-fi
+GZIP_CHECKSUM=$(compute_checksum "$GZIP_FILE")
+LZMA_CHECKSUM=$(compute_checksum "$LZMA_FILE")
 
-GZIP_SIZE=$(du -h $GZIP_FILE | cut -f1)
-LZMA_SIZE=$(du -h $LZMA_FILE | cut -f1)
+GZIP_SIZE=$(du -h "$GZIP_FILE" | cut -f1)
+LZMA_SIZE=$(du -h "$LZMA_FILE" | cut -f1)
 
 echo "${GZIP_CHECKSUM}" | tr -d '\n' > "${GZIP_FILE}.sha256"
 echo "${LZMA_CHECKSUM}" | tr -d '\n' > "${LZMA_FILE}.sha256"
@@ -45,3 +92,4 @@ echo "${LZMA_CHECKSUM}" | tr -d '\n' > "${LZMA_FILE}.sha256"
 echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
 echo "${LZMA_FILE} - ${LZMA_SIZE} - checksum: ${LZMA_CHECKSUM}"
+)

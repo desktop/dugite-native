@@ -51,13 +51,24 @@ fi
 
 (
 echo ""
-echo "Creating archives..."
+PLATFORM=$(uname -s)
+echo "Creating archives for $PLATFORM (${OSTYPE})..."
 mkdir output
 cd output || exit 1
-if [ "$(uname -s)" == "Darwin" ]; then
+if [ "$PLATFORM" == "Darwin" ]; then
+  echo "Using bsdtar which has some different command flags"
   tar -czf "$GZIP_FILE" -C $DESTINATION .
   tar --lzma -cf "$LZMA_FILE" -C $DESTINATION .
+elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
+  echo "Using tar and 7z here because tar is unable to access lzma compression on Windows"
+  tar -caf "$GZIP_FILE" -C $DESTINATION .
+  # hacking around the fact that 7z refuses to write to LZMA files despite them
+  # being the native format of 7z files
+  NEW_LZMA_FILE="dugite-native-$VERSION-win32-test.7z"
+  7z u -t7z "$NEW_LZMA_FILE" $DESTINATION/*
+  mv "$NEW_LZMA_FILE" "$LZMA_FILE"
 else
+  echo "Using unix tar by default"
   tar -caf "$GZIP_FILE" -C $DESTINATION .
   tar -caf "$LZMA_FILE" -C $DESTINATION .
 fi
