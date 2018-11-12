@@ -28,10 +28,11 @@ VERSION=$(
   echo "$VERSION"
 )
 
-echo "Archive contents:"
+(
+echo "Generated bits to package at $DESTINATION:"
 cd $DESTINATION
-du -ah $DESTINATION
-cd - > /dev/null
+find .
+)
 
 BUILD_HASH=$(git rev-parse --short HEAD)
 
