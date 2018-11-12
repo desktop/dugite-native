@@ -60,10 +60,12 @@ if [ "$PLATFORM" == "Darwin" ]; then
   tar -czf "$GZIP_FILE" -C $DESTINATION .
   tar --lzma -cf "$LZMA_FILE" -C $DESTINATION .
 elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
-  echo "Using 7z to generate the lzma file because the host doesn't have a working environment for tar to do this natively"
   tar -caf "$GZIP_FILE" -C $DESTINATION .
-  7z --help
-  exit 1
+  # hacking around the fact that 7z refuses to write to LZMA files despite them
+  # being the native format of 7z files
+  NEW_LZMA_FILE="dugite-native-$VERSION-win32-test.7z"
+  7z u -t7z "$NEW_LZMA_FILE" $DESTINATION/*
+  mv $NEW_LZMA_FILE $LZMA_FILE
 else
   echo "Using unix tar by default"
   tar -caf "$GZIP_FILE" -C $DESTINATION .
