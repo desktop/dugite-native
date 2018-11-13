@@ -129,7 +129,7 @@ async function run() {
       newFiles.push({
         platform: getPlatform(file),
         arch: getArch(file),
-        file,
+        name: file,
         checksum: match[1],
       })
     }
