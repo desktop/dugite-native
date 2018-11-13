@@ -1,12 +1,17 @@
+# NOTE:
+#
+# This config file is generated from a source script and should not be modified
+# manually. If you want to make changes to this config that are remembered
+# between upgrades, ensure that you update `script/generate-travis-config.js`,
+# run `npm run generate-travis-config` to generate a new config, and commit the
+# change to the repository.
+#
 sudo: required
-
 services:
   - docker
-
 env:
   global:
     - GIT_LFS_VERSION=2.6.0
-
 matrix:
   include:
     - os: linux
@@ -14,13 +19,11 @@ matrix:
       env:
         - TARGET_PLATFORM=ubuntu
         - GIT_LFS_CHECKSUM=43e9311bdded82d43c574b075aafaf56681a3450c1ccf59cce9d362acabf1362
-
     - os: osx
       language: c
       env:
         - TARGET_PLATFORM=macOS
         - GIT_LFS_CHECKSUM=42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60
-
     - os: linux
       language: c
       env:
@@ -29,7 +32,6 @@ matrix:
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-64-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=f89e103a41bda8e12efeaab198a8c20bb4a84804683862da518ee2cb66a5a5b3
         - GIT_LFS_CHECKSUM=f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279
-
     - os: linux
       language: c
       env:
@@ -38,29 +40,23 @@ matrix:
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-32-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=9bde728fe03f66a022b3e41408902ccfceb56a34067db1f35d6509375b9be922
         - GIT_LFS_CHECKSUM=7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
-
     - os: linux
       language: c
       env:
         - TARGET_PLATFORM=arm64
         - GIT_LFS_CHECKSUM=574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a
-
     - os: linux
       language: shell
       script:
         - bash -c 'shopt -s globstar; shellcheck script/**/*.sh'
-
 compiler:
   - gcc
-
 script:
   - script/build.sh && script/package.sh
-
 branches:
   only:
     - master
     - /^v[0-9]*.[0-9]*.[0.9]*.*$/
-
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN

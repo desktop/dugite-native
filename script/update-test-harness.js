@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const YAML = require('node-yaml')
+const YAML = require('yaml')
 
 function writeEnvironmentToFile(os, env) {
   const environmentVariables = env.map(a => `${a}`).join('\n')
@@ -109,7 +109,7 @@ echo "\${LZMA_FILE} - \${LZMA_SIZE} - checksum: \${LZMA_CHECKSUM}"
 
 const travisFile = path.resolve(__dirname, '..', '.travis.yml')
 
-const yamlText = fs.readFileSync(travisFile)
+const yamlText = fs.readFileSync(travisFile, 'utf8')
 const yaml = YAML.parse(yamlText)
 
 const globalEnv = yaml['env']['global']

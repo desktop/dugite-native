@@ -4,8 +4,11 @@
   "scripts": {
     "update-test-harness": "node script/update-test-harness.js",
     "generate-release-notes": "node script/generate-release-notes.js",
-    "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts}",
-    "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts}"
+    "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts,json}",
+    "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts,json}",
+    "generate-all-config": "npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix",
+    "generate-appveyor-config": "node script/generate-appveyor-config.js",
+    "generate-travis-config": "node script/generate-travis-config.js"
   },
   "repository": {
     "type": "git",
@@ -19,9 +22,9 @@
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "devDependencies": {
     "@octokit/rest": "^15.12.0",
-    "node-yaml": "^3.1.1",
     "prettier": "^1.15.2",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "yaml": "^1.0.1"
   }
 }
