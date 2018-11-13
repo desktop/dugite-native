@@ -14,7 +14,7 @@ environment:
       GIT_FOR_WINDOWS_CHECKSUM: 9bde728fe03f66a022b3e41408902ccfceb56a34067db1f35d6509375b9be922
       GIT_LFS_CHECKSUM: 7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
 build_script:
-  - 'cmd: git submodule update --init --recursive'
-  - "bash: script\\build.sh"
-  - "bash: script\\package.sh"
+  - git submodule update --init --recursive
+  - bash script\build.sh
+  - bash script\package.sh
 test: off
