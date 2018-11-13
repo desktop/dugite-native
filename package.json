@@ -3,7 +3,9 @@
   "description": "ad-hoc scripts for helping to contribute",
   "scripts": {
     "update-test-harness": "node script/update-test-harness.js",
-    "generate-release-notes": "node script/generate-release-notes.js"
+    "generate-release-notes": "node script/generate-release-notes.js",
+    "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts}",
+    "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts}"
   },
   "repository": {
     "type": "git",
@@ -15,9 +17,10 @@
     "url": "https://github.com/desktop/dugite-native/issues"
   },
   "homepage": "https://github.com/desktop/dugite-native#readme",
-  "dependencies": {
+  "devDependencies": {
     "@octokit/rest": "^15.12.0",
     "node-yaml": "^3.1.1",
+    "prettier": "^1.15.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
   }

@@ -101,7 +101,10 @@ echo "\${LZMA_FILE} - \${LZMA_SIZE} - checksum: \${LZMA_CHECKSUM}"
 )`
 
   const destination = path.resolve(__dirname, '..', `test/${os}.sh`)
-  fs.writeFileSync(destination, fileContents, { encoding: 'utf-8', mode: '777' })
+  fs.writeFileSync(destination, fileContents, {
+    encoding: 'utf-8',
+    mode: '777',
+  })
 }
 
 const travisFile = path.resolve(__dirname, '..', '.travis.yml')
