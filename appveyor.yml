@@ -1,3 +1,11 @@
+# NOTE:
+#
+# This config file is generated from a source script and should not be modified
+# manually. If you want to make changes to this config that are remembered
+# between upgrades, ensure that you update `script/generate-appveyor-config.js`,
+# run `npm run generate-appveyor-config` to generate a new config, and commit
+# the change to the repository.
+#
 image: Visual Studio 2015
 skip_branch_with_pr: true
 environment:
