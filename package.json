@@ -6,7 +6,8 @@
     "generate-release-notes": "node script/generate-release-notes.js",
     "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts}",
     "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts}",
-    "generate-appveyor-config": "node script/generate-appveyor-config.js"
+    "generate-appveyor-config": "node script/generate-appveyor-config.js",
+    "generate-all-config": "npm run generate-appveyor-config"
   },
   "repository": {
     "type": "git",
