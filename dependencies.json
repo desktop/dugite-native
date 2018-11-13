@@ -20,6 +20,12 @@
     "version": "v2.6.0",
     "files": [
       {
+        "platform": "darwin",
+        "arch": "amd64",
+        "name": "git-lfs-darwin-amd64-v2.6.0.tar.gz",
+        "checksum": "42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60"
+      },
+      {
         "platform": "linux",
         "arch": "amd64",
         "name": "git-lfs-linux-amd64-v2.6.0.tar.gz",
@@ -32,22 +38,16 @@
         "checksum": "574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a"
       },
       {
-        "platform": "darwin",
-        "arch": "amd64",
-        "name": "git-lfs-darwin-amd64-v2.6.0.tar.gz",
-        "checksum": "42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60"
+        "platform": "windows",
+        "arch": "x86",
+        "name": "git-lfs-windows-386-v2.6.0.zip",
+        "checksum": "7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5"
       },
       {
         "platform": "windows",
         "arch": "amd64",
         "name": "git-lfs-windows-amd64-v2.6.0.zip",
         "checksum": "f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279"
-      },
-      {
-        "platform": "windows",
-        "arch": "x86",
-        "name": "git-lfs-windows-x86-v2.6.0.zip",
-        "checksum": "7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5"
       }
     ]
   },

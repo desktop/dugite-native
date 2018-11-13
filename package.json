@@ -3,6 +3,7 @@
   "description": "ad-hoc scripts for helping to contribute",
   "scripts": {
     "update-test-harness": "node script/update-test-harness.js",
+    "update-git-lfs": "node script/update-git-lfs.js && npm run prettier-fix",
     "generate-release-notes": "node script/generate-release-notes.js",
     "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts,json}",
     "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts,json}",
