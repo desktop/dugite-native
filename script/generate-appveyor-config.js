@@ -66,9 +66,9 @@ const baseConfig = {
     matrix: [getConfig('windows', 'amd64'), getConfig('windows', 'x86')],
   },
   build_script: [
-    'cmd: git submodule update --init --recursive',
-    'bash: script\\build.sh',
-    'bash: script\\package.sh',
+    'git submodule update --init --recursive',
+    'bash script\\build.sh',
+    'bash script\\package.sh',
   ],
   test: 'off',
 }
