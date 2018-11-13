@@ -6,7 +6,7 @@
     "generate-release-notes": "node script/generate-release-notes.js",
     "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts}",
     "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts}",
-    "generate-all-config": "npm run generate-appveyor-config && npm run generate-travis-config",
+    "generate-all-config": "npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix",
     "generate-appveyor-config": "node script/generate-appveyor-config.js",
     "generate-travis-config": "node script/generate-travis-config.js"
   },
