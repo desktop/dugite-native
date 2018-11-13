@@ -143,7 +143,16 @@ const appveyorFile = path.resolve(__dirname, '..', '.travis.yml')
 
 const yaml = YAML.stringify(baseConfig)
 
-// TODO: insert comment lines before file to indicate this is a generated
-//       file and that you should update this script and then run `npm run generate-all-config`
+const commentPreamble = `# NOTE:
+#
+# This config file is generated from a source script and should not be modified
+# manually. If you want to make changes to this config that are remembered
+# between upgrades, ensure that you update \`script/generate-travis-config.js\`,
+# run \`npm run generate-travis-config\` to generate a new config, and commit the
+# change to the repository.
+#`
 
-fs.writeFileSync(appveyorFile, yaml)
+const fileContents = `${commentPreamble}
+${yaml}`
+
+fs.writeFileSync(appveyorFile, fileContents)
