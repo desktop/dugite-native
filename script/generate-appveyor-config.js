@@ -72,4 +72,7 @@ const appveyorFile = path.resolve(__dirname, '..', 'appveyor.yml')
 
 const yaml = YAML.stringify(baseConfig)
 
+// TODO: insert comment lines before file to indicate this is a generated
+//       file and that you should update this script and then run `npm run generate-all-config`
+
 fs.writeFileSync(appveyorFile, yaml)
