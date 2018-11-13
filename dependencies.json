@@ -1,77 +1,77 @@
 {
-    "git": {
-        "version": "v2.19.1",
-        "packages": [
-            {
-                "platform": "windows",
-                "arch": "amd64",
-                "url": "https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-64-bit.zip",
-                "checksum": "f89e103a41bda8e12efeaab198a8c20bb4a84804683862da518ee2cb66a5a5b3"
-            },
-            {
-                "platform": "windows",
-                "arch": "x86",
-                "url": "https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-32-bit.zip",
-                "checksum": "9bde728fe03f66a022b3e41408902ccfceb56a34067db1f35d6509375b9be922"
-            }
-        ]
-    },
-    "git-lfs": {
-        "version": "v2.6.0",
-        "files": [
-            {
-                "platform": "linux",
-                "arch": "amd64",
-                "name": "git-lfs-linux-amd64-v2.6.0.tar.gz",
-                "checksum": "43e9311bdded82d43c574b075aafaf56681a3450c1ccf59cce9d362acabf1362"
-            },
-            {
-                "platform": "linux",
-                "arch": "arm64",
-                "name": "git-lfs-linux-arm64-v2.6.0.tar.gz",
-                "checksum": "574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a"
-            },
-            {
-                "platform": "darwin",
-                "arch": "amd64",
-                "name": "git-lfs-darwin-amd64-v2.6.0.tar.gz",
-                "checksum": "42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60"
-            },
-            {
-                "platform": "windows",
-                "arch": "amd64",
-                "name": "git-lfs-windows-amd64-v2.6.0.zip",
-                "checksum": "f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279"
-            },
-            {
-                "platform": "windows",
-                "arch": "x86",
-                "name": "git-lfs-windows-x86-v2.6.0.zip",
-                "checksum": "7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5"
-            }
-        ]
-    },
-    "smimesign": {
-        "version": "0.0.6",
-        "files": [
-            {
-                "platform": "darwin",
-                "arch": "amd64",
-                "name": "smimesign-0.0.6-macos.tgz",
-                "checksum": "771790f685176b132cb287302a9374120184f7f7973038a0232efee145781906"
-            },
-            {
-                "platform": "windows",
-                "arch": "amd64",
-                "name": "smimesign-windows-amd64-0.0.6.zip",
-                "checksum": "2a2f946e31f2d74eadcdcd97b7bfc69298cee2f11cf7cb03c604d28fa1b34cd3"
-            },
-            {
-                "platform": "windows",
-                "arch": "x86",
-                "name": "smimesign-windows-386-0.0.6.zip",
-                "checksum": "9a13d00aa02c0a5d277c030297d09f10a467f31e6740f1520a08e09a23046323"
-            }
-        ]
-    }
+  "git": {
+    "version": "v2.19.1",
+    "packages": [
+      {
+        "platform": "windows",
+        "arch": "amd64",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-64-bit.zip",
+        "checksum": "f89e103a41bda8e12efeaab198a8c20bb4a84804683862da518ee2cb66a5a5b3"
+      },
+      {
+        "platform": "windows",
+        "arch": "x86",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-32-bit.zip",
+        "checksum": "9bde728fe03f66a022b3e41408902ccfceb56a34067db1f35d6509375b9be922"
+      }
+    ]
+  },
+  "git-lfs": {
+    "version": "v2.6.0",
+    "files": [
+      {
+        "platform": "linux",
+        "arch": "amd64",
+        "name": "git-lfs-linux-amd64-v2.6.0.tar.gz",
+        "checksum": "43e9311bdded82d43c574b075aafaf56681a3450c1ccf59cce9d362acabf1362"
+      },
+      {
+        "platform": "linux",
+        "arch": "arm64",
+        "name": "git-lfs-linux-arm64-v2.6.0.tar.gz",
+        "checksum": "574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a"
+      },
+      {
+        "platform": "darwin",
+        "arch": "amd64",
+        "name": "git-lfs-darwin-amd64-v2.6.0.tar.gz",
+        "checksum": "42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60"
+      },
+      {
+        "platform": "windows",
+        "arch": "amd64",
+        "name": "git-lfs-windows-amd64-v2.6.0.zip",
+        "checksum": "f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279"
+      },
+      {
+        "platform": "windows",
+        "arch": "x86",
+        "name": "git-lfs-windows-x86-v2.6.0.zip",
+        "checksum": "7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5"
+      }
+    ]
+  },
+  "smimesign": {
+    "version": "0.0.6",
+    "files": [
+      {
+        "platform": "darwin",
+        "arch": "amd64",
+        "name": "smimesign-0.0.6-macos.tgz",
+        "checksum": "771790f685176b132cb287302a9374120184f7f7973038a0232efee145781906"
+      },
+      {
+        "platform": "windows",
+        "arch": "amd64",
+        "name": "smimesign-windows-amd64-0.0.6.zip",
+        "checksum": "2a2f946e31f2d74eadcdcd97b7bfc69298cee2f11cf7cb03c604d28fa1b34cd3"
+      },
+      {
+        "platform": "windows",
+        "arch": "x86",
+        "name": "smimesign-windows-386-0.0.6.zip",
+        "checksum": "9a13d00aa02c0a5d277c030297d09f10a467f31e6740f1520a08e09a23046323"
+      }
+    ]
+  }
 }
