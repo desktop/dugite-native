@@ -26,6 +26,12 @@
                 "checksum": "43e9311bdded82d43c574b075aafaf56681a3450c1ccf59cce9d362acabf1362"
             },
             {
+                "platform": "linux",
+                "arch": "arm64",
+                "name": "git-lfs-linux-arm64-v2.6.0.tar.gz",
+                "checksum": "574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a"
+            },
+            {
                 "platform": "darwin",
                 "arch": "amd64",
                 "name": "git-lfs-darwin-amd64-v2.6.0.tar.gz",
