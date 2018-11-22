@@ -11,10 +11,9 @@ dependency.
 
 ## Changes to build configuration
 
-To avoid manual changes to build configurations which can be brittle and might
-introduce bugs, there are scripts defined to consume the `dependencies.json`
-file at the root of the repository and generate the required build configuration
-scripts.
+To avoid manual changes to build configurations, which can be brittle and might
+introduce bugs, scripts are used to consume the `dependencies.json` file at the
+root of the repository and generate the required build configuration scripts.
 
 The base config and scripts are found in these files:
 
