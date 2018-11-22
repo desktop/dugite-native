@@ -21,8 +21,8 @@ git checkout v2.11.1
 ```
 
 The package scripts will look for this tag, so non-tagged builds are not
-currently supported. Commit this submodule change and publish a pull request
-to test the packaging changes.
+currently supported. Commit the `dependencies.json` change as well as  the
+submodule change and open a pull request to test the packaging changes.
 
 ## Update Git LFS
 
