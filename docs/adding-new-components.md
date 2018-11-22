@@ -1,4 +1,4 @@
-# Add a new component
+# Adding new components
 
 If you own or know of a component that you believe should be "in the box" for
 `dugite-native`, please [open a new issue](https://github.com/desktop/dugite-native/issues/new)
