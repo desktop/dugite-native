@@ -54,7 +54,7 @@ matrix:
       node_js:
         - node
       script:
-        - npm run check
+        - npm run check && npm run prettier
 compiler:
   - gcc
 script:
