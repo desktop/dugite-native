@@ -1,4 +1,5 @@
-const octokit = require('@octokit/rest')()
+const Octokit = require('@octokit/rest')
+const octokit = new Octokit()
 const rp = require('request-promise')
 
 // five targeted OS/arch combinations

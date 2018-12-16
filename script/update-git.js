@@ -1,7 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 const ChildProcess = require('child_process')
-const octokit = require('@octokit/rest')()
+const Octokit = require('@octokit/rest')
+const octokit = new Octokit()
 
 const semver = require('semver')
 

@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const octokit = require('@octokit/rest')()
+const Octokit = require('@octokit/rest')
+const octokit = new Octokit()
 const rp = require('request-promise')
 
 process.on('unhandledRejection', reason => {
