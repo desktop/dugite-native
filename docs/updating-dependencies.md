@@ -12,17 +12,81 @@ all the dependencies requires for these scripts.
 
 ## Update Git
 
-If you want to incorporate a new version of Git, first ensure the submodule is
-checked out to the correct tag, e.g:
+To update to the latest stable version of Git, an automated script exists in the
+repository. Assign a `GITHUB_ACCESS_TOKEN` environment variable and run this
+command to perform this update process:
 
-```
-cd git
-git checkout v2.11.1
+```shellsession
+$ GITHUB_ACCESS_TOKEN=[token] npm run update-git
+
+> dugite-native@ update-git /Users/shiftkey/src/dugite-native
+> node script/update-git.js && npm run prettier-fix
+
+✅ Newest git release 'v2.20.1'
+✅ Token found for shiftkey
+✅ Newest git-for-windows release 'v2.20.1.windows.1'
+✅ Updated dependencies metadata to Git v2.20.1 (Git for Windows v2.20.1.windows.1)
+
+> dugite-native@ prettier-fix /Users/shiftkey/src/dugite-native
+> prettier --write **/*.y{,a}ml **/*.{js,ts,json}
+
+.travis.yml 63ms
+appveyor.yml 12ms
+script/generate-appveyor-config.js 75ms
+script/generate-release-notes.js 44ms
+script/generate-travis-config.js 29ms
+script/update-git-lfs.js 23ms
+script/update-git.js 34ms
+script/update-test-harness.js 22ms
+dependencies.json 10ms
+package-lock.json 27ms
+package.json 3ms
+tsconfig.json 5ms
 ```
 
-The package scripts will look for this tag, so non-tagged builds are not
-currently supported. Commit the `dependencies.json` change as well as  the
-submodule change and open a pull request to test the packaging changes.
+This is the steps that this script performs:
+
+ - fetch any new tags for the `git` submodule
+ - find the latest (production) tag
+ - checkout the `git` submodule to this new tag
+ - find the latest Git for Windows tag that matches this pattern
+ - regenerate the `dependencies.json` file with the new content
+
+Review the changes and ensure they look accurate, and then run the
+`generate-all-config` script to refresh the build configs:
+
+```shellsession
+$ npm run generate-all-config
+
+> dugite-native@ generate-all-config /Users/shiftkey/src/dugite-native
+> npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix
+
+
+> dugite-native@ generate-appveyor-config /Users/shiftkey/src/dugite-native
+> node script/generate-appveyor-config.js
+
+
+> dugite-native@ generate-travis-config /Users/shiftkey/src/dugite-native
+> node script/generate-travis-config.js
+
+
+> dugite-native@ prettier-fix /Users/shiftkey/src/dugite-native
+> prettier --write **/*.y{,a}ml **/*.{js,ts,json}
+
+.travis.yml 59ms
+appveyor.yml 13ms
+script/generate-appveyor-config.js 71ms
+script/generate-release-notes.js 42ms
+script/generate-travis-config.js 30ms
+script/update-git-lfs.js 23ms
+script/update-test-harness.js 10ms
+dependencies.json 7ms
+package-lock.json 23ms
+package.json 4ms
+```
+
+You're now ready to commit these changes and create a new pull request.
+
 
 ## Update Git LFS
 
