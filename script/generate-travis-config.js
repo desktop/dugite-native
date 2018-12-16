@@ -109,11 +109,6 @@ const baseConfig = {
   matrix: {
     fast_finish: true,
     include: [
-      getConfig('linux', 'amd64'),
-      getConfig('darwin', 'amd64'),
-      getConfig('windows', 'amd64'),
-      getConfig('windows', 'x86'),
-      getConfig('linux', 'arm64'),
       // shellcheck build step
       {
         os: 'linux',
@@ -127,6 +122,11 @@ const baseConfig = {
         node_js: ['node'],
         script: [`npm run check && npm run prettier`],
       },
+      getConfig('linux', 'amd64'),
+      getConfig('darwin', 'amd64'),
+      getConfig('windows', 'amd64'),
+      getConfig('windows', 'x86'),
+      getConfig('linux', 'arm64'),
     ],
   },
 

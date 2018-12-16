@@ -16,6 +16,16 @@ matrix:
   fast_finish: true
   include:
     - os: linux
+      language: shell
+      script:
+        - bash -c 'shopt -s globstar; shellcheck script/**/*.sh'
+    - os: linux
+      language: node_js
+      node_js:
+        - node
+      script:
+        - npm run check && npm run prettier
+    - os: linux
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
@@ -46,16 +56,6 @@ matrix:
       env:
         - TARGET_PLATFORM=arm64
         - GIT_LFS_CHECKSUM=5624ca015537333b459fa3817da7257a73ed612d958eccc596e6118b4bf6a5c6
-    - os: linux
-      language: shell
-      script:
-        - bash -c 'shopt -s globstar; shellcheck script/**/*.sh'
-    - os: linux
-      language: node_js
-      node_js:
-        - node
-      script:
-        - npm run check && npm run prettier
 compiler:
   - gcc
 script:
