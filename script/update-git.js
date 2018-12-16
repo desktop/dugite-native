@@ -145,7 +145,7 @@ async function run() {
     token,
   })
 
-  const user = await octokit.users.get({})
+  const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
