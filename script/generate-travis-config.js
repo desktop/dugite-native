@@ -124,7 +124,7 @@ const baseConfig = {
         os: 'linux',
         language: 'node_js',
         node_js: ['node'],
-        script: [`npm run check`],
+        script: [`npm run check && npm run prettier`],
       },
     ],
   },
