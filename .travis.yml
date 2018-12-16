@@ -11,19 +11,19 @@ services:
   - docker
 env:
   global:
-    - GIT_LFS_VERSION=2.6.0
+    - GIT_LFS_VERSION=2.6.1
 matrix:
   include:
     - os: linux
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
-        - GIT_LFS_CHECKSUM=43e9311bdded82d43c574b075aafaf56681a3450c1ccf59cce9d362acabf1362
+        - GIT_LFS_CHECKSUM=c098092be413915793214a570cd51ef46089b6f6616b2f78e35ba374de613b5b
     - os: osx
       language: c
       env:
         - TARGET_PLATFORM=macOS
-        - GIT_LFS_CHECKSUM=42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60
+        - GIT_LFS_CHECKSUM=84ac4953c55bbaf87efd1c3d5b7778b1cf0b257025d2a86d709a2bf301c32c8b
     - os: linux
       language: c
       env:
@@ -31,7 +31,7 @@ matrix:
         - WIN_ARCH=64
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.2.windows.1/MinGit-2.19.2-64-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=9d260fd4b9cf279491a1cc6762c2f08f7e8ca6c1d6492300cacbc800fe384a0f
-        - GIT_LFS_CHECKSUM=f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279
+        - GIT_LFS_CHECKSUM=35d0a62c5e36131b7ba65352146c585eaf1f33d7a229b9471082f49fca53b952
     - os: linux
       language: c
       env:
@@ -39,12 +39,12 @@ matrix:
         - WIN_ARCH=32
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.2.windows.1/MinGit-2.19.2-32-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=a85f4343628e7591a60ced4d54df176dba1c599b9097d1dc86597fd00bc3a5b3
-        - GIT_LFS_CHECKSUM=7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
+        - GIT_LFS_CHECKSUM=90bbeb7dc4ada394624d3a2675fd51dd4873753a56fb197b17bc01c9fcc91398
     - os: linux
       language: c
       env:
         - TARGET_PLATFORM=arm64
-        - GIT_LFS_CHECKSUM=574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a
+        - GIT_LFS_CHECKSUM=5624ca015537333b459fa3817da7257a73ed612d958eccc596e6118b4bf6a5c6
     - os: linux
       language: shell
       script:

@@ -9,18 +9,18 @@
 image: Visual Studio 2015
 skip_branch_with_pr: true
 environment:
-  GIT_LFS_VERSION: 2.6.0
+  GIT_LFS_VERSION: 2.6.1
   matrix:
     - TARGET_PLATFORM: win32
       WIN_ARCH: 64
       GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.19.2.windows.1/MinGit-2.19.2-64-bit.zip
       GIT_FOR_WINDOWS_CHECKSUM: 9d260fd4b9cf279491a1cc6762c2f08f7e8ca6c1d6492300cacbc800fe384a0f
-      GIT_LFS_CHECKSUM: f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279
+      GIT_LFS_CHECKSUM: 35d0a62c5e36131b7ba65352146c585eaf1f33d7a229b9471082f49fca53b952
     - TARGET_PLATFORM: win32
       WIN_ARCH: 32
       GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.19.2.windows.1/MinGit-2.19.2-32-bit.zip
       GIT_FOR_WINDOWS_CHECKSUM: a85f4343628e7591a60ced4d54df176dba1c599b9097d1dc86597fd00bc3a5b3
-      GIT_LFS_CHECKSUM: 7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
+      GIT_LFS_CHECKSUM: 90bbeb7dc4ada394624d3a2675fd51dd4873753a56fb197b17bc01c9fcc91398
 build_script:
   - git submodule update --init --recursive
   - bash script\build.sh
