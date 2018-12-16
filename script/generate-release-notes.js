@@ -17,7 +17,7 @@ async function getBuildUrl(
   /** @type {string} */ repo,
   /** @type {string} */ ref
 ) {
-  const response = await octokit.repos.getStatuses({
+  const response = await octokit.repos.listStatusesForRef({
     owner,
     repo,
     ref,
@@ -58,7 +58,7 @@ async function run() {
     token,
   })
 
-  const user = await octokit.users.get({})
+  const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
@@ -76,7 +76,7 @@ async function run() {
 
   console.log(`✅ Token has 'public_scope' scope to make changes to releases`)
 
-  const releases = await octokit.repos.getReleases({
+  const releases = await octokit.repos.listReleases({
     owner,
     repo,
     per_page: 1,
@@ -93,10 +93,10 @@ async function run() {
 
   console.log(`✅ Newest release '${tag_name}' is a draft`)
 
-  const assets = await octokit.repos.getAssets({
+  const assets = await octokit.repos.listAssetsForRelease({
     owner,
     repo,
-    release_id: id.toString(),
+    release_id: id,
   })
 
   if (assets.data.length !== SUCCESSFUL_RELEASE_FILE_COUNT) {
@@ -194,10 +194,10 @@ ${fileListText}`
 
   const numberWithoutPrefix = tag_name.substring(1)
 
-  const result = await octokit.repos.editRelease({
+  const result = await octokit.repos.updateRelease({
     owner: 'desktop',
     repo: 'dugite-native',
-    release_id: id.toString(),
+    release_id: id,
     tag_name,
     name: `Git ${numberWithoutPrefix}`,
     body: draftReleaseNotes,

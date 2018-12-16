@@ -70,7 +70,7 @@ async function run() {
     token,
   })
 
-  const user = await octokit.users.get({})
+  const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
@@ -86,10 +86,10 @@ async function run() {
   console.log(`✅ Newest git-lfs release '${version}'`)
 
   /** @type {{ data: Array<{name: string, url: string}>}} */
-  const assets = await octokit.repos.getAssets({
+  const assets = await octokit.repos.listAssetsForRelease({
     owner,
     repo,
-    release_id: id.toString(),
+    release_id: id,
   })
 
   const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
