@@ -40,7 +40,7 @@ docker run -it \
 -e "DESTINATION=$DESTINATION" \
 -e "CURL_INSTALL_DIR=$CURL_INSTALL_DIR" \
 -w="$BASEDIR" \
---rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh "$BASEDIR/script/build-arm64-git.sh"
+--rm shiftkey/dugite-native:arm64-jessie-git-with-curl bash "$BASEDIR/script/build-arm64-git.sh"
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
