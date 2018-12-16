@@ -107,6 +107,7 @@ const baseConfig = {
     global: [`GIT_LFS_VERSION=${getLFSVersion()}`],
   },
   matrix: {
+    fast_finish: true,
     include: [
       getConfig('linux', 'amd64'),
       getConfig('darwin', 'amd64'),
