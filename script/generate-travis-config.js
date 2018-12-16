@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const YAML = require('yaml')
 
+/** @type {{'git-lfs': {version: string, files: Array<{platform: string, arch: string, name: string, checksum: string}>}, git: {packages: Array<{platform: string, arch: string, url: string, checksum: string}>} }} */
 const dependencies = require('../dependencies.json')
 
 function getLFSVersion() {
@@ -11,7 +12,12 @@ function getLFSVersion() {
   return fullVersion.replace('v', '')
 }
 
-function getConfig(platform, arch) {
+function getConfig(
+  /** @type {string} */
+  platform,
+  /** @type {string} */
+  arch
+) {
   const lfs = dependencies['git-lfs']
   const lfsFile = lfs.files.find(
     f => f.platform === platform && f.arch === arch
@@ -23,6 +29,7 @@ function getConfig(platform, arch) {
   }
 
   if (platform === 'windows') {
+    /** @type {{packages: Array<{platform: string, arch: string, url: string, checksum: string}>}} */
     const git = dependencies['git']
     const gitPackage = git.packages.find(
       f => f.platform === platform && f.arch === arch
@@ -111,6 +118,13 @@ const baseConfig = {
         os: 'linux',
         language: 'shell',
         script: [`bash -c 'shopt -s globstar; shellcheck script/**/*.sh'`],
+      },
+      // verify tooling scripts
+      {
+        os: 'linux',
+        language: 'node_js',
+        node_js: ['node'],
+        script: [`npm run check`],
       },
     ],
   },

@@ -1,15 +1,21 @@
 const path = require('path')
 const fs = require('fs')
-const octokit = require('@octokit/rest')()
+const Octokit = require('@octokit/rest')
+const octokit = new Octokit()
 const rp = require('request-promise')
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
 })
 
-function updateDependencies(version, files) {
+function updateDependencies(
+  /** @type {string} */
+  version,
+  /** @type {Array<{platform: string, arch: string, name: string, checksum: string}>} */
+  files
+) {
   const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
-  const dependenciesText = fs.readFileSync(dependenciesPath)
+  const dependenciesText = fs.readFileSync(dependenciesPath, 'utf8')
   const dependencies = JSON.parse(dependenciesText)
 
   const gitLfs = {
@@ -24,7 +30,7 @@ function updateDependencies(version, files) {
   fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
 }
 
-function getPlatform(fileName) {
+function getPlatform(/** @type {string} */ fileName) {
   if (fileName.match(/-windows-/)) {
     return 'windows'
   }
@@ -38,7 +44,7 @@ function getPlatform(fileName) {
   throw new Error(`Unable to find platform for file: ${fileName}`)
 }
 
-function getArch(fileName) {
+function getArch(/** @type {string} */ fileName) {
   if (fileName.match(/-amd64-/)) {
     return 'amd64'
   }
@@ -64,7 +70,7 @@ async function run() {
     token,
   })
 
-  const user = await octokit.users.get()
+  const user = await octokit.users.get({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
@@ -79,16 +85,17 @@ async function run() {
 
   console.log(`✅ Newest git-lfs release '${version}'`)
 
+  /** @type {{ data: Array<{name: string, url: string}>}} */
   const assets = await octokit.repos.getAssets({
     owner,
     repo,
-    release_id: id,
+    release_id: id.toString(),
   })
 
   const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
 
   if (signaturesFile == null) {
-    const foundFiles = assets.map(a => a.name)
+    const foundFiles = assets.data.map(a => a.name)
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )
@@ -123,11 +130,12 @@ async function run() {
   for (const file of files) {
     const re = new RegExp(`([0-9a-z]{64})\\s*${file}`)
     const match = re.exec(fileContents)
+    const platform = getPlatform(file)
     if (match == null) {
       console.log(`🔴 Could not find entry for file ${platform}`)
     } else {
       newFiles.push({
-        platform: getPlatform(file),
+        platform,
         arch: getArch(file),
         name: file,
         checksum: match[1],

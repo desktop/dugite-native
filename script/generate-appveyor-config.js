@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const YAML = require('yaml')
 
+/** @type {{'git-lfs': {version: string, files: Array<{platform: string, arch: string, name: string, checksum: string}>}, git: {packages: Array<{platform: string, arch: string, url: string, checksum: string}>} }} */
 const dependencies = require('../dependencies.json')
 
 function getLFSVersion() {
@@ -11,7 +12,12 @@ function getLFSVersion() {
   return fullVersion.replace('v', '')
 }
 
-function getConfig(platform, arch) {
+function getConfig(
+  /** @type {string} */
+  platform,
+  /** @type {string} */
+  arch
+) {
   if (platform !== 'windows') {
     throw new Error(`Unsupported platform '${platform}'`)
   }

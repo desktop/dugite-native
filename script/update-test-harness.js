@@ -2,7 +2,10 @@ const fs = require('fs')
 const path = require('path')
 const YAML = require('yaml')
 
-function writeEnvironmentToFile(os, env) {
+function writeEnvironmentToFile(
+  /** @type {string} */ os,
+  /** @type {Array<string>} */ env
+) {
   const environmentVariables = env.map(a => `${a}`).join('\n')
 
   const script = `build-${os}.sh`
