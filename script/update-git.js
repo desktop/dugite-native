@@ -13,7 +13,12 @@ process.on('unhandledRejection', reason => {
 const root = path.dirname(__dirname)
 const gitDir = path.join(root, 'git')
 
-function spawn(cmd, args, cwd) {
+/** @returns {Promise<string>} */
+function spawn(
+  /** @type {string} */ cmd,
+  /** @type {Array<string>} */ args,
+  /** @type {string} */ cwd
+) {
   return new Promise((resolve, reject) => {
     const child = ChildProcess.spawn(cmd, args, { cwd })
     let receivedData = ''
@@ -44,7 +49,7 @@ async function refreshGitSubmodule() {
   await spawn('git', ['fetch', '--tags'], gitDir)
 }
 
-async function checkout(tag) {
+async function checkout(/** @type {string} */ tag) {
   await spawn('git', ['checkout', tag], gitDir)
 }
 
@@ -59,10 +64,14 @@ async function getLatestStableRelease() {
   const sortedTags = semver.sort(releaseTags)
   const latestTag = sortedTags[sortedTags.length - 1]
 
-  return latestTag
+  return latestTag.toString()
 }
 
-function getPackageDetails(assets, body, arch) {
+function getPackageDetails(
+  /** @type {Array<{name: string, url: string, browser_download_url: string}>} */ assets,
+  /** @type {string} */ body,
+  /** @type {string} */ arch
+) {
   const archValue = arch === 'amd64' ? '64-bit' : '32-bit'
 
   const minGitFile = assets.find(
@@ -97,9 +106,12 @@ function getPackageDetails(assets, body, arch) {
   }
 }
 
-function updateDependencies(version, packages) {
+function updateDependencies(
+  /** @type {string} */ version,
+  /** @type {Array<{platform: string, arch: string, filename: string, url: string, checksum: string}>} */ packages
+) {
   const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
-  const dependenciesText = fs.readFileSync(dependenciesPath)
+  const dependenciesText = fs.readFileSync(dependenciesPath, 'utf8')
   const dependencies = JSON.parse(dependenciesText)
 
   const git = {
@@ -133,7 +145,7 @@ async function run() {
     token,
   })
 
-  const user = await octokit.users.get()
+  const user = await octokit.users.get({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)

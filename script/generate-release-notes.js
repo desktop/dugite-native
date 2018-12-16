@@ -11,7 +11,12 @@ process.on('unhandledRejection', reason => {
   console.log(reason)
 })
 
-async function getBuildUrl(octokit, owner, repo, ref) {
+async function getBuildUrl(
+  /** @type {Octokit} */ octokit,
+  /** @type {string} */ owner,
+  /** @type {string} */ repo,
+  /** @type {string} */ ref
+) {
   const response = await octokit.repos.getStatuses({
     owner,
     repo,
@@ -53,10 +58,11 @@ async function run() {
     token,
   })
 
-  const user = await octokit.users.get()
+  const user = await octokit.users.get({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
+  // @ts-ignore
   const foundScopes = user.headers['x-oauth-scopes']
   if (foundScopes.indexOf('public_repo') === -1) {
     console.log(
@@ -90,7 +96,7 @@ async function run() {
   const assets = await octokit.repos.getAssets({
     owner,
     repo,
-    release_id: id,
+    release_id: id.toString(),
   })
 
   if (assets.data.length !== SUCCESSFUL_RELEASE_FILE_COUNT) {
@@ -135,6 +141,7 @@ async function run() {
 
   const latestReleaseTag = latestRelease.data.tag_name
 
+  /** @type {{ data: { commits: Array<{commit: { message: string }}>} }} */
   const response = await octokit.repos.compareCommits({
     owner,
     repo,
@@ -154,8 +161,11 @@ async function run() {
 
   for (const mergeCommitMessage of mergeCommitMessages) {
     const match = mergeCommitRegex.exec(mergeCommitMessage)
-    if (match.length === 2) {
-      pullRequestIds.push(match[1])
+    if (match != null && match.length === 2) {
+      const num = parseInt(match[1])
+      if (num != NaN) {
+        pullRequestIds.push(num)
+      }
     }
   }
 
@@ -187,7 +197,7 @@ ${fileListText}`
   const result = await octokit.repos.editRelease({
     owner: 'desktop',
     repo: 'dugite-native',
-    release_id: id,
+    release_id: id.toString(),
     tag_name,
     name: `Git ${numberWithoutPrefix}`,
     body: draftReleaseNotes,
