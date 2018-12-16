@@ -13,6 +13,7 @@ env:
   global:
     - GIT_LFS_VERSION=2.6.1
 matrix:
+  fast_finish: true
   include:
     - os: linux
       language: c
