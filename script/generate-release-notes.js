@@ -172,7 +172,7 @@ async function run() {
   const releaseNotesEntries = []
 
   for (const pullRequestId of pullRequestIds) {
-    const result = await octokit.pullRequests.get({
+    const result = await octokit.pulls.get({
       owner,
       repo,
       number: pullRequestId,
