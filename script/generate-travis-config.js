@@ -112,6 +112,13 @@ const baseConfig = {
         language: 'shell',
         script: [`bash -c 'shopt -s globstar; shellcheck script/**/*.sh'`],
       },
+      // verify tooling scripts
+      {
+        os: 'linux',
+        language: 'node_js',
+        node_js: ['node'],
+        script: [`npm run check`],
+      },
     ],
   },
 
