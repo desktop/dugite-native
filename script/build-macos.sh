@@ -25,6 +25,7 @@ make clean
 DESTDIR="$DESTINATION" make strip install prefix=/ \
     NO_PERL=1 \
     NO_TCLTK=1 \
+    USE_LIBPCRE=1 \
     NO_GETTEXT=1 \
     NO_DARWIN_PORTS=1 \
     NO_INSTALL_HARDLINKS=1 \
