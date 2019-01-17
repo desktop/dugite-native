@@ -30,11 +30,17 @@ matrix:
       env:
         - TARGET_PLATFORM=ubuntu
         - GIT_LFS_CHECKSUM=c098092be413915793214a570cd51ef46089b6f6616b2f78e35ba374de613b5b
+      addons:
+        apt:
+          packages:
+            - libpcre3-dev
     - os: osx
       language: c
       env:
         - TARGET_PLATFORM=macOS
         - GIT_LFS_CHECKSUM=84ac4953c55bbaf87efd1c3d5b7778b1cf0b257025d2a86d709a2bf301c32c8b
+      before_script:
+        - brew install pcre2
     - os: linux
       language: c
       env:
