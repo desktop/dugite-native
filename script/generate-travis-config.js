@@ -76,6 +76,7 @@ function getConfig(
       os: 'osx',
       language: 'c',
       env: ['TARGET_PLATFORM=macOS', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
+      before_script: ['brew install pcre2'],
     }
   }
 
@@ -85,6 +86,11 @@ function getConfig(
         os: 'linux',
         language: 'c',
         env: ['TARGET_PLATFORM=ubuntu', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
+        addons: {
+          apt: {
+            packages: ['libpcre3-dev'],
+          },
+        },
       }
     } else if (arch === 'arm64') {
       return {
