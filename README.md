@@ -19,7 +19,7 @@ There are also additional customizations included in this toolchain:
  - Git-LFS
  - certificate bundle for Linux consumers
 
-**Note:** this is not intended to installed by end users - [go here](https://git-scm.com/)
+**Note:** this is not intended to be installed by end users - [go here](https://git-scm.com/)
 to download Git for your operating system.
 
 ### Status
