@@ -3,8 +3,8 @@ const path = require('path')
 const YAML = require('yaml')
 
 function writeEnvironmentToFile(
-  /** @type {string} */ os,
-  /** @type {Array<string>} */ env
+  os: string,
+  env: Array<string>
 ) {
   const environmentVariables = env.map(a => `${a}`).join('\n')
 
