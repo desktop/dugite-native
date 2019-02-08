@@ -11,10 +11,10 @@ process.on('unhandledRejection', reason => {
 })
 
 async function getBuildUrl(
-  /** @type {Octokit} */ octokit,
-  /** @type {string} */ owner,
-  /** @type {string} */ repo,
-  /** @type {string} */ ref
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  ref: string
 ) {
   const response = await octokit.repos.listStatusesForRef({
     owner,
@@ -150,8 +150,8 @@ async function run() {
   const mergeCommitRegex = /Merge pull request #(\d{1,}) /
 
   const mergeCommitMessages = commits
-    .filter(c => c.commit.message.match(mergeCommitRegex))
-    .map(c => c.commit.message)
+    .filter((c: {commit: { message: string }}) => c.commit.message.match(mergeCommitRegex))
+    .map((c: {commit: { message: string }}) => c.commit.message)
 
   const pullRequestIds = []
 
