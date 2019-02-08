@@ -11,7 +11,7 @@
     "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts,json}",
     "generate-all-config": "npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix",
     "generate-appveyor-config": "ts-node script/generate-appveyor-config.ts",
-    "generate-travis-config": "node script/generate-travis-config.js"
+    "generate-travis-config": "ts-node script/generate-travis-config.ts"
   },
   "repository": {
     "type": "git",
