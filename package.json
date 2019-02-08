@@ -10,7 +10,7 @@
     "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts,json}",
     "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts,json}",
     "generate-all-config": "npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix",
-    "generate-appveyor-config": "node script/generate-appveyor-config.js",
+    "generate-appveyor-config": "ts-node script/generate-appveyor-config.ts",
     "generate-travis-config": "node script/generate-travis-config.js"
   },
   "repository": {
