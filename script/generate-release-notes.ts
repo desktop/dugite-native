@@ -150,8 +150,10 @@ async function run() {
   const mergeCommitRegex = /Merge pull request #(\d{1,}) /
 
   const mergeCommitMessages = commits
-    .filter((c: {commit: { message: string }}) => c.commit.message.match(mergeCommitRegex))
-    .map((c: {commit: { message: string }}) => c.commit.message)
+    .filter((c: { commit: { message: string } }) =>
+      c.commit.message.match(mergeCommitRegex)
+    )
+    .map((c: { commit: { message: string } }) => c.commit.message)
 
   const pullRequestIds = []
 

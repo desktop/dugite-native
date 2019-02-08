@@ -12,17 +12,15 @@ function getLFSVersion() {
   return fullVersion.replace('v', '')
 }
 
-function getConfig(
-  platform: string,
-  arch: string
-) {
+function getConfig(platform: string, arch: string) {
   if (platform !== 'windows') {
     throw new Error(`Unsupported platform '${platform}'`)
   }
 
   const git = dependencies['git']
   const gitPackage = git.packages.find(
-    (f: {platform: string, arch: string, name: string, checksum: string}) => f.platform === platform && f.arch === arch
+    (f: { platform: string; arch: string; name: string; checksum: string }) =>
+      f.platform === platform && f.arch === arch
   )
   if (gitPackage == null) {
     throw new Error(
@@ -32,7 +30,8 @@ function getConfig(
 
   const lfs = dependencies['git-lfs']
   const lfsFile = lfs.files.find(
-    (f: {platform: string, arch: string, name: string, checksum: string}) => f.platform === platform && f.arch === arch
+    (f: { platform: string; arch: string; name: string; checksum: string }) =>
+      f.platform === platform && f.arch === arch
   )
   if (lfsFile == null) {
     throw new Error(
