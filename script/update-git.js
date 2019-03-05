@@ -45,6 +45,7 @@ function spawn(
 }
 
 async function refreshGitSubmodule() {
+  await spawn('git', ['submodule', 'update', '--init'], root)
   await spawn('git', ['fetch', '--tags'], gitDir)
 }
 
