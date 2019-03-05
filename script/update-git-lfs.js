@@ -124,7 +124,7 @@ async function run() {
   const newFiles = []
 
   for (const file of files) {
-    const re = new RegExp(`([0-9a-z]{64})\\s*${file}`)
+    const re = new RegExp(`([0-9a-z]{64})\\s\\*${file}`)
     const match = re.exec(fileContents)
     const platform = getPlatform(file)
     if (match == null) {
