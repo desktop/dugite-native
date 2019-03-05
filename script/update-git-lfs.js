@@ -128,7 +128,10 @@ async function run() {
     const match = re.exec(fileContents)
     const platform = getPlatform(file)
     if (match == null) {
-      console.log(`🔴 Could not find entry for file ${platform}`)
+      console.log(`🔴 Could not find entry for file '${file}'`)
+      console.log(`🔴 Release notes contents:`)
+      console.log(`${fileContents}`)
+      console.log()
     } else {
       newFiles.push({
         platform,
