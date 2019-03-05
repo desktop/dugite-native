@@ -2,7 +2,6 @@ const path = require('path')
 const fs = require('fs')
 const ChildProcess = require('child_process')
 const Octokit = require('@octokit/rest')
-const octokit = new Octokit()
 
 const semver = require('semver')
 
@@ -140,10 +139,7 @@ async function run() {
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
+  const octokit = new Octokit({ auth: `token ${token}` })
 
   const user = await octokit.users.getAuthenticated({})
   const me = user.data.login

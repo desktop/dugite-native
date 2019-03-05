@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 const Octokit = require('@octokit/rest')
-const octokit = new Octokit()
 const rp = require('request-promise')
 
 process.on('unhandledRejection', reason => {
@@ -65,10 +64,7 @@ async function run() {
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
+  const octokit = new Octokit({ auth: `token ${token}` })
 
   const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
