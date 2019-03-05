@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 const Octokit = require('@octokit/rest')
-const octokit = new Octokit()
 const rp = require('request-promise')
 
 process.on('unhandledRejection', reason => {
@@ -65,10 +64,7 @@ async function run() {
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
+  const octokit = new Octokit({ auth: `token ${token}` })
 
   const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
@@ -128,11 +124,14 @@ async function run() {
   const newFiles = []
 
   for (const file of files) {
-    const re = new RegExp(`([0-9a-z]{64})\\s*${file}`)
+    const re = new RegExp(`([0-9a-z]{64})\\s\\*${file}`)
     const match = re.exec(fileContents)
     const platform = getPlatform(file)
     if (match == null) {
-      console.log(`🔴 Could not find entry for file ${platform}`)
+      console.log(`🔴 Could not find entry for file '${file}'`)
+      console.log(`🔴 SHA256 checksum contents:`)
+      console.log(`${fileContents}`)
+      console.log()
     } else {
       newFiles.push({
         platform,
