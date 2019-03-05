@@ -129,7 +129,7 @@ async function run() {
     const platform = getPlatform(file)
     if (match == null) {
       console.log(`🔴 Could not find entry for file '${file}'`)
-      console.log(`🔴 Release notes contents:`)
+      console.log(`🔴 SHA256 checksum contents:`)
       console.log(`${fileContents}`)
       console.log()
     } else {
