@@ -24,6 +24,11 @@ function spawn(
 
     child.on('error', reject)
 
+    if (child.stdout === null) {
+      reject(new Error('Unable to read stdout of child process'))
+      return
+    }
+
     child.stdout.on('data', data => {
       receivedData += data
     })
