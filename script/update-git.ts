@@ -1,9 +1,8 @@
-const path = require('path')
-const fs = require('fs')
-const ChildProcess = require('child_process')
-const Octokit = require('@octokit/rest')
-
-const semver = require('semver')
+import * as path from 'path'
+import * as fs from 'fs'
+import * as ChildProcess from 'child_process'
+import Octokit from '@octokit/rest'
+import * as semver from 'semver'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -12,12 +11,7 @@ process.on('unhandledRejection', reason => {
 const root = path.dirname(__dirname)
 const gitDir = path.join(root, 'git')
 
-/** @returns {Promise<string>} */
-function spawn(
-  /** @type {string} */ cmd,
-  /** @type {Array<string>} */ args,
-  /** @type {string} */ cwd
-) {
+function spawn(cmd: string, args: Array<string>, cwd: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = ChildProcess.spawn(cmd, args, { cwd })
     let receivedData = ''
@@ -29,11 +23,11 @@ function spawn(
       return
     }
 
-    child.stdout.on('data', data => {
+    child.stdout.on('data', (data: any) => {
       receivedData += data
     })
 
-    child.on('close', (code, signal) => {
+    child.on('close', (code: number, signal: string) => {
       if (code === 0) {
         resolve(receivedData)
       } else {
@@ -54,7 +48,7 @@ async function refreshGitSubmodule() {
   await spawn('git', ['fetch', '--tags'], gitDir)
 }
 
-async function checkout(/** @type {string} */ tag) {
+async function checkout(tag: string) {
   await spawn('git', ['checkout', tag], gitDir)
 }
 
@@ -73,9 +67,9 @@ async function getLatestStableRelease() {
 }
 
 function getPackageDetails(
-  /** @type {Array<{name: string, url: string, browser_download_url: string}>} */ assets,
-  /** @type {string} */ body,
-  /** @type {string} */ arch
+  assets: Array<{ name: string; url: string; browser_download_url: string }>,
+  body: string,
+  arch: string
 ) {
   const archValue = arch === 'amd64' ? '64-bit' : '32-bit'
 
@@ -112,8 +106,14 @@ function getPackageDetails(
 }
 
 function updateDependencies(
-  /** @type {string} */ version,
-  /** @type {Array<{platform: string, arch: string, filename: string, url: string, checksum: string}>} */ packages
+  version: string,
+  packages: Array<{
+    platform: string
+    arch: string
+    filename: string
+    url: string
+    checksum: string
+  }>
 ) {
   const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
   const dependenciesText = fs.readFileSync(dependenciesPath, 'utf8')

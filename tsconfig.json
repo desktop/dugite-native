@@ -2,12 +2,10 @@
   "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
-    "allowJs": true,
-    "checkJs": true,
     "noEmit": true,
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["script/*.js"]
+  "include": ["script/*.ts"]
 }

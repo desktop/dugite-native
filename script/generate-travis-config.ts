@@ -1,6 +1,6 @@
-const fs = require('fs')
-const path = require('path')
-const YAML = require('yaml')
+import * as fs from 'fs'
+import * as path from 'path'
+import * as YAML from 'yaml'
 
 /** @type {{'git-lfs': {version: string, files: Array<{platform: string, arch: string, name: string, checksum: string}>}, git: {packages: Array<{platform: string, arch: string, url: string, checksum: string}>} }} */
 const dependencies = require('../dependencies.json')
@@ -12,15 +12,11 @@ function getLFSVersion() {
   return fullVersion.replace('v', '')
 }
 
-function getConfig(
-  /** @type {string} */
-  platform,
-  /** @type {string} */
-  arch
-) {
+function getConfig(platform: string, arch: string) {
   const lfs = dependencies['git-lfs']
   const lfsFile = lfs.files.find(
-    f => f.platform === platform && f.arch === arch
+    (f: { platform: string; arch: string; url: string; checksum: string }) =>
+      f.platform === platform && f.arch === arch
   )
   if (lfsFile == null) {
     throw new Error(
@@ -32,7 +28,8 @@ function getConfig(
     /** @type {{packages: Array<{platform: string, arch: string, url: string, checksum: string}>}} */
     const git = dependencies['git']
     const gitPackage = git.packages.find(
-      f => f.platform === platform && f.arch === arch
+      (f: { platform: string; arch: string; url: string; checksum: string }) =>
+        f.platform === platform && f.arch === arch
     )
     if (gitPackage == null) {
       throw new Error(

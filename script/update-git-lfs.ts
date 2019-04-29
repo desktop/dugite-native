@@ -1,17 +1,20 @@
-const path = require('path')
-const fs = require('fs')
-const Octokit = require('@octokit/rest')
-const rp = require('request-promise')
+import * as path from 'path'
+import * as fs from 'fs'
+import Octokit from '@octokit/rest'
+import rp from 'request-promise'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
 })
 
 function updateDependencies(
-  /** @type {string} */
-  version,
-  /** @type {Array<{platform: string, arch: string, name: string, checksum: string}>} */
-  files
+  version: string,
+  files: Array<{
+    platform: string
+    arch: string
+    name: string
+    checksum: string
+  }>
 ) {
   const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
   const dependenciesText = fs.readFileSync(dependenciesPath, 'utf8')
@@ -29,7 +32,7 @@ function updateDependencies(
   fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
 }
 
-function getPlatform(/** @type {string} */ fileName) {
+function getPlatform(fileName: string) {
   if (fileName.match(/-windows-/)) {
     return 'windows'
   }
@@ -43,7 +46,7 @@ function getPlatform(/** @type {string} */ fileName) {
   throw new Error(`Unable to find platform for file: ${fileName}`)
 }
 
-function getArch(/** @type {string} */ fileName) {
+function getArch(fileName: string) {
   if (fileName.match(/-amd64-/)) {
     return 'amd64'
   }
@@ -88,10 +91,14 @@ async function run() {
     release_id: id,
   })
 
-  const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
+  const signaturesFile = assets.data.find(
+    (a: { name: string; url: string }) => a.name === 'sha256sums.asc'
+  )
 
   if (signaturesFile == null) {
-    const foundFiles = assets.data.map(a => a.name)
+    const foundFiles = assets.data.map(
+      (a: { name: string; url: string }) => a.name
+    )
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )

@@ -3,15 +3,15 @@
   "description": "ad-hoc scripts for helping to contribute",
   "scripts": {
     "check": "tsc",
-    "update-test-harness": "node script/update-test-harness.js",
-    "update-git": "node script/update-git.js && npm run prettier-fix",
-    "update-git-lfs": "node script/update-git-lfs.js && npm run prettier-fix",
-    "generate-release-notes": "node script/generate-release-notes.js",
+    "update-test-harness": "ts-node script/update-test-harness.ts",
+    "update-git": "ts-node script/update-git.ts && npm run prettier-fix",
+    "update-git-lfs": "ts-node script/update-git-lfs.ts && npm run prettier-fix",
+    "generate-release-notes": "ts-node script/generate-release-notes.ts",
     "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts,json}",
     "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts,json}",
     "generate-all-config": "npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix",
-    "generate-appveyor-config": "node script/generate-appveyor-config.js",
-    "generate-travis-config": "node script/generate-travis-config.js"
+    "generate-appveyor-config": "ts-node script/generate-appveyor-config.ts",
+    "generate-travis-config": "ts-node script/generate-travis-config.ts"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "semver": "^6.0.0",
+    "ts-node": "^8.1.0",
     "typescript": "^3.4.5",
     "yaml": "^1.5.0"
   }
