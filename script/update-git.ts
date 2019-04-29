@@ -1,8 +1,8 @@
 import * as path from 'path'
-import * as fs from 'fs'
 import * as ChildProcess from 'child_process'
 import Octokit from '@octokit/rest'
 import * as semver from 'semver'
+import { updateGitDependencies } from './lib/dependencies'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -105,32 +105,6 @@ function getPackageDetails(
   }
 }
 
-function updateDependencies(
-  version: string,
-  packages: Array<{
-    platform: string
-    arch: string
-    filename: string
-    url: string
-    checksum: string
-  }>
-) {
-  const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
-  const dependenciesText = fs.readFileSync(dependenciesPath, 'utf8')
-  const dependencies = JSON.parse(dependenciesText)
-
-  const git = {
-    version: version,
-    packages: packages,
-  }
-
-  const updatedDependencies = { ...dependencies, git: git }
-
-  const newDepedenciesText = JSON.stringify(updatedDependencies, null, 2)
-
-  fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
-}
-
 async function run() {
   await refreshGitSubmodule()
   const latestGitVersion = await getLatestStableRelease()
@@ -176,7 +150,7 @@ async function run() {
     return
   }
 
-  updateDependencies(latestGitVersion, [package64bit, package32bit])
+  updateGitDependencies(latestGitVersion, [package64bit, package32bit])
 
   console.log(
     `✅ Updated dependencies metadata to Git ${latestGitVersion} (Git for Windows ${version})`

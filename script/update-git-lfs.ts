@@ -1,36 +1,10 @@
-import * as path from 'path'
-import * as fs from 'fs'
 import Octokit from '@octokit/rest'
 import rp from 'request-promise'
+import { updateGitLfsDependencies } from './lib/dependencies'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
 })
-
-function updateDependencies(
-  version: string,
-  files: Array<{
-    platform: string
-    arch: string
-    name: string
-    checksum: string
-  }>
-) {
-  const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
-  const dependenciesText = fs.readFileSync(dependenciesPath, 'utf8')
-  const dependencies = JSON.parse(dependenciesText)
-
-  const gitLfs = {
-    version: version,
-    files: files,
-  }
-
-  const updatedDependencies = { ...dependencies, 'git-lfs': gitLfs }
-
-  const newDepedenciesText = JSON.stringify(updatedDependencies, null, 2)
-
-  fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
-}
 
 function getPlatform(fileName: string) {
   if (fileName.match(/-windows-/)) {
@@ -149,7 +123,7 @@ async function run() {
     }
   }
 
-  updateDependencies(version, newFiles)
+  updateGitLfsDependencies(version, newFiles)
 
   console.log(`✅ Updated dependencies metadata to Git LFS '${version}'`)
 }
