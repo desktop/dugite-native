@@ -1,5 +1,4 @@
 const Octokit = require('@octokit/rest')
-const octokit = new Octokit()
 const rp = require('request-promise')
 
 // five targeted OS/arch combinations
@@ -53,10 +52,7 @@ async function run() {
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
+  const octokit = new Octokit({ auth: `token ${token}` })
 
   const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
