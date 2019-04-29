@@ -29,7 +29,7 @@
     "@types/request-promise": "^4.1.42",
     "@types/semver": "^6.0.0",
     "@types/yaml": "^1.0.2",
-    "prettier": "^1.16.4",
+    "prettier": "^1.17.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "semver": "^6.0.0",
