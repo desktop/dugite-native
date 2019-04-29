@@ -1,5 +1,5 @@
-const Octokit = require('@octokit/rest')
-const rp = require('request-promise')
+import Octokit from '@octokit/rest'
+import rp from 'request-promise'
 
 // five targeted OS/arch combinations
 // two files for each targeted OS/arch

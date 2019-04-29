@@ -1,7 +1,7 @@
-const path = require('path')
-const fs = require('fs')
-const Octokit = require('@octokit/rest')
-const rp = require('request-promise')
+import * as path from 'path'
+import * as fs from 'fs'
+import Octokit from '@octokit/rest'
+import rp from 'request-promise'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)

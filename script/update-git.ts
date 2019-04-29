@@ -1,9 +1,8 @@
-const path = require('path')
-const fs = require('fs')
-const ChildProcess = require('child_process')
-const Octokit = require('@octokit/rest')
-
-const semver = require('semver')
+import * as path from 'path'
+import * as fs from 'fs'
+import * as ChildProcess from 'child_process'
+import Octokit from '@octokit/rest'
+import * as semver from 'semver'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)

@@ -1,6 +1,6 @@
-const fs = require('fs')
-const path = require('path')
-const YAML = require('yaml')
+import * as fs from 'fs'
+import * as path from 'path'
+import * as YAML from 'yaml'
 
 /** @type {{'git-lfs': {version: string, files: Array<{platform: string, arch: string, name: string, checksum: string}>}, git: {packages: Array<{platform: string, arch: string, url: string, checksum: string}>} }} */
 const dependencies = require('../dependencies.json')
