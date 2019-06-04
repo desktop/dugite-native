@@ -33,7 +33,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "semver": "^6.0.0",
-    "ts-node": "^8.1.0",
+    "ts-node": "^8.2.0",
     "typescript": "^3.4.5",
     "yaml": "^1.5.1"
   }
