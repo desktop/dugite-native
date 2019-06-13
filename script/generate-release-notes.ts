@@ -97,9 +97,7 @@ async function run() {
 
   if (assets.data.length !== SUCCESSFUL_RELEASE_FILE_COUNT) {
     console.log(
-      `🔴 Draft has ${
-        assets.data.length
-      } assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going...`
+      `🔴 Draft has ${assets.data.length} assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going...`
     )
 
     await getBuildUrl(octokit, owner, repo, tag_name)
