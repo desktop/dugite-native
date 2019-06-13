@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "devDependencies": {
-    "@octokit/rest": "^16.26.0",
+    "@octokit/rest": "^16.28.1",
     "@types/node": "^12.0.7",
     "@types/request-promise": "^4.1.44",
     "@types/semver": "^6.0.0",
