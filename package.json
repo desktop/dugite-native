@@ -32,7 +32,7 @@
     "prettier": "^1.18.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "semver": "^6.1.1",
+    "semver": "^6.2.0",
     "ts-node": "^8.2.0",
     "typescript": "^3.5.1",
     "yaml": "^1.6.0"
