@@ -90,5 +90,4 @@ rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
 echo "-- Removing global gitattributes which handles certain file extensions"
 
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
-rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
 echo "-- Removing legacy credential helpers"

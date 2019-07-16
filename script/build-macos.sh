@@ -31,6 +31,12 @@ DESTDIR="$DESTINATION" make strip install prefix=/ \
     MACOSX_DEPLOYMENT_TARGET=10.9
 )
 
+(
+cd "$SOURCE/contrib/credential/osxkeychain" || exit 1
+make clean
+make
+cp "$SOURCE/contrib/credential/osxkeychain/git-credential-osxkeychain" "$DESTINATION/libexec/git-core/"
+)
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
