@@ -25,6 +25,7 @@ make configure
 CC='gcc' \
   CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
   LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
+  CURL_CONFIG="$CURL_INSTALL_DIR/bin/curl-config" \
   ./configure \
   --with-curl="$CURL_INSTALL_DIR" \
   --prefix=/

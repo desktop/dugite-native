@@ -11,44 +11,51 @@ services:
   - docker
 env:
   global:
-    - GIT_LFS_VERSION=2.6.0
+    - GIT_LFS_VERSION=2.7.2
 matrix:
+  fast_finish: true
   include:
+    - os: linux
+      language: shell
+      script:
+        - bash -c 'shopt -s globstar; shellcheck script/**/*.sh'
+    - os: linux
+      language: node_js
+      node_js:
+        - node
+      script:
+        - npm run check && npm run prettier
     - os: linux
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
-        - GIT_LFS_CHECKSUM=43e9311bdded82d43c574b075aafaf56681a3450c1ccf59cce9d362acabf1362
+        - GIT_LFS_CHECKSUM=89f5aa2c29800bbb71f5d4550edd69c5f83e3ee9e30f770446436dd7f4ef1d4c
     - os: osx
       language: c
       env:
         - TARGET_PLATFORM=macOS
-        - GIT_LFS_CHECKSUM=42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60
+        - GIT_LFS_CHECKSUM=f67da07561c25889af56b1fd873c074eb240a0fad853989fec9923c1c1acb826
     - os: linux
       language: c
       env:
         - TARGET_PLATFORM=win32
         - WIN_ARCH=64
-        - GIT_FOR_WINDOWS_URL=http://desktop.githubusercontent.com/MinGit/MinGit-2.19.2.windows.2-64-bit.zip
-        - GIT_FOR_WINDOWS_CHECKSUM=111cfe326a0bf361d71186a08faaa9d0cff827abe2ae25f34205e6f40f448c3f
-        - GIT_LFS_CHECKSUM=f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279
+        - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.21.0.windows.1/MinGit-2.21.0-64-bit.zip
+        - GIT_FOR_WINDOWS_CHECKSUM=bd91db55bd95eaa80687df28877e2df8c8858a0266e9c67331cfddba2735f25c
+        - GIT_LFS_CHECKSUM=5cbe0765d469bbb32548a86e92d5e8694f1e97df7d590552477c3fafdc6c82e1
     - os: linux
       language: c
       env:
         - TARGET_PLATFORM=win32
         - WIN_ARCH=32
-        - GIT_FOR_WINDOWS_URL=http://desktop.githubusercontent.com/MinGit/MinGit-2.19.2.windows.2-32-bit.zip
-        - GIT_FOR_WINDOWS_CHECKSUM=ba869d15902c6485cf369d17518e151730cab4cbe46ce3c1113aac7dad74033b
-        - GIT_LFS_CHECKSUM=7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
+        - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.21.0.windows.1/MinGit-2.21.0-32-bit.zip
+        - GIT_FOR_WINDOWS_CHECKSUM=652c05175553e25401e38c7e65467d92748fc5d577374c9587c09f5875d8937e
+        - GIT_LFS_CHECKSUM=f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
     - os: linux
       language: c
       env:
         - TARGET_PLATFORM=arm64
-        - GIT_LFS_CHECKSUM=574192d485ce84495fe3f228a57e3ef80f93635ae4677ac4a189425b4c9aeb0a
-    - os: linux
-      language: shell
-      script:
-        - bash -c 'shopt -s globstar; shellcheck script/**/*.sh'
+        - GIT_LFS_CHECKSUM=ea628d95158d5c76d9c7fe9432f28e49cc1a1b7ae3928b7089b1f4f97748d7a0
 compiler:
   - gcc
 script:

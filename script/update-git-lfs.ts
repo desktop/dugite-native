@@ -1,30 +1,12 @@
-const path = require('path')
-const fs = require('fs')
-const octokit = require('@octokit/rest')()
-const rp = require('request-promise')
+import Octokit from '@octokit/rest'
+import rp from 'request-promise'
+import { updateGitLfsDependencies } from './lib/dependencies'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
 })
 
-function updateDependencies(version, files) {
-  const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
-  const dependenciesText = fs.readFileSync(dependenciesPath)
-  const dependencies = JSON.parse(dependenciesText)
-
-  const gitLfs = {
-    version: version,
-    files: files,
-  }
-
-  const updatedDependencies = { ...dependencies, 'git-lfs': gitLfs }
-
-  const newDepedenciesText = JSON.stringify(updatedDependencies, null, 2)
-
-  fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
-}
-
-function getPlatform(fileName) {
+function getPlatform(fileName: string) {
   if (fileName.match(/-windows-/)) {
     return 'windows'
   }
@@ -38,7 +20,7 @@ function getPlatform(fileName) {
   throw new Error(`Unable to find platform for file: ${fileName}`)
 }
 
-function getArch(fileName) {
+function getArch(fileName: string) {
   if (fileName.match(/-amd64-/)) {
     return 'amd64'
   }
@@ -59,12 +41,9 @@ async function run() {
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
+  const octokit = new Octokit({ auth: `token ${token}` })
 
-  const user = await octokit.users.get()
+  const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
@@ -79,16 +58,21 @@ async function run() {
 
   console.log(`✅ Newest git-lfs release '${version}'`)
 
-  const assets = await octokit.repos.getAssets({
+  /** @type {{ data: Array<{name: string, url: string}>}} */
+  const assets = await octokit.repos.listAssetsForRelease({
     owner,
     repo,
     release_id: id,
   })
 
-  const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
+  const signaturesFile = assets.data.find(
+    (a: { name: string; url: string }) => a.name === 'sha256sums.asc'
+  )
 
   if (signaturesFile == null) {
-    const foundFiles = assets.map(a => a.name)
+    const foundFiles = assets.data.map(
+      (a: { name: string; url: string }) => a.name
+    )
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )
@@ -121,13 +105,17 @@ async function run() {
   const newFiles = []
 
   for (const file of files) {
-    const re = new RegExp(`([0-9a-z]{64})\\s*${file}`)
+    const re = new RegExp(`([0-9a-z]{64})\\s\\*${file}`)
     const match = re.exec(fileContents)
+    const platform = getPlatform(file)
     if (match == null) {
-      console.log(`🔴 Could not find entry for file ${platform}`)
+      console.log(`🔴 Could not find entry for file '${file}'`)
+      console.log(`🔴 SHA256 checksum contents:`)
+      console.log(`${fileContents}`)
+      console.log()
     } else {
       newFiles.push({
-        platform: getPlatform(file),
+        platform,
         arch: getArch(file),
         name: file,
         checksum: match[1],
@@ -135,7 +123,7 @@ async function run() {
     }
   }
 
-  updateDependencies(version, newFiles)
+  updateGitLfsDependencies(version, newFiles)
 
   console.log(`✅ Updated dependencies metadata to Git LFS '${version}'`)
 }
