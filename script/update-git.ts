@@ -1,9 +1,8 @@
-const path = require('path')
-const fs = require('fs')
-const ChildProcess = require('child_process')
-const octokit = require('@octokit/rest')()
-
-const semver = require('semver')
+import * as path from 'path'
+import * as ChildProcess from 'child_process'
+import Octokit from '@octokit/rest'
+import * as semver from 'semver'
+import { updateGitDependencies } from './lib/dependencies'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -12,18 +11,23 @@ process.on('unhandledRejection', reason => {
 const root = path.dirname(__dirname)
 const gitDir = path.join(root, 'git')
 
-function spawn(cmd, args, cwd) {
+function spawn(cmd: string, args: Array<string>, cwd: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = ChildProcess.spawn(cmd, args, { cwd })
     let receivedData = ''
 
     child.on('error', reject)
 
-    child.stdout.on('data', data => {
+    if (child.stdout === null) {
+      reject(new Error('Unable to read stdout of child process'))
+      return
+    }
+
+    child.stdout.on('data', (data: any) => {
       receivedData += data
     })
 
-    child.on('close', (code, signal) => {
+    child.on('close', (code: number, signal: string) => {
       if (code === 0) {
         resolve(receivedData)
       } else {
@@ -40,10 +44,11 @@ function spawn(cmd, args, cwd) {
 }
 
 async function refreshGitSubmodule() {
+  await spawn('git', ['submodule', 'update', '--init'], root)
   await spawn('git', ['fetch', '--tags'], gitDir)
 }
 
-async function checkout(tag) {
+async function checkout(tag: string) {
   await spawn('git', ['checkout', tag], gitDir)
 }
 
@@ -58,10 +63,14 @@ async function getLatestStableRelease() {
   const sortedTags = semver.sort(releaseTags)
   const latestTag = sortedTags[sortedTags.length - 1]
 
-  return latestTag
+  return latestTag.toString()
 }
 
-function getPackageDetails(assets, body, arch) {
+function getPackageDetails(
+  assets: Array<{ name: string; url: string; browser_download_url: string }>,
+  body: string,
+  arch: string
+) {
   const archValue = arch === 'amd64' ? '64-bit' : '32-bit'
 
   const minGitFile = assets.find(
@@ -96,23 +105,6 @@ function getPackageDetails(assets, body, arch) {
   }
 }
 
-function updateDependencies(version, packages) {
-  const dependenciesPath = path.resolve(__dirname, '..', 'dependencies.json')
-  const dependenciesText = fs.readFileSync(dependenciesPath)
-  const dependencies = JSON.parse(dependenciesText)
-
-  const git = {
-    version: version,
-    packages: packages,
-  }
-
-  const updatedDependencies = { ...dependencies, git: git }
-
-  const newDepedenciesText = JSON.stringify(updatedDependencies, null, 2)
-
-  fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
-}
-
 async function run() {
   await refreshGitSubmodule()
   const latestGitVersion = await getLatestStableRelease()
@@ -127,12 +119,9 @@ async function run() {
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
+  const octokit = new Octokit({ auth: `token ${token}` })
 
-  const user = await octokit.users.get()
+  const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
@@ -161,7 +150,7 @@ async function run() {
     return
   }
 
-  updateDependencies(latestGitVersion, [package64bit, package32bit])
+  updateGitDependencies(latestGitVersion, [package64bit, package32bit])
 
   console.log(
     `✅ Updated dependencies metadata to Git ${latestGitVersion} (Git for Windows ${version})`

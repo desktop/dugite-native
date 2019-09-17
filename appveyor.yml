@@ -9,18 +9,18 @@
 image: Visual Studio 2015
 skip_branch_with_pr: true
 environment:
-  GIT_LFS_VERSION: 2.6.0
+  GIT_LFS_VERSION: 2.7.2
   matrix:
     - TARGET_PLATFORM: win32
       WIN_ARCH: 64
-      GIT_FOR_WINDOWS_URL: http://desktop.githubusercontent.com/MinGit/MinGit-2.19.2.windows.3-64-bit.zip
-      GIT_FOR_WINDOWS_CHECKSUM: 6503649151a93fae845c6d6802fd8571539e052ff0a18c2515bd6cb24ff8e56f
-      GIT_LFS_CHECKSUM: f1312d00e435c16c8d19d914d5108db6a5ddbee1badb214c66f22cfa5d18b279
+      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.21.0.windows.1/MinGit-2.21.0-64-bit.zip
+      GIT_FOR_WINDOWS_CHECKSUM: bd91db55bd95eaa80687df28877e2df8c8858a0266e9c67331cfddba2735f25c
+      GIT_LFS_CHECKSUM: 5cbe0765d469bbb32548a86e92d5e8694f1e97df7d590552477c3fafdc6c82e1
     - TARGET_PLATFORM: win32
       WIN_ARCH: 32
-      GIT_FOR_WINDOWS_URL: http://desktop.githubusercontent.com/MinGit/MinGit-2.19.2.windows.3-32-bit.zip
-      GIT_FOR_WINDOWS_CHECKSUM: 9c2efe3eb98ea886736cf8e43eca484d99171aa288a17881092470d28100c854
-      GIT_LFS_CHECKSUM: 7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
+      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.21.0.windows.1/MinGit-2.21.0-32-bit.zip
+      GIT_FOR_WINDOWS_CHECKSUM: 652c05175553e25401e38c7e65467d92748fc5d577374c9587c09f5875d8937e
+      GIT_LFS_CHECKSUM: f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
 build_script:
   - git submodule update --init --recursive
   - bash script\build.sh
