@@ -90,7 +90,7 @@ async function calculateAssetChecksum(uri: string) {
   })
 }
 
-function getPackageDetails(
+async function getPackageDetails(
   assets: Array<Octokit.ReposGetReleaseByTagResponseAssetsItem>,
   body: string,
   arch: string
@@ -113,11 +113,14 @@ function getPackageDetails(
   const filename = minGitFile.name
   const checksumRe = new RegExp(`${filename}\\s*\\|\\s*([0-9a-f]{64})`)
   const match = checksumRe.exec(body)
+  let checksum: string
   if (match == null || match.length !== 2) {
-    console.log(
-      `🔴 Could not find checksum for ${archValue} archive in release notes body.`
-    )
-    return null
+    console.log(`🔴 No checksum for ${archValue} in release notes body`)
+    checksum = await calculateAssetChecksum(minGitFile.browser_download_url)
+    console.log(`✅ Calculated checksum for ${archValue} from downloaded asset`)
+  } else {
+    console.log(`✅ Got checksum for ${archValue} from release notes body`)
+    checksum = match[1]
   }
 
   return {
@@ -125,7 +128,7 @@ function getPackageDetails(
     arch,
     filename,
     url: minGitFile.browser_download_url,
-    checksum: match[1],
+    checksum,
   }
 }
 
@@ -167,8 +170,8 @@ async function run() {
     return
   }
 
-  const package64bit = getPackageDetails(assets, body, 'amd64')
-  const package32bit = getPackageDetails(assets, body, 'x86')
+  const package64bit = await getPackageDetails(assets, body, 'amd64')
+  const package32bit = await getPackageDetails(assets, body, 'x86')
 
   if (package64bit == null || package32bit == null) {
     return
