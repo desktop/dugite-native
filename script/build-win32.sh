@@ -102,7 +102,7 @@ git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 echo "-- Removing system level gitattributes which handles certain file extensions"
 
 if [[ -f "$DESTINATION/etc/gitattributes" ]]; then
-  SYSTEM_GITATTRIBUTES="$DESTINATION/etc/gitattributes"
+  rm "$DESTINATION/etc/gitattributes"
 
   if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
     echo "System level git attributes file found in both locations"
@@ -110,10 +110,8 @@ if [[ -f "$DESTINATION/etc/gitattributes" ]]; then
     exit 1
   fi
 elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
-  SYSTEM_GITATTRIBUTES="$DESTINATION/$MINGW_DIR/etc/gitattributes"
+  rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
 fi
-
-rm "$SYSTEM_GITATTRIBUTES"
 
 echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
