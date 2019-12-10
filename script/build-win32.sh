@@ -86,9 +86,9 @@ git config --file "$SYSTEM_CONFIG" --unset http.sslCAInfo
 git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 
 # removing global gitattributes file
-rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
 echo "-- Removing global gitattributes which handles certain file extensions"
+rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
 
+echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
-echo "-- Removing legacy credential helpers"
