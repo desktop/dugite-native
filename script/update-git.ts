@@ -1,7 +1,8 @@
-import * as path from 'path'
-import * as ChildProcess from 'child_process'
+import path from 'path'
+import ChildProcess from 'child_process'
+import request from 'request'
 import Octokit from '@octokit/rest'
-import * as semver from 'semver'
+import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
 
 process.on('unhandledRejection', reason => {
