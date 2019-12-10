@@ -139,6 +139,7 @@ async function run() {
     .version(false)
     .option('tag', { default: 'latest', desc: 'The Git tag to use' })
     .option('g4w-tag', {
+      alias: 'g4w',
       default: 'latest',
       desc: 'The Git for Windows tag to use',
     })
