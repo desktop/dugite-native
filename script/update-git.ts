@@ -160,17 +160,18 @@ async function run() {
   await checkout(latestGitVersion)
 
   const token = process.env.GITHUB_ACCESS_TOKEN
-  if (token == null) {
-    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
-    return
+  const octokit = new Octokit(token ? {} : { auth: `token ${token}` })
+
+  if (token) {
+    const user = await octokit.users.getAuthenticated({})
+    const me = user.data.login
+
+    console.log(`✅ Token found for ${me}`)
+  } else {
+    console.log(
+      `🔴 No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
+    )
   }
-
-  const octokit = new Octokit({ auth: `token ${token}` })
-
-  const user = await octokit.users.getAuthenticated({})
-  const me = user.data.login
-
-  console.log(`✅ Token found for ${me}`)
 
   const owner = 'git-for-windows'
   const repo = 'git'
