@@ -54,7 +54,7 @@ export function updateGitDependencies(
 
   const newDepedenciesText = JSON.stringify(updatedDependencies, null, 2)
 
-  fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
+  fs.writeFileSync(dependenciesPath, newDepedenciesText + '\n', 'utf8')
 }
 
 export function updateGitLfsDependencies(
