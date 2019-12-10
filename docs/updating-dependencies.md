@@ -72,6 +72,50 @@ package.json 4ms
 
 You're now ready to commit these changes and create a new pull request.
 
+### Updating Git to a specific version
+
+From time to time it may be useful to ship a version of dugite using a
+version which isn't the latest release. An example of this would be a
+backported security fix. It's possible to specify the version you'd
+like to update to both for the Git submodule (which covers macOS and
+Linux) and for Git for Windows.
+
+```
+$ npm run update-git -- --help
+
+> dugite-native@ update-git /Users/markus/GitHub/dugite-native
+> ts-node script/update-git.ts "--help"
+
+Usage: update-git [options]
+
+Options:
+  --help                     Show help                                 [boolean]
+  --tag                      The Git tag to use              [default: "latest"]
+  --g4w-tag, --g4w           The Git for Windows tag to use  [default: "latest"]
+  --ignore-version-mismatch  Continue update even if the Git for Windows version
+                             and the Git submodule (macOS, Linux) don't match.
+                             Use with caution.        [boolean] [default: false]
+```
+
+Example: Update GitHub for Windows to version `v2.19.2.windows.3` and
+the Git submodule to version `v2.20.0`
+
+```
+$ npm run update-git -- --tag v2.20.0 --g4w v2.19.2.windows.3 --ignore-version-mismatch
+
+> dugite-native@ update-git /Users/markus/GitHub/dugite-native
+> ts-node script/update-git.ts "--tag" "v2.20.0" "--g4w" "v2.19.2.windows.3" "--ignore-version-mismatch"
+
+✅ Using Git version 'v2.20.0'
+🔴 No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.
+✅ Using Git for Windows version 'v2.19.2.windows.3'
+🔴 Latest Git for Windows version is v2.19.2.windows.3 which is a different series to Git version v2.20.0
+🔴 No checksum for 64-bit in release notes body
+✅ Calculated checksum for 64-bit from downloaded asset
+🔴 No checksum for 32-bit in release notes body
+✅ Calculated checksum for 32-bit from downloaded asset
+✅ Updated dependencies metadata to Git v2.20.0 (Git for Windows v2.19.2.windows.3)
+```
 
 ## Update Git LFS
 
