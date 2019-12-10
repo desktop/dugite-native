@@ -27,22 +27,6 @@ $ GITHUB_ACCESS_TOKEN=[token] npm run update-git
 ✅ Token found for shiftkey
 ✅ Newest git-for-windows release 'v2.20.1.windows.1'
 ✅ Updated dependencies metadata to Git v2.20.1 (Git for Windows v2.20.1.windows.1)
-
-> dugite-native@ prettier-fix /Users/shiftkey/src/dugite-native
-> prettier --write **/*.y{,a}ml **/*.{js,ts,json}
-
-.travis.yml 63ms
-appveyor.yml 12ms
-script/generate-appveyor-config.js 75ms
-script/generate-release-notes.js 44ms
-script/generate-travis-config.js 29ms
-script/update-git-lfs.js 23ms
-script/update-git.js 34ms
-script/update-test-harness.js 22ms
-dependencies.json 10ms
-package-lock.json 27ms
-package.json 3ms
-tsconfig.json 5ms
 ```
 
 This is the steps that this script performs:
