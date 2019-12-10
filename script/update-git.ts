@@ -86,7 +86,7 @@ async function calculateAssetChecksum(uri: string) {
           reject(new Error(`Server responded with ${r.statusCode}`))
         }
       })
-      .on('error', e => reject(e))
+      .on('error', reject)
       .pipe(hs)
   })
 }
