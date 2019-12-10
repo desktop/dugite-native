@@ -113,7 +113,7 @@ elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
   SYSTEM_GITATTRIBUTES="$DESTINATION/$MINGW_DIR/etc/gitattributes"
 fi
 
-rm "$DESTINATION/etc/gitattributes"
+rm "$SYSTEM_GITATTRIBUTES"
 
 echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
