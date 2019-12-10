@@ -160,7 +160,7 @@ async function run() {
   await checkout(latestGitVersion)
 
   const token = process.env.GITHUB_ACCESS_TOKEN
-  const octokit = new Octokit(token ? {} : { auth: `token ${token}` })
+  const octokit = new Octokit(token ? { auth: `token ${token}` } : {})
 
   if (token) {
     const user = await octokit.users.getAuthenticated({})
