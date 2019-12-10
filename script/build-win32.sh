@@ -63,7 +63,7 @@ else
 fi
 
 
-SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
+SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
 
 echo "-- Setting some system configuration values"
 git config --file "$SYSTEM_CONFIG" core.symlinks "false"
@@ -87,7 +87,7 @@ git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 
 # removing global gitattributes file
 echo "-- Removing global gitattributes which handles certain file extensions"
-rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
+rm "$DESTINATION/etc/gitattributes"
 
 echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
