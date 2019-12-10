@@ -68,7 +68,7 @@ async function getLatestStableRelease() {
 }
 
 function getPackageDetails(
-  assets: Array<{ name: string; url: string; browser_download_url: string }>,
+  assets: Array<Octokit.ReposGetReleaseByTagResponseAssetsItem>,
   body: string,
   arch: string
 ) {
