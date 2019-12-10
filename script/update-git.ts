@@ -141,6 +141,13 @@ async function run() {
     .option('g4w-tag', {
       default: 'latest',
       desc: 'The Git for Windows tag to use',
+    })
+    .option('ignore-version-mismatch', {
+      desc:
+        "Continue update even if the Git for Windows version and the Git submodule (macOS, Linux) don't match. " +
+        'Use with caution.',
+      default: false,
+      boolean: true,
     }).argv
 
   await refreshGitSubmodule()
@@ -185,7 +192,9 @@ async function run() {
     console.log(
       `🔴 Latest Git for Windows version is ${version} which is a different series to Git version ${latestGitVersion}`
     )
-    return
+    if (argv['ignore-version-mismatch'] !== true) {
+      return
+    }
   }
 
   const package64bit = await getPackageDetails(assets, body, 'amd64')
