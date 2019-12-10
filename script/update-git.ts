@@ -67,6 +67,28 @@ async function getLatestStableRelease() {
   return latestTag.toString()
 }
 
+async function calculateAssetChecksum(uri: string) {
+  return new Promise<string>((resolve, reject) => {
+    const hs = crypto.createHash('sha256', { encoding: 'hex' })
+    hs.on('finish', () => resolve(hs.read()))
+
+    request({
+      uri,
+      headers: {
+        'User-Agent': 'dugite-native',
+        accept: 'application/octet-stream',
+      },
+    })
+      .on('response', r => {
+        if (r.statusCode !== 200) {
+          reject(new Error(`Server responded with ${r.statusCode}`))
+        }
+      })
+      .on('error', e => reject(e))
+      .pipe(hs)
+  })
+}
+
 function getPackageDetails(
   assets: Array<Octokit.ReposGetReleaseByTagResponseAssetsItem>,
   body: string,
