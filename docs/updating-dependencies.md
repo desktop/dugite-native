@@ -117,6 +117,22 @@ $ npm run update-git -- --tag v2.20.0 --g4w v2.19.2.windows.3 --ignore-version-m
 ✅ Updated dependencies metadata to Git v2.20.0 (Git for Windows v2.19.2.windows.3)
 ```
 
+### Update Git for Windows using self-hosted binaries
+
+In rare circumstances we've had to ship a version of dugite-native using binaries
+hosted by us rather than the Git for Windows release assets. The process for
+updating just the Git for Windows binaries are pretty straightforward.
+
+1. Upload the 64-bit and 32-bit binaries to the desktop S3 bucket
+2. Update the dependencies.json file with the new URLs (ensure that you're using
+   the desktop.githubusercontent.com url and not the direct S3 bucket URL so that we
+   can benefit from the CDN).
+3. Download both files to disk (if you're using Safari you'll have to turn off the
+   "Open safe files after downloading" option in preferences)
+4. Generate SHA-256 checksums for each file using `shasum -a 256 < filename` (macOS)
+   and update dependencies.json.
+5. Follow the regular release process (updating the CI configs etc).
+
 ## Update Git LFS
 
 As Git LFS publishes their releases on GitHub, we have an automated script that
