@@ -5,6 +5,7 @@ import request from 'request'
 import Octokit from '@octokit/rest'
 import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
+import yargs from 'yargs'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -133,8 +134,18 @@ async function getPackageDetails(
 }
 
 async function run() {
+  const argv = yargs
+    .usage('Usage: update-git [options]')
+    .version(false)
+    .option('tag', { default: 'latest', desc: 'The Git tag to use' })
+    .option('g4w-tag', {
+      default: 'latest',
+      desc: 'The Git for Windows tag to use',
+    }).argv
+
   await refreshGitSubmodule()
-  const latestGitVersion = await getLatestStableRelease()
+  const latestGitVersion =
+    argv['tag'] === 'latest' ? await getLatestStableRelease() : argv['tag']
 
   console.log(`✅ Newest git release '${latestGitVersion}'`)
 
@@ -156,7 +167,14 @@ async function run() {
   const owner = 'git-for-windows'
   const repo = 'git'
 
-  const release = await octokit.repos.getLatestRelease({ owner, repo })
+  const release =
+    argv['g4w-tag'] === 'latest'
+      ? await octokit.repos.getLatestRelease({ owner, repo })
+      : await octokit.repos.getReleaseByTag({
+          owner,
+          repo,
+          tag: argv['g4w-tag'],
+        })
 
   const { tag_name, body, assets } = release.data
   const version = tag_name
