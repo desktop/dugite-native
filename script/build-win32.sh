@@ -70,7 +70,7 @@ if [[ -f "$DESTINATION/etc/gitconfig" ]]; then
     echo "aborting..."
     exit 1
   fi
-elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]
+elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
   SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
 else
   echo "Could not locate system git config file"
