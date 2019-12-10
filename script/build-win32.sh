@@ -62,19 +62,18 @@ else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
 
+if [[ -f "$DESTINATION/etc/gitconfig" ]]; then
+  SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
 
-SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
-
-# Make sure that the system config file is where we expect it to be...
-if [[ ! -f "$SYSTEM_CONFIG" ]]; then
-  echo "Global git config file not found in expected location: $SYSTEM_CONFIG"
-  echo "aborting..."
-  exit 1
-fi
-
-# ...and nowhere else.
-if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
-  echo "Global git config file found in unexpected location: $DESTINATION/$MINGW_DIR/etc/gitconfig"
+  if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
+    echo "System level git config file found in both locations"
+    echo "aborting..."
+    exit 1
+  fi
+else if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]
+  SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
+else
+  echo "Could not locate system git config file"
   echo "aborting..."
   exit 1
 fi
@@ -100,19 +99,20 @@ git config --file "$SYSTEM_CONFIG" --unset http.sslCAInfo
 git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 
 # removing global gitattributes file
-echo "-- Removing global gitattributes which handles certain file extensions"
+echo "-- Removing system level gitattributes which handles certain file extensions"
 
-if [[ ! -f "$DESTINATION/etc/gitattributes" ]]; then
-  echo "Global git attributes file not found in expected location: $DESTINATION/etc/gitattributes"
-  echo "aborting..."
-  exit 1
+if [[ -f "$DESTINATION/etc/gitattributes" ]]; then
+  SYSTEM_GITATTRIBUTES="$DESTINATION/etc/gitattributes"
+
+  if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
+    echo "System level git attributes file found in both locations"
+    echo "aborting..."
+    exit 1
+  fi
+else if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]
+  SYSTEM_GITATTRIBUTES="$DESTINATION/$MINGW_DIR/etc/gitattributes"
 fi
 
-if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
-  echo "Global git attributes file found in unexpected location: $DESTINATION/$MINGW_DIR/etc/gitattributes"
-  echo "aborting..."
-  exit 1
-fi
 rm "$DESTINATION/etc/gitattributes"
 
 echo "-- Removing legacy credential helpers"
