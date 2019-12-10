@@ -1,4 +1,5 @@
 import path from 'path'
+import crypto from 'crypto'
 import ChildProcess from 'child_process'
 import request from 'request'
 import Octokit from '@octokit/rest'
