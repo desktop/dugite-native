@@ -13,8 +13,9 @@ all the dependencies requires for these scripts.
 ## Update Git
 
 To update to the latest stable version of Git, an automated script exists in the
-repository. Assign a `GITHUB_ACCESS_TOKEN` environment variable and run this
-command to perform this update process:
+repository. Assign a `GITHUB_ACCESS_TOKEN` environment variable (not strictly
+necessary for testing but highly recommended when used in an automated process
+such as CI) and run this command to perform this update process:
 
 ```shellsession
 $ GITHUB_ACCESS_TOKEN=[token] npm run update-git
