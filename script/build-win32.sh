@@ -65,6 +65,20 @@ fi
 
 SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
 
+# Make sure that the system config file is where we expect it to be...
+if [[ ! -f "$SYSTEM_CONFIG" ]]; then
+  echo "Global git config file not found in expected location: $SYSTEM_CONFIG"
+  echo "aborting..."
+  exit 1
+fi
+
+# ...and nowhere else.
+if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
+  echo "Global git config file found in unexpected location: $DESTINATION/$MINGW_DIR/etc/gitconfig"
+  echo "aborting..."
+  exit 1
+fi
+
 echo "-- Setting some system configuration values"
 git config --file "$SYSTEM_CONFIG" core.symlinks "false"
 git config --file "$SYSTEM_CONFIG" core.autocrlf "true"
@@ -87,6 +101,18 @@ git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 
 # removing global gitattributes file
 echo "-- Removing global gitattributes which handles certain file extensions"
+
+if [[ ! -f "$DESTINATION/etc/gitattributes" ]]; then
+  echo "Global git attributes file not found in expected location: $DESTINATION/etc/gitattributes"
+  echo "aborting..."
+  exit 1
+fi
+
+if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
+  echo "Global git attributes file found in unexpected location: $DESTINATION/$MINGW_DIR/etc/gitattributes"
+  echo "aborting..."
+  exit 1
+fi
 rm "$DESTINATION/etc/gitattributes"
 
 echo "-- Removing legacy credential helpers"
