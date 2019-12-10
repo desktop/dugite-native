@@ -154,7 +154,7 @@ async function run() {
   const latestGitVersion =
     argv['tag'] === 'latest' ? await getLatestStableRelease() : argv['tag']
 
-  console.log(`✅ Newest git release '${latestGitVersion}'`)
+  console.log(`✅ Using Git version '${latestGitVersion}'`)
 
   await checkout(latestGitVersion)
 
@@ -186,7 +186,7 @@ async function run() {
   const { tag_name, body, assets } = release.data
   const version = tag_name
 
-  console.log(`✅ Newest git-for-windows release '${version}'`)
+  console.log(`✅ Using Git for Windows version '${version}'`)
 
   if (!version.startsWith(latestGitVersion)) {
     console.log(
