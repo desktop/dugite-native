@@ -109,7 +109,7 @@ if [[ -f "$DESTINATION/etc/gitattributes" ]]; then
     echo "aborting..."
     exit 1
   fi
-else if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]
+elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
   SYSTEM_GITATTRIBUTES="$DESTINATION/$MINGW_DIR/etc/gitattributes"
 fi
 
