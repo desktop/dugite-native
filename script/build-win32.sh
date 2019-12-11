@@ -98,6 +98,19 @@ git config --file "$SYSTEM_CONFIG" --unset http.sslCAInfo
 # details: https://github.com/dscho/git/blob/6152657e1a97c478df97d633c47469043b397519/Documentation/config.txt#L2135
 git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 
+# Git for Windows has started automatically including the config file
+# from c:\Program Files\Git\etc\gitconfig, see
+#
+# https://github.com/git-for-windows/build-extra/commit/475b4538803e6354ba19f334fea40446cf4fdc3f
+#
+# While the notion of being able to inherit some system level config values
+# is appealing it's also scary as we lose our isolation. The way the include
+# section is set up at the moment means that any config value in the Program Files
+# directory takes precedence over ours meaning that we might end up using the
+# openssl backend even though GitHub Desktop requires the schannel backend for
+# certificate bypass to work.
+git config --file "$SYSTEM_CONFIG" --remove-section include
+
 # removing global gitattributes file
 echo "-- Removing system level gitattributes which handles certain file extensions"
 
