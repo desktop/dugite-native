@@ -62,8 +62,21 @@ else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
 
+if [[ -f "$DESTINATION/etc/gitconfig" ]]; then
+  SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
 
-SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
+  if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
+    echo "System level git config file found in both locations"
+    echo "aborting..."
+    exit 1
+  fi
+elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
+  SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
+else
+  echo "Could not locate system git config file"
+  echo "aborting..."
+  exit 1
+fi
 
 echo "-- Setting some system configuration values"
 git config --file "$SYSTEM_CONFIG" core.symlinks "false"
@@ -86,9 +99,20 @@ git config --file "$SYSTEM_CONFIG" --unset http.sslCAInfo
 git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 
 # removing global gitattributes file
-rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
-echo "-- Removing global gitattributes which handles certain file extensions"
+echo "-- Removing system level gitattributes which handles certain file extensions"
 
+if [[ -f "$DESTINATION/etc/gitattributes" ]]; then
+  rm "$DESTINATION/etc/gitattributes"
+
+  if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
+    echo "System level git attributes file found in both locations"
+    echo "aborting..."
+    exit 1
+  fi
+elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
+  rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
+fi
+
+echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
-echo "-- Removing legacy credential helpers"
