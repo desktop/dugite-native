@@ -1,5 +1,11 @@
-const octokit = require('@octokit/rest')()
+const Octokit = require('@octokit/rest')
 const rp = require('request-promise')
+
+const token = process.env.GITHUB_ACCESS_TOKEN
+
+const octokit = new Octokit({
+  auth: `token ${token}`
+})
 
 // five targeted OS/arch combinations
 // two files for each targeted OS/arch
@@ -11,7 +17,7 @@ process.on('unhandledRejection', reason => {
 })
 
 async function getBuildUrl(octokit, owner, repo, ref) {
-  const response = await octokit.repos.getStatuses({
+  const response = await octokit.repos.listStatusesForRef({
     owner,
     repo,
     ref,
@@ -41,18 +47,12 @@ async function getBuildUrl(octokit, owner, repo, ref) {
 }
 
 async function run() {
-  const token = process.env.GITHUB_ACCESS_TOKEN
   if (token == null) {
     console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
-
-  const user = await octokit.users.get()
+  const user = await octokit.users.getAuthenticated()
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
@@ -69,7 +69,7 @@ async function run() {
 
   console.log(`✅ Token has 'public_scope' scope to make changes to releases`)
 
-  const releases = await octokit.repos.getReleases({
+  const releases = await octokit.repos.listReleases({
     owner,
     repo,
     per_page: 1,
@@ -86,7 +86,7 @@ async function run() {
 
   console.log(`✅ Newest release '${tag_name}' is a draft`)
 
-  const assets = await octokit.repos.getAssets({
+  const assets = await octokit.repos.listAssetsForRelease({
     owner,
     repo,
     release_id: id,
@@ -159,7 +159,7 @@ async function run() {
   const releaseNotesEntries = []
 
   for (const pullRequestId of pullRequestIds) {
-    const result = await octokit.pullRequests.get({
+    const result = await octokit.pulls.get({
       owner,
       repo,
       number: pullRequestId,
@@ -181,7 +181,7 @@ ${fileListText}`
 
   const numberWithoutPrefix = tag_name.substring(1)
 
-  const result = await octokit.repos.editRelease({
+  const result = await octokit.repos.updateRelease({
     owner: 'desktop',
     repo: 'dugite-native',
     release_id: id,
