@@ -12,8 +12,6 @@ elif [ "$TARGET_PLATFORM" == "macOS" ]; then
   SCRIPT="$CURRENT_DIR/build-macos.sh"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
   SCRIPT="$CURRENT_DIR/build-win32.sh"
-elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  SCRIPT="$CURRENT_DIR/build-arm64.sh"
 else
   echo "Unable to build Git for platform $TARGET_PLATFORM"
   exit 1
