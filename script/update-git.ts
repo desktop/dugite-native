@@ -1,8 +1,11 @@
-import * as path from 'path'
-import * as ChildProcess from 'child_process'
+import path from 'path'
+import crypto from 'crypto'
+import ChildProcess from 'child_process'
+import request from 'request'
 import Octokit from '@octokit/rest'
-import * as semver from 'semver'
+import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
+import yargs from 'yargs'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -66,8 +69,30 @@ async function getLatestStableRelease() {
   return latestTag.toString()
 }
 
-function getPackageDetails(
-  assets: Array<{ name: string; url: string; browser_download_url: string }>,
+async function calculateAssetChecksum(uri: string) {
+  return new Promise<string>((resolve, reject) => {
+    const hs = crypto.createHash('sha256', { encoding: 'hex' })
+    hs.on('finish', () => resolve(hs.read()))
+
+    request({
+      uri,
+      headers: {
+        'User-Agent': 'dugite-native',
+        accept: 'application/octet-stream',
+      },
+    })
+      .on('response', r => {
+        if (r.statusCode !== 200) {
+          reject(new Error(`Server responded with ${r.statusCode}`))
+        }
+      })
+      .on('error', reject)
+      .pipe(hs)
+  })
+}
+
+async function getPackageDetails(
+  assets: Array<Octokit.ReposGetReleaseByTagResponseAssetsItem>,
   body: string,
   arch: string
 ) {
@@ -89,11 +114,14 @@ function getPackageDetails(
   const filename = minGitFile.name
   const checksumRe = new RegExp(`${filename}\\s*\\|\\s*([0-9a-f]{64})`)
   const match = checksumRe.exec(body)
+  let checksum: string
   if (match == null || match.length !== 2) {
-    console.log(
-      `🔴 Could not find checksum for ${archValue} archive in release notes body.`
-    )
-    return null
+    console.log(`🔴 No checksum for ${archValue} in release notes body`)
+    checksum = await calculateAssetChecksum(minGitFile.browser_download_url)
+    console.log(`✅ Calculated checksum for ${archValue} from downloaded asset`)
+  } else {
+    console.log(`✅ Got checksum for ${archValue} from release notes body`)
+    checksum = match[1]
   }
 
   return {
@@ -101,50 +129,78 @@ function getPackageDetails(
     arch,
     filename,
     url: minGitFile.browser_download_url,
-    checksum: match[1],
+    checksum,
   }
 }
 
 async function run() {
-  await refreshGitSubmodule()
-  const latestGitVersion = await getLatestStableRelease()
+  const argv = yargs
+    .usage('Usage: update-git [options]')
+    .version(false)
+    .option('tag', { default: 'latest', desc: 'The Git tag to use' })
+    .option('g4w-tag', {
+      alias: 'g4w',
+      default: 'latest',
+      desc: 'The Git for Windows tag to use',
+    })
+    .option('ignore-version-mismatch', {
+      desc:
+        "Continue update even if the Git for Windows version and the Git submodule (macOS, Linux) don't match. " +
+        'Use with caution.',
+      default: false,
+      boolean: true,
+    }).argv
 
-  console.log(`✅ Newest git release '${latestGitVersion}'`)
+  await refreshGitSubmodule()
+  const latestGitVersion =
+    argv['tag'] === 'latest' ? await getLatestStableRelease() : argv['tag']
+
+  console.log(`✅ Using Git version '${latestGitVersion}'`)
 
   await checkout(latestGitVersion)
 
   const token = process.env.GITHUB_ACCESS_TOKEN
-  if (token == null) {
-    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
-    return
+  const octokit = new Octokit(token ? { auth: `token ${token}` } : {})
+
+  if (token) {
+    const user = await octokit.users.getAuthenticated({})
+    const me = user.data.login
+
+    console.log(`✅ Token found for ${me}`)
+  } else {
+    console.log(
+      `🔴 No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
+    )
   }
-
-  const octokit = new Octokit({ auth: `token ${token}` })
-
-  const user = await octokit.users.getAuthenticated({})
-  const me = user.data.login
-
-  console.log(`✅ Token found for ${me}`)
 
   const owner = 'git-for-windows'
   const repo = 'git'
 
-  const release = await octokit.repos.getLatestRelease({ owner, repo })
+  const release =
+    argv['g4w-tag'] === 'latest'
+      ? await octokit.repos.getLatestRelease({ owner, repo })
+      : await octokit.repos.getReleaseByTag({
+          owner,
+          repo,
+          tag: argv['g4w-tag'],
+        })
 
   const { tag_name, body, assets } = release.data
   const version = tag_name
 
-  console.log(`✅ Newest git-for-windows release '${version}'`)
+  console.log(`✅ Using Git for Windows version '${version}'`)
 
   if (!version.startsWith(latestGitVersion)) {
     console.log(
       `🔴 Latest Git for Windows version is ${version} which is a different series to Git version ${latestGitVersion}`
     )
-    return
+    if (argv['ignore-version-mismatch'] !== true) {
+      return
+    }
   }
 
-  const package64bit = getPackageDetails(assets, body, 'amd64')
-  const package32bit = getPackageDetails(assets, body, 'x86')
+  const package64bit = await getPackageDetails(assets, body, 'amd64')
+  const package32bit = await getPackageDetails(assets, body, 'x86')
 
   if (package64bit == null || package32bit == null) {
     return
