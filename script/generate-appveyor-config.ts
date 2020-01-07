@@ -1,8 +1,9 @@
-const fs = require('fs')
-const path = require('path')
-const YAML = require('yaml')
+import * as fs from 'fs'
+import * as path from 'path'
+import * as YAML from 'yaml'
+import { getDependencies } from './lib/dependencies'
 
-const dependencies = require('../dependencies.json')
+const dependencies = getDependencies()
 
 function getLFSVersion() {
   const lfs = dependencies['git-lfs']
@@ -11,11 +12,7 @@ function getLFSVersion() {
   return fullVersion.replace('v', '')
 }
 
-function getConfig(platform, arch) {
-  if (platform !== 'windows') {
-    throw new Error(`Unsupported platform '${platform}'`)
-  }
-
+function getConfig(platform: 'windows', arch: string) {
   const git = dependencies['git']
   const gitPackage = git.packages.find(
     f => f.platform === platform && f.arch === arch

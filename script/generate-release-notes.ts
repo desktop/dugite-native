@@ -1,11 +1,5 @@
-const Octokit = require('@octokit/rest')
-const rp = require('request-promise')
-
-const token = process.env.GITHUB_ACCESS_TOKEN
-
-const octokit = new Octokit({
-  auth: `token ${token}`
-})
+import Octokit from '@octokit/rest'
+import rp from 'request-promise'
 
 // five targeted OS/arch combinations
 // two files for each targeted OS/arch
@@ -16,7 +10,12 @@ process.on('unhandledRejection', reason => {
   console.log(reason)
 })
 
-async function getBuildUrl(octokit, owner, repo, ref) {
+async function getBuildUrl(
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  ref: string
+) {
   const response = await octokit.repos.listStatusesForRef({
     owner,
     repo,
@@ -47,15 +46,19 @@ async function getBuildUrl(octokit, owner, repo, ref) {
 }
 
 async function run() {
+  const token = process.env.GITHUB_ACCESS_TOKEN
   if (token == null) {
     console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
     return
   }
 
-  const user = await octokit.users.getAuthenticated()
+  const octokit = new Octokit({ auth: `token ${token}` })
+
+  const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
+  // @ts-ignore
   const foundScopes = user.headers['x-oauth-scopes']
   if (foundScopes.indexOf('public_repo') === -1) {
     console.log(
@@ -132,6 +135,7 @@ async function run() {
 
   const latestReleaseTag = latestRelease.data.tag_name
 
+  /** @type {{ data: { commits: Array<{commit: { message: string }}>} }} */
   const response = await octokit.repos.compareCommits({
     owner,
     repo,
@@ -144,15 +148,20 @@ async function run() {
   const mergeCommitRegex = /Merge pull request #(\d{1,}) /
 
   const mergeCommitMessages = commits
-    .filter(c => c.commit.message.match(mergeCommitRegex))
-    .map(c => c.commit.message)
+    .filter((c: { commit: { message: string } }) =>
+      c.commit.message.match(mergeCommitRegex)
+    )
+    .map((c: { commit: { message: string } }) => c.commit.message)
 
   const pullRequestIds = []
 
   for (const mergeCommitMessage of mergeCommitMessages) {
     const match = mergeCommitRegex.exec(mergeCommitMessage)
-    if (match.length === 2) {
-      pullRequestIds.push(match[1])
+    if (match != null && match.length === 2) {
+      const num = parseInt(match[1])
+      if (num != NaN) {
+        pullRequestIds.push(num)
+      }
     }
   }
 

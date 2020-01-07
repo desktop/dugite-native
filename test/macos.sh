@@ -1,8 +1,8 @@
 #!/bin/bash
 
-GIT_LFS_VERSION=2.6.0
+GIT_LFS_VERSION=2.7.2
 TARGET_PLATFORM=macOS
-GIT_LFS_CHECKSUM=42bf89b9775a69ab7dbe65847e174fe802d54ce6ed0d553bd497c740f2803f60
+GIT_LFS_CHECKSUM=f67da07561c25889af56b1fd873c074eb240a0fad853989fec9923c1c1acb826
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$CURRENT_DIR/.."
@@ -48,9 +48,6 @@ elif [ "$TARGET_PLATFORM" == "win32" ]; then
   if [ "$WIN_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.lzma"
-elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.lzma"
 else
   echo "Unable to package Git for platform $TARGET_PLATFORM"
   exit 1

@@ -1,8 +1,9 @@
-const fs = require('fs')
-const path = require('path')
-const YAML = require('yaml')
+import * as fs from 'fs'
+import * as path from 'path'
+import * as YAML from 'yaml'
+import { getDependencies } from './lib/dependencies'
 
-const dependencies = require('../dependencies.json')
+const dependencies = getDependencies()
 
 function getLFSVersion() {
   const lfs = dependencies['git-lfs']
@@ -11,7 +12,7 @@ function getLFSVersion() {
   return fullVersion.replace('v', '')
 }
 
-function getConfig(platform, arch) {
+function getConfig(platform: string, arch: string) {
   const lfs = dependencies['git-lfs']
   const lfsFile = lfs.files.find(
     f => f.platform === platform && f.arch === arch
@@ -72,19 +73,11 @@ function getConfig(platform, arch) {
     }
   }
 
-  if (platform === 'linux') {
-    if (arch === 'amd64') {
-      return {
-        os: 'linux',
-        language: 'c',
-        env: ['TARGET_PLATFORM=ubuntu', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
-      }
-    } else if (arch === 'arm64') {
-      return {
-        os: 'linux',
-        language: 'c',
-        env: ['TARGET_PLATFORM=arm64', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
-      }
+  if (platform === 'linux' && arch === 'amd64') {
+    return {
+      os: 'linux',
+      language: 'c',
+      env: ['TARGET_PLATFORM=ubuntu', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
     }
   }
 
@@ -100,18 +93,25 @@ const baseConfig = {
     global: [`GIT_LFS_VERSION=${getLFSVersion()}`],
   },
   matrix: {
+    fast_finish: true,
     include: [
-      getConfig('linux', 'amd64'),
-      getConfig('darwin', 'amd64'),
-      getConfig('windows', 'amd64'),
-      getConfig('windows', 'x86'),
-      getConfig('linux', 'arm64'),
       // shellcheck build step
       {
         os: 'linux',
         language: 'shell',
         script: [`bash -c 'shopt -s globstar; shellcheck script/**/*.sh'`],
       },
+      // verify tooling scripts
+      {
+        os: 'linux',
+        language: 'node_js',
+        node_js: ['node'],
+        script: [`npm run check && npm run prettier`],
+      },
+      getConfig('linux', 'amd64'),
+      getConfig('darwin', 'amd64'),
+      getConfig('windows', 'amd64'),
+      getConfig('windows', 'x86'),
     ],
   },
 

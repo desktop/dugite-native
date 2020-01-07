@@ -1,11 +1,11 @@
 #!/bin/bash
 
-GIT_LFS_VERSION=2.6.0
+GIT_LFS_VERSION=2.7.2
 TARGET_PLATFORM=win32
 WIN_ARCH=32
-GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.19.1.windows.1/MinGit-2.19.1-32-bit.zip
-GIT_FOR_WINDOWS_CHECKSUM=9bde728fe03f66a022b3e41408902ccfceb56a34067db1f35d6509375b9be922
-GIT_LFS_CHECKSUM=7fa3475c60221837860138b4fd0fd0ad1213a5e49c596fdb0aac8932ca7a20a5
+GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.21.0.windows.1/MinGit-2.21.0-32-bit.zip
+GIT_FOR_WINDOWS_CHECKSUM=652c05175553e25401e38c7e65467d92748fc5d577374c9587c09f5875d8937e
+GIT_LFS_CHECKSUM=f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$CURRENT_DIR/.."
@@ -51,9 +51,6 @@ elif [ "$TARGET_PLATFORM" == "win32" ]; then
   if [ "$WIN_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.lzma"
-elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.lzma"
 else
   echo "Unable to package Git for platform $TARGET_PLATFORM"
   exit 1
