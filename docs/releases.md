@@ -15,10 +15,11 @@ Examples:
 
 ### Release Process
 
-1. `git tag {version}` the version you wish to publish 
-1. `git push origin --tags` to start off the release build
-1. Wait a few minutes for the build to finish
-1. From your machine run this command: `npm run generate-release-notes`
+1. `git tag {version}` the version you wish to publish.
+1. `git push --follow-tags` to ensure all new commits (and the tag) are pushed
+   to the remote. Pushing the tag will start the release process.
+1. Wait a few minutes for the build to finish.
+1. From your machine run this command: `npm run generate-release-notes`.
 
 Pushing the tag triggers a new build for the platforms we need to support. As
 each of those builds completes, the artefacts are published to a draft release

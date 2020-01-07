@@ -62,8 +62,21 @@ else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
 
+if [[ -f "$DESTINATION/etc/gitconfig" ]]; then
+  SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
 
-SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
+  if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
+    echo "System level git config file found in both locations"
+    echo "aborting..."
+    exit 1
+  fi
+elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitconfig" ]]; then
+  SYSTEM_CONFIG="$DESTINATION/$MINGW_DIR/etc/gitconfig"
+else
+  echo "Could not locate system git config file"
+  echo "aborting..."
+  exit 1
+fi
 
 echo "-- Setting some system configuration values"
 git config --file "$SYSTEM_CONFIG" core.symlinks "false"
@@ -85,10 +98,34 @@ git config --file "$SYSTEM_CONFIG" --unset http.sslCAInfo
 # details: https://github.com/dscho/git/blob/6152657e1a97c478df97d633c47469043b397519/Documentation/config.txt#L2135
 git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 
-# removing global gitattributes file
-rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
-echo "-- Removing global gitattributes which handles certain file extensions"
+# Git for Windows has started automatically including the config file
+# from c:\Program Files\Git\etc\gitconfig, see
+#
+# https://github.com/git-for-windows/build-extra/commit/475b4538803e6354ba19f334fea40446cf4fdc3f
+#
+# While the notion of being able to inherit some system level config values
+# is appealing it's also scary as we lose our isolation. The way the include
+# section is set up at the moment means that any config value in the Program Files
+# directory takes precedence over ours meaning that we might end up using the
+# openssl backend even though GitHub Desktop requires the schannel backend for
+# certificate bypass to work.
+git config --file "$SYSTEM_CONFIG" --remove-section include
 
+# removing global gitattributes file
+echo "-- Removing system level gitattributes which handles certain file extensions"
+
+if [[ -f "$DESTINATION/etc/gitattributes" ]]; then
+  rm "$DESTINATION/etc/gitattributes"
+
+  if [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
+    echo "System level git attributes file found in both locations"
+    echo "aborting..."
+    exit 1
+  fi
+elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
+  rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
+fi
+
+echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
-echo "-- Removing legacy credential helpers"

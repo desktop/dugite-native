@@ -1,5 +1,5 @@
-const octokit = require('@octokit/rest')()
-const rp = require('request-promise')
+import Octokit from '@octokit/rest'
+import rp from 'request-promise'
 
 // five targeted OS/arch combinations
 // two files for each targeted OS/arch
@@ -10,8 +10,13 @@ process.on('unhandledRejection', reason => {
   console.log(reason)
 })
 
-async function getBuildUrl(octokit, owner, repo, ref) {
-  const response = await octokit.repos.getStatuses({
+async function getBuildUrl(
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  ref: string
+) {
+  const response = await octokit.repos.listStatusesForRef({
     owner,
     repo,
     ref,
@@ -47,15 +52,13 @@ async function run() {
     return
   }
 
-  octokit.authenticate({
-    type: 'token',
-    token,
-  })
+  const octokit = new Octokit({ auth: `token ${token}` })
 
-  const user = await octokit.users.get()
+  const user = await octokit.users.getAuthenticated({})
   const me = user.data.login
 
   console.log(`✅ Token found for ${me}`)
+  // @ts-ignore
   const foundScopes = user.headers['x-oauth-scopes']
   if (foundScopes.indexOf('public_repo') === -1) {
     console.log(
@@ -69,7 +72,7 @@ async function run() {
 
   console.log(`✅ Token has 'public_scope' scope to make changes to releases`)
 
-  const releases = await octokit.repos.getReleases({
+  const releases = await octokit.repos.listReleases({
     owner,
     repo,
     per_page: 1,
@@ -86,7 +89,7 @@ async function run() {
 
   console.log(`✅ Newest release '${tag_name}' is a draft`)
 
-  const assets = await octokit.repos.getAssets({
+  const assets = await octokit.repos.listAssetsForRelease({
     owner,
     repo,
     release_id: id,
@@ -132,6 +135,7 @@ async function run() {
 
   const latestReleaseTag = latestRelease.data.tag_name
 
+  /** @type {{ data: { commits: Array<{commit: { message: string }}>} }} */
   const response = await octokit.repos.compareCommits({
     owner,
     repo,
@@ -144,22 +148,27 @@ async function run() {
   const mergeCommitRegex = /Merge pull request #(\d{1,}) /
 
   const mergeCommitMessages = commits
-    .filter(c => c.commit.message.match(mergeCommitRegex))
-    .map(c => c.commit.message)
+    .filter((c: { commit: { message: string } }) =>
+      c.commit.message.match(mergeCommitRegex)
+    )
+    .map((c: { commit: { message: string } }) => c.commit.message)
 
   const pullRequestIds = []
 
   for (const mergeCommitMessage of mergeCommitMessages) {
     const match = mergeCommitRegex.exec(mergeCommitMessage)
-    if (match.length === 2) {
-      pullRequestIds.push(match[1])
+    if (match != null && match.length === 2) {
+      const num = parseInt(match[1])
+      if (num != NaN) {
+        pullRequestIds.push(num)
+      }
     }
   }
 
   const releaseNotesEntries = []
 
   for (const pullRequestId of pullRequestIds) {
-    const result = await octokit.pullRequests.get({
+    const result = await octokit.pulls.get({
       owner,
       repo,
       number: pullRequestId,
@@ -181,7 +190,7 @@ ${fileListText}`
 
   const numberWithoutPrefix = tag_name.substring(1)
 
-  const result = await octokit.repos.editRelease({
+  const result = await octokit.repos.updateRelease({
     owner: 'desktop',
     repo: 'dugite-native',
     release_id: id,

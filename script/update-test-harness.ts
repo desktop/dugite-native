@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const YAML = require('yaml')
 
-function writeEnvironmentToFile(os, env) {
+function writeEnvironmentToFile(os: string, env: Array<string>) {
   const environmentVariables = env.map(a => `${a}`).join('\n')
 
   const script = `build-${os}.sh`
@@ -54,9 +54,6 @@ elif [ "$TARGET_PLATFORM" == "win32" ]; then
   if [ "$WIN_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.lzma"
-elif [ "$TARGET_PLATFORM" == "arm64" ]; then
-  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-arm64.lzma"
 else
   echo "Unable to package Git for platform $TARGET_PLATFORM"
   exit 1
