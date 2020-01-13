@@ -171,7 +171,7 @@ async function run() {
     const result = await octokit.pulls.get({
       owner,
       repo,
-      number: pullRequestId,
+      pull_number: pullRequestId,
     })
     const { title, number, user } = result.data
     const entry = ` - ${title} - #${number} via @${user.login}`
