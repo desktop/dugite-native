@@ -4,7 +4,7 @@ import rp from 'request-promise'
 // five targeted OS/arch combinations
 // two files for each targeted OS/arch
 // two checksum files for the previous
-const SUCCESSFUL_RELEASE_FILE_COUNT = 5 * 2 * 2
+const SUCCESSFUL_RELEASE_FILE_COUNT = 4 * 2 * 2
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
