@@ -35,6 +35,7 @@ echo "-- Building git at $SOURCE to $DESTINATION"
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
+  # git tags for git-lfs are the version number prefixed with "v"
   git clone -b "v$GIT_LFS_VERSION" "https://github.com/git-lfs/git-lfs"
   (
     cd git-lfs
