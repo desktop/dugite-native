@@ -35,14 +35,16 @@ echo "-- Building git at $SOURCE to $DESTINATION"
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
+  # build steps from https://github.com/git-lfs/git-lfs/wiki/Installation#source
   # git tags for git-lfs are the version number prefixed with "v"
   git clone -b "v$GIT_LFS_VERSION" "https://github.com/git-lfs/git-lfs"
   (
     cd git-lfs
     make CGO_CFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" CGO_LDFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" BUILTIN_LD_FLAGS="-linkmode external"
   )
-  if test -f "git-lfs/bin/git-lfs"; then
-    cp "git-lfs/bin/git-lfs" "$DESTINATION/libexec/git-core/"
+  GIT_LFS_BINARY_PATH="git-lfs/bin/git-lfs"
+  if test -f "$GIT_LFS_BINARY_PATH"; then
+    cp "$GIT_LFS_BINARY_PATH" "$DESTINATION/libexec/git-core/"
   else
     echo "The git-lfs binary is missing, the build must have failed"
     echo "aborting..."
