@@ -3,7 +3,7 @@
 # Compiling Git for macOS and bundling Git LFS from upstream.
 #
 
-MACOSX_BUILD_VERSION="10.10"
+MACOSX_BUILD_VERSION="10.9"
 
 if [[ -z "${SOURCE}" ]]; then
   echo "Required environment variable SOURCE was not set"
