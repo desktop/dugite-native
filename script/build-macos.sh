@@ -3,6 +3,8 @@
 # Compiling Git for macOS and bundling Git LFS from upstream.
 #
 
+MACOSX_BUILD_VERSION="10.10"
+
 if [[ -z "${SOURCE}" ]]; then
   echo "Required environment variable SOURCE was not set"
   exit 1
@@ -28,7 +30,7 @@ echo "-- Building git at $SOURCE to $DESTINATION"
     NO_GETTEXT=1 \
     NO_DARWIN_PORTS=1 \
     NO_INSTALL_HARDLINKS=1 \
-    MACOSX_DEPLOYMENT_TARGET=10.10
+    MACOSX_DEPLOYMENT_TARGET=$MACOSX_BUILD_VERSION
 )
 
 if [[ "$GIT_LFS_VERSION" ]]; then
@@ -36,7 +38,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   git clone -b "v$GIT_LFS_VERSION" "http://github.com/git-lfs/git-lfs"
   (
     cd git-lfs
-    make CGO_CFLAGS="-mmacosx-version-min=10.10" CGO_LDFLAGS="-mmacosx-version-min=10.10" BUILTIN_LD_FLAGS="-linkmode external"
+    make CGO_CFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" CGO_LDFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" BUILTIN_LD_FLAGS="-linkmode external"
   )
   if test -f "git-lfs/bin/git-lfs"; then
     cp "git-lfs/bin/git-lfs" "$DESTINATION/libexec/git-core/"
