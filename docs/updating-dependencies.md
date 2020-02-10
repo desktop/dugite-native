@@ -198,4 +198,20 @@ package-lock.json 23ms
 package.json 4ms
 ```
 
-You're now ready to commit these changes and create a new pull request.
+Finally, you'll need to run the `update-test-harness` script to keep our local test scripts in sync with the CI config.
+
+```shellsession
+$ npm run update-test-harness
+
+> dugite-native@ update-test-harness /Users/outofambit/src/dugite-native
+> ts-node script/update-test-harness.ts
+
+Updating test harness for ubuntu...
+Updating test harness for macos...
+Updating test harness for win32...
+Updating test harness for win32...
+```
+
+This primarily updates environment variables for the scripts in `test/`.
+
+**You're now ready to commit these changes and create a new pull request.**
