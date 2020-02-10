@@ -22,12 +22,6 @@
     "version": "v2.7.2",
     "files": [
       {
-        "platform": "darwin",
-        "arch": "amd64",
-        "name": "git-lfs-darwin-amd64-v2.7.2.tar.gz",
-        "checksum": "f67da07561c25889af56b1fd873c074eb240a0fad853989fec9923c1c1acb826"
-      },
-      {
         "platform": "linux",
         "arch": "amd64",
         "name": "git-lfs-linux-amd64-v2.7.2.tar.gz",
