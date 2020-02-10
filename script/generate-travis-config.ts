@@ -88,6 +88,7 @@ function getConfig(platform: string, arch: string) {
 
 const baseConfig = {
   sudo: 'required',
+  language: 'go',
   services: ['docker'],
   env: {
     global: [`GIT_LFS_VERSION=${getLFSVersion()}`],
