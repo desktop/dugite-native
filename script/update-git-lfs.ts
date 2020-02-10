@@ -92,7 +92,6 @@ async function run() {
   const fileContents = await rp(options)
 
   const files = [
-    `git-lfs-darwin-amd64-${version}.tar.gz`,
     `git-lfs-linux-amd64-${version}.tar.gz`,
     `git-lfs-windows-386-${version}.zip`,
     `git-lfs-windows-amd64-${version}.zip`,
