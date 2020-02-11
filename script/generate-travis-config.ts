@@ -13,6 +13,16 @@ function getLFSVersion() {
 }
 
 function getConfig(platform: string, arch: string) {
+  // if this is macOS, we don't need
+  // to read anything from `dependencies`
+  if (platform === 'darwin') {
+    return {
+      os: 'osx',
+      language: 'c',
+      env: ['TARGET_PLATFORM=macOS'],
+    }
+  }
+
   const lfs = dependencies['git-lfs']
   const lfsFile = lfs.files.find(
     f => f.platform === platform && f.arch === arch
@@ -62,14 +72,6 @@ function getConfig(platform: string, arch: string) {
       throw new Error(
         `Unsupported platform '${platform}' and architecture '${arch}'`
       )
-    }
-  }
-
-  if (platform === 'darwin' && arch === 'amd64') {
-    return {
-      os: 'osx',
-      language: 'c',
-      env: ['TARGET_PLATFORM=macOS', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
     }
   }
 

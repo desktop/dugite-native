@@ -35,7 +35,6 @@ matrix:
       language: c
       env:
         - TARGET_PLATFORM=macOS
-        - GIT_LFS_CHECKSUM=f67da07561c25889af56b1fd873c074eb240a0fad853989fec9923c1c1acb826
     - os: linux
       language: c
       env:
