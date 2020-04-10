@@ -3,8 +3,8 @@
 GIT_LFS_VERSION=2.7.2
 TARGET_PLATFORM=win32
 WIN_ARCH=32
-GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.23.0.windows.2/MinGit-2.23.0.windows.2-32-bit.zip
-GIT_FOR_WINDOWS_CHECKSUM=aa96e6472b7b6f6c320fb24d0b90afa14d9ca38c8473b5832d5911ae92ee1e9a
+GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.26.0.windows.1/MinGit-2.26.0-32-bit.zip
+GIT_FOR_WINDOWS_CHECKSUM=e57761114a74a045972903146922ebe42ba399cb9e306e51bdd63465e856f5c8
 GIT_LFS_CHECKSUM=f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
