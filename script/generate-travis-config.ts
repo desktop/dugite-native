@@ -75,11 +75,19 @@ function getConfig(platform: string, arch: string) {
     }
   }
 
-  if (platform === 'linux' && arch === 'amd64') {
-    return {
-      os: 'linux',
-      language: 'c',
-      env: ['TARGET_PLATFORM=ubuntu', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
+  if (platform === 'linux') {
+    if (arch === 'amd64') {
+      return {
+        os: 'linux',
+        language: 'c',
+        env: ['TARGET_PLATFORM=ubuntu', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
+      }
+    } else if (arch === 'arm64') {
+      return {
+        os: 'linux',
+        language: 'c',
+        env: ['TARGET_PLATFORM=arm64', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
+      }
     }
   }
 
@@ -115,6 +123,7 @@ const baseConfig = {
       getConfig('darwin', 'amd64'),
       getConfig('windows', 'amd64'),
       getConfig('windows', 'x86'),
+      getConfig('linux', 'arm64'),
     ],
   },
 
