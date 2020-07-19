@@ -80,12 +80,15 @@ function getConfig(platform: string, arch: string) {
       return {
         os: 'linux',
         language: 'c',
+        cache: 'ccache',
         env: ['TARGET_PLATFORM=ubuntu', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
       }
     } else if (arch === 'arm64') {
       return {
         os: 'linux',
         language: 'c',
+        arch: 'arm64',
+        cache: 'ccache',
         env: ['TARGET_PLATFORM=arm64', `GIT_LFS_CHECKSUM=${lfsFile.checksum}`],
       }
     }

@@ -1,7 +1,8 @@
 #!/bin/bash -e
 #
-# Building Git for ARM64 Linux and bundling Git LFS from upstream.
+# Compiling Git for ARM64 Linux and bundling Git LFS from upstream.
 #
+
 
 if [[ -z "${SOURCE}" ]]; then
   echo "Required environment variable SOURCE was not set"
@@ -18,29 +19,48 @@ if [[ -z "${CURL_INSTALL_DIR}" ]]; then
   exit 1
 fi
 
-if [[ -z "${BASEDIR}" ]]; then
-  echo "Required environment variable BASEDIR was not set"
-  exit 1
-fi
-
-
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 # shellcheck source=script/check-static-linking.sh
 source "$CURRENT_DIR/check-static-linking.sh"
 
-mkdir -p "$DESTINATION"
+# Missing on arm64
+sudo apt-get install gettext
 
-docker run --rm --privileged multiarch/qemu-user-static:register --reset
-docker run -it \
---mount type=bind,source="$BASEDIR",target="$BASEDIR" \
---mount type=bind,source="$DESTINATION",target="$DESTINATION" \
--e "SOURCE=$SOURCE" \
--e "DESTINATION=$DESTINATION" \
--e "CURL_INSTALL_DIR=$CURL_INSTALL_DIR" \
--w="$BASEDIR" \
---rm shiftkey/dugite-native:arm64-jessie-git-with-curl bash "$BASEDIR/script/build-arm64-git.sh"
+echo " -- Building vanilla curl at $CURL_INSTALL_DIR instead of distro-specific version"
+
+CURL_FILE_NAME="curl-7.61.1"
+CURL_FILE="$CURL_FILE_NAME.tar.gz"
+
+cd /tmp || exit 1
+curl -LO "https://curl.haxx.se/download/$CURL_FILE"
+tar -xf $CURL_FILE
+
+(
+cd $CURL_FILE_NAME || exit 1
+./configure --prefix="$CURL_INSTALL_DIR"
+make install -j "$(nproc)"
+)
+echo " -- Building git at $SOURCE to $DESTINATION"
+
+(
+cd "$SOURCE" || exit 1
+make clean
+make configure
+CC='gcc' \
+  CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
+  LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
+  ./configure \
+  --with-curl="$CURL_INSTALL_DIR" \
+  --prefix=/
+DESTDIR="$DESTINATION" \
+  NO_TCLTK=1 \
+  NO_GETTEXT=1 \
+  NO_INSTALL_HARDLINKS=1 \
+  NO_R_TO_GCC_LINKER=1 \
+  make strip install -j "$(nproc)"
+)
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
@@ -82,13 +102,37 @@ if [[ ! -f "$DESTINATION/ssl/cacert.pem" ]]; then
   echo "-- Skipped bundling of CA certificates (failed to download them)"
 fi
 
-echo "-- Verifying environment"
-docker run -it \
-  --mount type=bind,source="$BASEDIR",target="$BASEDIR" \
-  --mount type=bind,source="$DESTINATION",target="$DESTINATION" \
-  -e "DESTINATION=$DESTINATION" \
-  -w="$BASEDIR" \
-  --rm shiftkey/dugite-native:arm64-jessie-git-with-curl sh "$BASEDIR/script/verify-arm64-git.sh"
+
+echo "-- Removing server-side programs"
+rm "$DESTINATION/bin/git-cvsserver"
+rm "$DESTINATION/bin/git-receive-pack"
+rm "$DESTINATION/bin/git-upload-archive"
+rm "$DESTINATION/bin/git-upload-pack"
+rm "$DESTINATION/bin/git-shell"
+
+echo "-- Removing unsupported features"
+rm "$DESTINATION/libexec/git-core/git-svn"
+rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
+rm "$DESTINATION/libexec/git-core/git-p4"
 
 echo "-- Static linking research"
 check_static_linking "$DESTINATION"
+
+echo "-- Testing clone operation with generated binary"
+
+rm -rf "$CURL_OUTPUT_DIR"
+
+TEMP_CLONE_DIR=/tmp/clones
+mkdir -p $TEMP_CLONE_DIR
+
+(
+cd "$DESTINATION/bin" || exit 1
+./git --version
+GIT_CURL_VERBOSE=1 \
+  GIT_TEMPLATE_DIR="$DESTINATION/share/git-core/templates" \
+  GIT_SSL_CAINFO="$DESTINATION/ssl/cacert.pem" \
+  GIT_EXEC_PATH="$DESTINATION/libexec/git-core" \
+  PREFIX="$DESTINATION" \
+  ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
+)
+
