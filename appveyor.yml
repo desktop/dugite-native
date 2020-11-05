@@ -7,19 +7,19 @@
 # the change to the repository.
 #
 image: Visual Studio 2015
-skip_branch_with_pr: true
+skip_branch_with_pr: false
 environment:
   GIT_LFS_VERSION: 2.7.2
   matrix:
     - TARGET_PLATFORM: win32
       WIN_ARCH: 64
-      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.26.0.windows.1/MinGit-2.26.0-64-bit.zip
-      GIT_FOR_WINDOWS_CHECKSUM: e19662da49c2891cb2ac04e9f4f413d13c0c0974b6221169a5717eb62e2288f3
+      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.26.1.windows.1/MinGit-2.26.1-64-bit.zip
+      GIT_FOR_WINDOWS_CHECKSUM: ddc2d4a19fab641b144b5ea30845d9b8ef070ba418f2b5a959f47118e1961274
       GIT_LFS_CHECKSUM: 5cbe0765d469bbb32548a86e92d5e8694f1e97df7d590552477c3fafdc6c82e1
     - TARGET_PLATFORM: win32
       WIN_ARCH: 32
-      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.26.0.windows.1/MinGit-2.26.0-32-bit.zip
-      GIT_FOR_WINDOWS_CHECKSUM: e57761114a74a045972903146922ebe42ba399cb9e306e51bdd63465e856f5c8
+      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.26.1.windows.1/MinGit-2.26.1-32-bit.zip
+      GIT_FOR_WINDOWS_CHECKSUM: 127c71b53c1855e7290b1e803ed4d2ff9b80af8e3c13ea2f073523ac5413f8c5
       GIT_LFS_CHECKSUM: f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
 build_script:
   - git submodule update --init --recursive

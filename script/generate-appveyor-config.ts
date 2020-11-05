@@ -57,7 +57,7 @@ function getConfig(platform: 'windows', arch: string) {
 const baseConfig = {
   image: 'Visual Studio 2015',
 
-  skip_branch_with_pr: true,
+  skip_branch_with_pr: false,
   environment: {
     GIT_LFS_VERSION: getLFSVersion(),
     matrix: [getConfig('windows', 'amd64'), getConfig('windows', 'x86')],
