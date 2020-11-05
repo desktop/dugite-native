@@ -14,7 +14,7 @@ source "$CURRENT_DIR/compute-checksum.sh"
 
 mkdir -p "$DESTINATION"
 
-if [ "$WIN_ARCH" -eq "64" ]; then MINGW_DIR="mingw64"; else MINGW_DIR="mingw32"; fi
+if [ "$TARGET_ARCH" -eq "64" ]; then MINGW_DIR="mingw64"; else MINGW_DIR="mingw32"; fi
 
 echo "-- Downloading MinGit from $GIT_FOR_WINDOWS_URL"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
@@ -34,7 +34,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   # download Git LFS, verify its the right contents, and unpack it
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.zip
-  if [ "$WIN_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
+  if [ "$TARGET_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
   GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
   echo "-- Downloading from $GIT_LFS_URL"
   curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
