@@ -108,8 +108,7 @@ async function run() {
 
   const entries = []
 
-  for (const asset of assets.data) {
-    const { name, url } = asset
+  for (const { name, url } of assets.data) {
     if (name.endsWith('.sha256')) {
       const fileName = name.slice(0, -7)
       const headers: Record<string, string> = {
@@ -118,12 +117,26 @@ async function run() {
         Authorization: `token ${token}`,
       }
 
-      const fileContents = await fetch(url, { headers })
-        .then(x =>
-          x.ok
-            ? Promise.resolve(x)
-            : Promise.reject(new Error(`Server responded with ${x.status}`))
-        )
+      const fileContents = await fetch(url, { headers, redirect: 'manual' })
+        .then(x => {
+          // Follow one redirect but don't send the auth token to AWS. Seems
+          // request.redirected isn't implemented in node-fetch so we'll have
+          // to check the status ourselves :/
+          if (x.status === 302 && x.headers.has('location')) {
+            const redirectURL = x.headers.get('location')
+            if (redirectURL) {
+              return fetch(redirectURL, {
+                headers: { 'User-Agent': 'dugite-native' },
+              })
+            }
+          }
+
+          if (x.ok) {
+            return x
+          }
+
+          throw new Error(`Server responded with ${x.status}: ${x.statusText}`)
+        })
         .then(x => x.text())
 
       const checksum = fileContents.trim()
