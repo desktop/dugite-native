@@ -8,6 +8,15 @@ if [[ -z "${DESTINATION}" ]]; then
   exit 1
 fi
 
+GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
+
+if [ "$TARGET_ARCH" -eq "64" ]; then DEPENDENCY_ARCH="amd64"; else DEPENDENCY_ARCH="x86"; fi
+
+GIT_FOR_WINDOWS_CHECKSUM="$(jq --raw-output '.git.packages[] | select(.arch == "$DEPENDENCY_ARCH" and .platform == "windows") | .checksum')"
+
+echo $GIT_FOR_WINDOWS_CHECKSUM
+exit 1
+
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
