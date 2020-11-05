@@ -1,8 +1,8 @@
 import { Octokit } from '@octokit/rest'
-import rp from 'request-promise'
 import { updateGitLfsDependencies } from './lib/dependencies'
+import fetch from 'node-fetch'
 
-process.on('unhandledRejection', (reason) => {
+process.on('unhandledRejection', reason => {
   console.log(reason)
 })
 
@@ -61,10 +61,10 @@ async function run(): Promise<boolean> {
     release_id: id,
   })
 
-  const signaturesFile = assets.data.find((a) => a.name === 'sha256sums.asc')
+  const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
 
   if (signaturesFile == null) {
-    const foundFiles = assets.data.map((a) => a.name)
+    const foundFiles = assets.data.map(a => a.name)
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )
@@ -73,18 +73,13 @@ async function run(): Promise<boolean> {
 
   console.log(`✅ Found SHA256 signatures for release '${version}'`)
 
-  const { url } = signaturesFile
-  const options = {
-    url,
+  const fileContents = await fetch(signaturesFile.url, {
     headers: {
       Accept: 'application/octet-stream',
       'User-Agent': 'dugite-native',
       Authorization: `token ${token}`,
     },
-    secureProtocol: 'TLSv1_2_method',
-  }
-
-  const fileContents = await rp(options)
+  }).then(x => x.text())
 
   const files = [
     `git-lfs-linux-amd64-${version}.tar.gz`,
@@ -119,4 +114,4 @@ async function run(): Promise<boolean> {
   return true
 }
 
-run().then((success) => process.exit(success ? 0 : 1))
+run().then(success => process.exit(success ? 0 : 1))

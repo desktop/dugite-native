@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest'
 import rp from 'request-promise'
+import fetch from 'node-fetch'
 
 // five targeted OS/arch combinations
 // two files for each targeted OS/arch
@@ -112,17 +113,14 @@ async function run() {
     const { name, url } = asset
     if (name.endsWith('.sha256')) {
       const fileName = name.slice(0, -7)
-      const options = {
-        url,
+      const fileContents = await fetch(url, {
         headers: {
           Accept: 'application/octet-stream',
           'User-Agent': 'dugite-native',
           Authorization: `token ${token}`,
         },
-        secureProtocol: 'TLSv1_2_method',
-      }
+      }).then(x => x.text())
 
-      const fileContents = await rp(options)
       const checksum = fileContents.trim()
       entries.push({ fileName, checksum })
     }
