@@ -1,5 +1,4 @@
 import { Octokit } from '@octokit/rest'
-import rp from 'request-promise'
 import fetch from 'node-fetch'
 
 // five targeted OS/arch combinations
@@ -113,13 +112,19 @@ async function run() {
     const { name, url } = asset
     if (name.endsWith('.sha256')) {
       const fileName = name.slice(0, -7)
-      const fileContents = await fetch(url, {
-        headers: {
-          Accept: 'application/octet-stream',
-          'User-Agent': 'dugite-native',
-          Authorization: `token ${token}`,
-        },
-      }).then(x => x.text())
+      const headers: Record<string, string> = {
+        Accept: 'application/octet-stream',
+        'User-Agent': 'dugite-native',
+        Authorization: `token ${token}`,
+      }
+
+      const fileContents = await fetch(url, { headers })
+        .then(x =>
+          x.ok
+            ? Promise.resolve(x)
+            : Promise.reject(new Error(`Server responded with ${x.status}`))
+        )
+        .then(x => x.text())
 
       const checksum = fileContents.trim()
       entries.push({ fileName, checksum })
