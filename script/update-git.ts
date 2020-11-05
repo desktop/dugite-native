@@ -2,7 +2,7 @@ import path from 'path'
 import crypto from 'crypto'
 import ChildProcess from 'child_process'
 import request from 'request'
-import Octokit from '@octokit/rest'
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest'
 import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
 import yargs from 'yargs'
@@ -13,6 +13,9 @@ process.on('unhandledRejection', reason => {
 
 const root = path.dirname(__dirname)
 const gitDir = path.join(root, 'git')
+
+// OMG
+type ReleaseAssets = RestEndpointMethodTypes["repos"]["getLatestRelease"]["response"]["data"]["assets"]
 
 function spawn(cmd: string, args: Array<string>, cwd: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -92,7 +95,7 @@ async function calculateAssetChecksum(uri: string) {
 }
 
 async function getPackageDetails(
-  assets: Array<Octokit.ReposGetReleaseByTagResponseAssetsItem>,
+  assets: ReleaseAssets,
   body: string,
   arch: string
 ) {

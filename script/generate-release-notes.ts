@@ -1,4 +1,4 @@
-import Octokit from '@octokit/rest'
+import { Octokit } from '@octokit/rest'
 import rp from 'request-promise'
 
 // five targeted OS/arch combinations
@@ -16,7 +16,7 @@ async function getBuildUrl(
   repo: string,
   ref: string
 ) {
-  const response = await octokit.repos.listStatusesForRef({
+  const response = await octokit.repos.listCommitStatusesForRef({
     owner,
     repo,
     ref,
@@ -60,7 +60,7 @@ async function run() {
   console.log(`✅ Token found for ${me}`)
   // @ts-ignore
   const foundScopes = user.headers['x-oauth-scopes']
-  if (foundScopes.indexOf('public_repo') === -1) {
+  if (foundScopes && foundScopes.indexOf('public_repo') === -1) {
     console.log(
       `🔴 Found GITHUB_ACCESS_TOKEN does not have required scope 'public_repo' which is required to read draft releases on dugite-native`
     )
@@ -89,7 +89,7 @@ async function run() {
 
   console.log(`✅ Newest release '${tag_name}' is a draft`)
 
-  const assets = await octokit.repos.listAssetsForRelease({
+  const assets = await octokit.repos.listReleaseAssets({
     owner,
     repo,
     release_id: id,
@@ -135,7 +135,6 @@ async function run() {
 
   const latestReleaseTag = latestRelease.data.tag_name
 
-  /** @type {{ data: { commits: Array<{commit: { message: string }}>} }} */
   const response = await octokit.repos.compareCommits({
     owner,
     repo,

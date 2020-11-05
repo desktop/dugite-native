@@ -2,7 +2,7 @@ import { Octokit } from '@octokit/rest'
 import rp from 'request-promise'
 import { updateGitLfsDependencies } from './lib/dependencies'
 
-process.on('unhandledRejection', reason => {
+process.on('unhandledRejection', (reason) => {
   console.log(reason)
 })
 
@@ -55,16 +55,16 @@ async function run(): Promise<boolean> {
 
   console.log(`✅ Newest git-lfs release '${version}'`)
 
-  const assets = await octokit.repos.listAssetsForRelease({
+  const assets = await octokit.repos.listReleaseAssets({
     owner,
     repo,
     release_id: id,
   })
 
-  const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
+  const signaturesFile = assets.data.find((a) => a.name === 'sha256sums.asc')
 
   if (signaturesFile == null) {
-    const foundFiles = assets.data.map(a => a.name)
+    const foundFiles = assets.data.map((a) => a.name)
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )
@@ -119,4 +119,4 @@ async function run(): Promise<boolean> {
   return true
 }
 
-run().then(success => process.exit(success ? 0 : 1))
+run().then((success) => process.exit(success ? 0 : 1))
