@@ -18,7 +18,7 @@
     "url": "git+https://github.com/desktop/dugite-native.git"
   },
   "author": "",
-  "license": "GPLv2",
+  "license": "GPL-2.0-only",
   "bugs": {
     "url": "https://github.com/desktop/dugite-native/issues"
   },
