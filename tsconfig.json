@@ -11,7 +11,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
-    "sourceMap": true,
+    "sourceMap": true
   },
   "include": ["script/**/*.ts"]
 }
