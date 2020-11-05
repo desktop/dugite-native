@@ -31,11 +31,11 @@ function getArch(fileName: string) {
   throw new Error(`Unable to find arch for file: ${fileName}`)
 }
 
-async function run() {
+async function run(): Promise<boolean> {
   const token = process.env.GITHUB_ACCESS_TOKEN
   if (token == null) {
     console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
-    return
+    return false
   }
 
   const octokit = new Octokit({ auth: `token ${token}` })
@@ -68,7 +68,7 @@ async function run() {
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )
-    return
+    return false
   }
 
   console.log(`✅ Found SHA256 signatures for release '${version}'`)
@@ -116,6 +116,7 @@ async function run() {
   updateGitLfsDependencies(version, newFiles)
 
   console.log(`✅ Updated dependencies metadata to Git LFS '${version}'`)
+  return true
 }
 
-run()
+run().then(success => process.exit(success ? 0 : 1))
