@@ -122,7 +122,7 @@ const baseConfig = {
   script: ['script/build.sh && script/package.sh'],
 
   branches: {
-    only: ['master', '/^v[0-9]*.[0-9]*.[0.9]*.*$/'],
+    only: ['master', '/release\\/\\S+/', '/^v[0-9]*.[0-9]*.[0.9]*.*$/'],
   },
   deploy: {
     provider: 'releases',

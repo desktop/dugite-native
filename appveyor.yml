@@ -7,7 +7,7 @@
 # the change to the repository.
 #
 image: Visual Studio 2015
-skip_branch_with_pr: true
+skip_branch_with_pr: false
 environment:
   GIT_LFS_VERSION: 2.7.2
   matrix:
