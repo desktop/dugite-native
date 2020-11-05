@@ -12,7 +12,7 @@ services:
   - docker
 env:
   global:
-    - GIT_LFS_VERSION=2.7.2
+    - GIT_LFS_VERSION=2.12.1
 matrix:
   fast_finish: true
   include:
@@ -30,7 +30,7 @@ matrix:
       language: c
       env:
         - TARGET_PLATFORM=ubuntu
-        - GIT_LFS_CHECKSUM=89f5aa2c29800bbb71f5d4550edd69c5f83e3ee9e30f770446436dd7f4ef1d4c
+        - GIT_LFS_CHECKSUM=f1ad07284dfdefaca96fbd047b804dd95731332c90ae79acc30a5ab575a42c5c
     - os: osx
       language: c
       env:
@@ -42,7 +42,7 @@ matrix:
         - WIN_ARCH=64
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.26.2.windows.1/MinGit-2.26.2-64-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=2dfbb1c46547c70179442a92b8593d592292b8bce2fd02ac4e0051a8072dde8f
-        - GIT_LFS_CHECKSUM=5cbe0765d469bbb32548a86e92d5e8694f1e97df7d590552477c3fafdc6c82e1
+        - GIT_LFS_CHECKSUM=1243626c8b7d3607e1335c31cc00972e34904a568dcfb48e7c0f404877cceadc
     - os: linux
       language: c
       env:
@@ -50,7 +50,7 @@ matrix:
         - WIN_ARCH=32
         - GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.26.2.windows.1/MinGit-2.26.2-32-bit.zip
         - GIT_FOR_WINDOWS_CHECKSUM=d4953a8144eec84d210de48128cda4de4dd359e4112ab3086dda971b85aefb8e
-        - GIT_LFS_CHECKSUM=f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
+        - GIT_LFS_CHECKSUM=246d6ad24ae6c89d88453dac50aa6ec991b0f09b21a72b56397c4ee3d795b2fc
 compiler:
   - gcc
 script:
