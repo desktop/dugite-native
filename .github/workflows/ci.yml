@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  pull_request:
+jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: script
+  build:
+    name: ${{ matrix.friendlyName }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-10.15, windows-2019, ubuntu-18.04]
+        arch: [32, 64]
+        include:
+          - os: macos-10.15
+            friendlyName: macOS
+            targetPlatform: macOS
+          - os: windows-2019
+            friendlyName: Windows
+            targetPlatform: win32
+          - os: ubuntu-18.04
+            friendlyName: Linux
+            targetPlatform: ubuntu
+        exclude:
+          - os: macos-10.15
+            arch: 32
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: npm install
+      - name: Check formatting
+        run: npm run prettier
+      - name: Build tools
+        run: npm run check
+      - name: Build
+        run: script/build.sh
+        env:
+          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
+          TARGET_ARCH: ${{ matrix.arch }}
+      - name: Package
+        run: script/package.sh
+        env:
+          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
