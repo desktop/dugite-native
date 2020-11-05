@@ -1,4 +1,4 @@
-import Octokit from '@octokit/rest'
+import { Octokit } from '@octokit/rest'
 import rp from 'request-promise'
 import { updateGitLfsDependencies } from './lib/dependencies'
 
