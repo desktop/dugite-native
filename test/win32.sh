@@ -2,7 +2,7 @@
 
 GIT_LFS_VERSION=2.7.2
 TARGET_PLATFORM=win32
-WIN_ARCH=32
+TARGET_ARCH=32
 GIT_FOR_WINDOWS_URL=https://github.com/git-for-windows/git/releases/download/v2.26.0.windows.1/MinGit-2.26.0-32-bit.zip
 GIT_FOR_WINDOWS_CHECKSUM=e57761114a74a045972903146922ebe42ba399cb9e306e51bdd63465e856f5c8
 GIT_LFS_CHECKSUM=f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
@@ -48,7 +48,7 @@ elif [ "$TARGET_PLATFORM" == "macOS" ]; then
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.lzma"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
-  if [ "$WIN_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
+  if [ "$TARGET_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.lzma"
 else

@@ -36,7 +36,7 @@ function getConfig(platform: 'windows', arch: string) {
   if (arch === 'amd64') {
     return {
       TARGET_PLATFORM: 'win32',
-      WIN_ARCH: 64,
+      TARGET_ARCH: 64,
       GIT_FOR_WINDOWS_URL: gitPackage.url,
       GIT_FOR_WINDOWS_CHECKSUM: gitPackage.checksum,
       GIT_LFS_CHECKSUM: lfsFile.checksum,
@@ -44,7 +44,7 @@ function getConfig(platform: 'windows', arch: string) {
   } else if (arch === 'x86') {
     return {
       TARGET_PLATFORM: 'win32',
-      WIN_ARCH: 32,
+      TARGET_ARCH: 32,
       GIT_FOR_WINDOWS_URL: gitPackage.url,
       GIT_FOR_WINDOWS_CHECKSUM: gitPackage.checksum,
       GIT_LFS_CHECKSUM: lfsFile.checksum,

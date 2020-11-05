@@ -50,7 +50,7 @@ function getConfig(platform: string, arch: string) {
         language: 'c',
         env: [
           'TARGET_PLATFORM=win32',
-          'WIN_ARCH=64',
+          'TARGET_ARCH=64',
           `GIT_FOR_WINDOWS_URL=${gitPackage.url}`,
           `GIT_FOR_WINDOWS_CHECKSUM=${gitPackage.checksum}`,
           `GIT_LFS_CHECKSUM=${lfsFile.checksum}`,
@@ -62,7 +62,7 @@ function getConfig(platform: string, arch: string) {
         language: 'c',
         env: [
           'TARGET_PLATFORM=win32',
-          'WIN_ARCH=32',
+          'TARGET_ARCH=32',
           `GIT_FOR_WINDOWS_URL=${gitPackage.url}`,
           `GIT_FOR_WINDOWS_CHECKSUM=${gitPackage.checksum}`,
           `GIT_LFS_CHECKSUM=${lfsFile.checksum}`,
