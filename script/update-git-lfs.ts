@@ -55,21 +55,16 @@ async function run() {
 
   console.log(`✅ Newest git-lfs release '${version}'`)
 
-  /** @type {{ data: Array<{name: string, url: string}>}} */
   const assets = await octokit.repos.listAssetsForRelease({
     owner,
     repo,
     release_id: id,
   })
 
-  const signaturesFile = assets.data.find(
-    (a: { name: string; url: string }) => a.name === 'sha256sums.asc'
-  )
+  const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
 
   if (signaturesFile == null) {
-    const foundFiles = assets.data.map(
-      (a: { name: string; url: string }) => a.name
-    )
+    const foundFiles = assets.data.map(a => a.name)
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )
