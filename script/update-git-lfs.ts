@@ -1,6 +1,6 @@
-import Octokit from '@octokit/rest'
-import rp from 'request-promise'
+import { Octokit } from '@octokit/rest'
 import { updateGitLfsDependencies } from './lib/dependencies'
+import fetch from 'node-fetch'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -31,11 +31,11 @@ function getArch(fileName: string) {
   throw new Error(`Unable to find arch for file: ${fileName}`)
 }
 
-async function run() {
+async function run(): Promise<boolean> {
   const token = process.env.GITHUB_ACCESS_TOKEN
   if (token == null) {
     console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
-    return
+    return false
   }
 
   const octokit = new Octokit({ auth: `token ${token}` })
@@ -55,41 +55,31 @@ async function run() {
 
   console.log(`✅ Newest git-lfs release '${version}'`)
 
-  /** @type {{ data: Array<{name: string, url: string}>}} */
-  const assets = await octokit.repos.listAssetsForRelease({
+  const assets = await octokit.repos.listReleaseAssets({
     owner,
     repo,
     release_id: id,
   })
 
-  const signaturesFile = assets.data.find(
-    (a: { name: string; url: string }) => a.name === 'sha256sums.asc'
-  )
+  const signaturesFile = assets.data.find(a => a.name === 'sha256sums.asc')
 
   if (signaturesFile == null) {
-    const foundFiles = assets.data.map(
-      (a: { name: string; url: string }) => a.name
-    )
+    const foundFiles = assets.data.map(a => a.name)
     console.log(
       `🔴 Could not find signatures. Got files: ${JSON.stringify(foundFiles)}`
     )
-    return
+    return false
   }
 
   console.log(`✅ Found SHA256 signatures for release '${version}'`)
 
-  const { url } = signaturesFile
-  const options = {
-    url,
+  const fileContents = await fetch(signaturesFile.url, {
     headers: {
       Accept: 'application/octet-stream',
       'User-Agent': 'dugite-native',
       Authorization: `token ${token}`,
     },
-    secureProtocol: 'TLSv1_2_method',
-  }
-
-  const fileContents = await rp(options)
+  }).then(x => x.text())
 
   const files = [
     `git-lfs-linux-amd64-${version}.tar.gz`,
@@ -121,6 +111,7 @@ async function run() {
   updateGitLfsDependencies(version, newFiles)
 
   console.log(`✅ Updated dependencies metadata to Git LFS '${version}'`)
+  return true
 }
 
-run()
+run().then(success => process.exit(success ? 0 : 1))

@@ -7,3 +7,4 @@ build
 *.zip
 *.lzma
 *.sha256
+.node-version

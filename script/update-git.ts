@@ -1,11 +1,11 @@
 import path from 'path'
 import crypto from 'crypto'
 import ChildProcess from 'child_process'
-import request from 'request'
-import Octokit from '@octokit/rest'
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest'
 import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
 import yargs from 'yargs'
+import fetch from 'node-fetch'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -13,6 +13,9 @@ process.on('unhandledRejection', reason => {
 
 const root = path.dirname(__dirname)
 const gitDir = path.join(root, 'git')
+
+// OMG
+type ReleaseAssets = RestEndpointMethodTypes['repos']['getLatestRelease']['response']['data']['assets']
 
 function spawn(cmd: string, args: Array<string>, cwd: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -74,25 +77,24 @@ async function calculateAssetChecksum(uri: string) {
     const hs = crypto.createHash('sha256', { encoding: 'hex' })
     hs.on('finish', () => resolve(hs.read()))
 
-    request({
-      uri,
-      headers: {
-        'User-Agent': 'dugite-native',
-        accept: 'application/octet-stream',
-      },
-    })
-      .on('response', r => {
-        if (r.statusCode !== 200) {
-          reject(new Error(`Server responded with ${r.statusCode}`))
-        }
-      })
-      .on('error', reject)
-      .pipe(hs)
+    const headers: Record<string, string> = {
+      'User-Agent': 'dugite-native',
+      accept: 'application/octet-stream',
+    }
+
+    fetch(uri, { headers })
+      .then(x =>
+        x.ok
+          ? Promise.resolve(x)
+          : Promise.reject(new Error(`Server responded with ${x.status}`))
+      )
+      .then(x => x.buffer())
+      .then(x => hs.end(x))
   })
 }
 
 async function getPackageDetails(
-  assets: Array<Octokit.ReposGetReleaseByTagResponseAssetsItem>,
+  assets: ReleaseAssets,
   body: string,
   arch: string
 ) {

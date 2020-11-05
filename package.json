@@ -7,8 +7,8 @@
     "update-git": "ts-node script/update-git.ts",
     "update-git-lfs": "ts-node script/update-git-lfs.ts && npm run prettier-fix",
     "generate-release-notes": "ts-node script/generate-release-notes.ts",
-    "prettier": "prettier -l **/*.y{,a}ml **/*.{js,ts,json}",
-    "prettier-fix": "prettier --write **/*.y{,a}ml **/*.{js,ts,json}",
+    "prettier": "prettier -l \"**/*.y{,a}ml\" \"**/*.{js,ts,json}\"",
+    "prettier-fix": "prettier --write \"**/*.y{,a}ml\" \"**/*.{js,ts,json}\"",
     "generate-all-config": "npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix",
     "generate-appveyor-config": "ts-node script/generate-appveyor-config.ts",
     "generate-travis-config": "ts-node script/generate-travis-config.ts"
@@ -18,25 +18,24 @@
     "url": "git+https://github.com/desktop/dugite-native.git"
   },
   "author": "",
-  "license": "GPLv2",
+  "license": "GPL-2.0-only",
   "bugs": {
     "url": "https://github.com/desktop/dugite-native/issues"
   },
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "devDependencies": {
-    "@octokit/rest": "^16.28.1",
-    "@types/node": "^12.0.7",
-    "@types/request-promise": "^4.1.44",
+    "@octokit/rest": "^18.0.9",
+    "@types/node": "^14.14.6",
+    "@types/node-fetch": "^2.5.7",
     "@types/semver": "^6.0.0",
-    "@types/yaml": "^1.0.2",
+    "@types/yaml": "^1.9.7",
     "@types/yargs": "^13.0.3",
-    "prettier": "^1.18.2",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4",
+    "node-fetch": "^2.6.1",
+    "prettier": "^2.1.2",
     "semver": "^6.1.1",
-    "ts-node": "^8.2.0",
-    "typescript": "^3.5.1",
-    "yaml": "^1.6.0",
-    "yargs": "^15.0.2"
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5",
+    "yaml": "^1.10.0",
+    "yargs": "^16.1.0"
   }
 }

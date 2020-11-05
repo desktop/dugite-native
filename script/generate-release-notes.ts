@@ -1,5 +1,5 @@
-import Octokit from '@octokit/rest'
-import rp from 'request-promise'
+import { Octokit } from '@octokit/rest'
+import fetch from 'node-fetch'
 
 // five targeted OS/arch combinations
 // two files for each targeted OS/arch
@@ -16,7 +16,7 @@ async function getBuildUrl(
   repo: string,
   ref: string
 ) {
-  const response = await octokit.repos.listStatusesForRef({
+  const response = await octokit.repos.listCommitStatusesForRef({
     owner,
     repo,
     ref,
@@ -60,7 +60,7 @@ async function run() {
   console.log(`✅ Token found for ${me}`)
   // @ts-ignore
   const foundScopes = user.headers['x-oauth-scopes']
-  if (foundScopes.indexOf('public_repo') === -1) {
+  if (foundScopes && foundScopes.indexOf('public_repo') === -1) {
     console.log(
       `🔴 Found GITHUB_ACCESS_TOKEN does not have required scope 'public_repo' which is required to read draft releases on dugite-native`
     )
@@ -89,7 +89,7 @@ async function run() {
 
   console.log(`✅ Newest release '${tag_name}' is a draft`)
 
-  const assets = await octokit.repos.listAssetsForRelease({
+  const assets = await octokit.repos.listReleaseAssets({
     owner,
     repo,
     release_id: id,
@@ -108,21 +108,37 @@ async function run() {
 
   const entries = []
 
-  for (const asset of assets.data) {
-    const { name, url } = asset
+  for (const { name, url } of assets.data) {
     if (name.endsWith('.sha256')) {
       const fileName = name.slice(0, -7)
-      const options = {
-        url,
-        headers: {
-          Accept: 'application/octet-stream',
-          'User-Agent': 'dugite-native',
-          Authorization: `token ${token}`,
-        },
-        secureProtocol: 'TLSv1_2_method',
+      const headers: Record<string, string> = {
+        Accept: 'application/octet-stream',
+        'User-Agent': 'dugite-native',
+        Authorization: `token ${token}`,
       }
 
-      const fileContents = await rp(options)
+      const fileContents = await fetch(url, { headers, redirect: 'manual' })
+        .then(x => {
+          // Follow one redirect but don't send the auth token to AWS. Seems
+          // request.redirected isn't implemented in node-fetch so we'll have
+          // to check the status ourselves :/
+          if (x.status === 302 && x.headers.has('location')) {
+            const redirectURL = x.headers.get('location')
+            if (redirectURL) {
+              return fetch(redirectURL, {
+                headers: { 'User-Agent': 'dugite-native' },
+              })
+            }
+          }
+
+          if (x.ok) {
+            return x
+          }
+
+          throw new Error(`Server responded with ${x.status}: ${x.statusText}`)
+        })
+        .then(x => x.text())
+
       const checksum = fileContents.trim()
       entries.push({ fileName, checksum })
     }
@@ -135,7 +151,6 @@ async function run() {
 
   const latestReleaseTag = latestRelease.data.tag_name
 
-  /** @type {{ data: { commits: Array<{commit: { message: string }}>} }} */
   const response = await octokit.repos.compareCommits({
     owner,
     repo,
