@@ -13,13 +13,13 @@ environment:
   matrix:
     - TARGET_PLATFORM: win32
       WIN_ARCH: 64
-      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.23.0.windows.5/MinGit-2.23.0.windows.5-64-bit.zip
-      GIT_FOR_WINDOWS_CHECKSUM: 5f30fdf57608ec78a8ba949184c0d7075ca46c11bc4edcfa7a5c89a191682721
+      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.26.0.windows.1/MinGit-2.26.0-64-bit.zip
+      GIT_FOR_WINDOWS_CHECKSUM: e19662da49c2891cb2ac04e9f4f413d13c0c0974b6221169a5717eb62e2288f3
       GIT_LFS_CHECKSUM: 5cbe0765d469bbb32548a86e92d5e8694f1e97df7d590552477c3fafdc6c82e1
     - TARGET_PLATFORM: win32
       WIN_ARCH: 32
-      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.23.0.windows.5/MinGit-2.23.0.windows.5-32-bit.zip
-      GIT_FOR_WINDOWS_CHECKSUM: 17e8dcffcc3c42e37e6beedcf51ef0457bef45f24290ee6e854f622a9133dd76
+      GIT_FOR_WINDOWS_URL: https://github.com/git-for-windows/git/releases/download/v2.26.0.windows.1/MinGit-2.26.0-32-bit.zip
+      GIT_FOR_WINDOWS_CHECKSUM: e57761114a74a045972903146922ebe42ba399cb9e306e51bdd63465e856f5c8
       GIT_LFS_CHECKSUM: f4f49e9261584711c337f566a62bd9645cc0e10cef4dc54de1e1e0d31a7b2f71
 build_script:
   - git submodule update --init --recursive
