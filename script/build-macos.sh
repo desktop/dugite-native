@@ -15,8 +15,8 @@ if [[ -z "${DESTINATION}" ]]; then
   exit 1
 fi
 
-GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 
