@@ -3,27 +3,29 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
-if [[ -z "${DESTINATION}" ]]; then
-  echo "Required environment variable DESTINATION was not set"
-  exit 1
+# if [[ -z "${DESTINATION}" ]]; then
+#   echo "Required environment variable DESTINATION was not set"
+#   exit 1
+# fi
+
+
+if [ "$TARGET_ARCH" = "64" ]; then
+  DEPENDENCY_ARCH="amd64"
+  MINGW_DIR="mingw64"
+else
+  DEPENDENCY_ARCH="x86"
+  MINGW_DIR="mingw32"
 fi
 
-GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
-
-if [ "$TARGET_ARCH" -eq "64" ]; then DEPENDENCY_ARCH="amd64"; else DEPENDENCY_ARCH="x86"; fi
-
-GIT_FOR_WINDOWS_CHECKSUM="$(jq --raw-output '.git.packages[] | select(.arch == "$DEPENDENCY_ARCH" and .platform == "windows") | .checksum')"
-
-echo $GIT_FOR_WINDOWS_CHECKSUM
-exit 1
+GIT_LFS_VERSION=$(jq --raw-output ".[\"git-lfs\"].version[1:]" dependencies.json)
+GIT_FOR_WINDOWS_URL=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .url" dependencies.json)
+GIT_FOR_WINDOWS_CHECKSUM=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 
 mkdir -p "$DESTINATION"
-
-if [ "$TARGET_ARCH" -eq "64" ]; then MINGW_DIR="mingw64"; else MINGW_DIR="mingw32"; fi
 
 echo "-- Downloading MinGit from $GIT_FOR_WINDOWS_URL"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
