@@ -39,7 +39,7 @@ jobs:
           - os: macos-10.15
             arch: 32
           - os: ubuntu-18.04
-            arc: 32
+            arch: 32
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v2
