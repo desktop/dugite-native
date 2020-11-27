@@ -87,6 +87,8 @@ else
   exit 1
 fi
 
+set +eu
+
 echo "-- Setting some system configuration values"
 git config --file "$SYSTEM_CONFIG" core.symlinks "false"
 git config --file "$SYSTEM_CONFIG" core.autocrlf "true"
@@ -119,6 +121,8 @@ git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 # openssl backend even though GitHub Desktop requires the schannel backend for
 # certificate bypass to work.
 git config --file "$SYSTEM_CONFIG" --remove-section include
+
+set -eu -o pipefail
 
 # removing global gitattributes file
 echo "-- Removing system level gitattributes which handles certain file extensions"

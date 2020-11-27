@@ -5,6 +5,8 @@
 # script works off the assumption that everything at $DESTINATION is
 # intended to be part of the archive.
 
+set -eu -o pipefail
+
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOURCE="./git"
 DESTINATION="/tmp/build/git"
@@ -83,3 +85,5 @@ echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
 echo "${LZMA_FILE} - ${LZMA_SIZE} - checksum: ${LZMA_CHECKSUM}"
 )
+
+set +eu
