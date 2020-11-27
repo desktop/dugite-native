@@ -15,9 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: './script'
+        run: |
+          sudo apt-get install shellcheck
+          shellcheck script/**/*.sh
 
   build:
     name: ${{ matrix.friendlyName }}
@@ -32,7 +32,7 @@ jobs:
             friendlyName: macOS
             targetPlatform: macOS
           - os: windows-2019
-            friendlyName: Windows
+            friendlyName: Windows ${{ matrix.arch }}
             targetPlatform: win32
           - os: ubuntu-18.04
             friendlyName: Linux
@@ -54,11 +54,21 @@ jobs:
       - name: Build tools
         run: npm run check
       - name: Build
-        run: script/build.sh
+        run: |
+          if [[ "${{ matrix.targetPlatform }}" == "win32" ]]; then
+            bash script/build.sh
+          else
+            script/build.sh
+          fi
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
       - name: Package
-        run: script/package.sh
+        run: |
+          if [[ "${{ matrix.targetPlatform }}" == "win32" ]]; then
+            bash script/package.sh
+          else
+            script/package.sh
+          fi
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
