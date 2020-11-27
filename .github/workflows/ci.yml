@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: Install dependencies
+      - name: Install dependencies 
         run: npm install
       - name: Check formatting
         run: npm run prettier
