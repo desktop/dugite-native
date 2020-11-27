@@ -73,7 +73,8 @@ jobs:
       - name: Upload ouptut artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
+          name:
+            dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
           path: ./output
           retention-days: 5
       - name: Create release on tag push
