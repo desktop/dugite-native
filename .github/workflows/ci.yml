@@ -69,3 +69,4 @@ jobs:
         run: script/package.sh
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
+          TARGET_ARCH: ${{ matrix.arch }}
