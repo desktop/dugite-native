@@ -70,7 +70,7 @@ jobs:
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
-      - name: Upload ouptut artifacts
+      - name: Upload output artifacts
         uses: actions/upload-artifact@v2
         with:
           name:
@@ -80,7 +80,7 @@ jobs:
 
   release:
     name: Create GitHub release
-    needs: build
+    needs: [build, shellcheck]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
@@ -115,7 +115,7 @@ jobs:
         uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
-          # Workaround since actions/upload-release-asset doesn't support wilcard paths
+          # Workaround since actions/upload-release-asset doesn't support wildcard paths
           script: |
             const script = require(`${process.env.GITHUB_WORKSPACE}/script/create-release.js`);
             const artifactsDir = `${process.env.GITHUB_WORKSPACE}/artifacts`;
