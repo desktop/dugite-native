@@ -3,8 +3,6 @@ name: CI
 on:
   push:
     branches:
-      # Temp: also run on actions branch
-      - actions
       - master
     tags:
       - v*
