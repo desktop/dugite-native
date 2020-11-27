@@ -3,10 +3,13 @@ name: CI
 on:
   push:
     branches:
+      # Temp: also run on actions branch
+      - actions
       - master
     tags:
       - v*
   pull_request:
+
 jobs:
   shellcheck:
     name: Shellcheck
@@ -17,6 +20,7 @@ jobs:
         uses: ludeeus/action-shellcheck@master
         with:
           scandir: script
+  
   build:
     name: ${{ matrix.friendlyName }}
     runs-on: ${{ matrix.os }}
