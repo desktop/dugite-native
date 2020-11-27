@@ -131,8 +131,6 @@ set -eu -o pipefail
 
 echo "-- Testing clone operation with generated binary"
 
-rm -rf "$CURL_OUTPUT_DIR"
-
 TEMP_CLONE_DIR=/tmp/clones
 mkdir -p $TEMP_CLONE_DIR
 

@@ -3,12 +3,12 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
-# if [[ -z "${DESTINATION}" ]]; then
-#   echo "Required environment variable DESTINATION was not set"
-#   exit 1
-# fi
-
 set -eu -o pipefail
+
+if [[ -z "${DESTINATION}" ]]; then
+  echo "Required environment variable DESTINATION was not set"
+  exit 1
+fi
 
 if [ "$TARGET_ARCH" = "64" ]; then
   DEPENDENCY_ARCH="amd64"
@@ -56,10 +56,6 @@ if [[ "$GIT_LFS_VERSION" ]]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
     unzip -j $GIT_LFS_FILE -x '*.md' -d "$SUBFOLDER"
-
-    # this is a workaround because Git LFS changed the names of the files in the archive
-    OLD_FILE_NAME="git-lfs-windows-$GIT_LFS_ARCH.exe"
-    mv "$SUBFOLDER/$OLD_FILE_NAME" "$SUBFOLDER/git-lfs.exe"
 
     if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
       echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
