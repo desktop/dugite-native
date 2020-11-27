@@ -34,6 +34,10 @@ jobs:
           - os: windows-2019
             friendlyName: Windows
             targetPlatform: win32
+          - os: windows-2019
+            friendlyName: Windows
+            targetPlatform: win32
+            arch: arm64
           - os: ubuntu-18.04
             friendlyName: Linux
             targetPlatform: ubuntu

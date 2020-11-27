@@ -15,6 +15,13 @@
         "filename": "MinGit-2.29.2.3-32-bit.zip",
         "url": "https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.3/MinGit-2.29.2.3-32-bit.zip",
         "checksum": "e2b7302b2cb013a27984ba65aeff11030b32b7e19deb228304e3e5b85b31befd"
+      },
+      {
+        "platform": "windows",
+        "arch": "arm64",
+        "filename": "MinGit-2.30.0-arm64.zip",
+        "url": "https://github.com/dennisameling/git/releases/download/2.30.0-beta2/MinGit-2.30.0-arm64.zip",
+        "checksum": "d105fadcc2d407952c777577aa4c263e3878816e52230e5824169cffa0d9bdc6"
       }
     ]
   },
@@ -29,7 +36,7 @@
       },
       {
         "platform": "windows",
-        "arch": "x86",
+        "arch": "386",
         "name": "git-lfs-windows-386-v2.13.2.zip",
         "checksum": "27d061f9fd6b14555c220758ae0b77d81ef20f64dde0179a515d55a75f5355a8"
       },
