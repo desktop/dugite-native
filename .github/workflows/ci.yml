@@ -17,7 +17,7 @@ jobs:
       - name: Run ShellCheck
         run: |
           sudo apt-get install shellcheck
-          shellcheck script/**/*.sh
+          shopt -s globstar; shellcheck script/**/*.sh
 
   build:
     name: ${{ matrix.friendlyName }} ${{ matrix.arch }}
@@ -53,22 +53,17 @@ jobs:
         run: npm run prettier
       - name: Build tools
         run: npm run check
+      - name: Install libcurl4-openssl-dev on Ubuntu
+        if: matrix.targetPlatform == 'ubuntu'
+        run: sudo apt-get install libcurl4-openssl-dev
       - name: Build
-        run: |
-          if [[ "${{ matrix.targetPlatform }}" == "win32" ]]; then
-            bash script/build.sh
-          else
-            script/build.sh
-          fi
+        shell: bash
+        run: script/build.sh
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
       - name: Package
-        run: |
-          if [[ "${{ matrix.targetPlatform }}" == "win32" ]]; then
-            bash script/package.sh
-          else
-            script/package.sh
-          fi
+        shell: bash
+        run: script/package.sh
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}

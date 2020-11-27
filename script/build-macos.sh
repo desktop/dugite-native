@@ -3,6 +3,8 @@
 # Compiling Git for macOS and bundling Git LFS from upstream.
 #
 
+set -eu -o pipefail
+
 MACOSX_BUILD_VERSION="10.9"
 
 if [[ -z "${SOURCE}" ]]; then
@@ -66,3 +68,5 @@ echo "-- Removing unsupported features"
 rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
+
+set +eu

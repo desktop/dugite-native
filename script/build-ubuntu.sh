@@ -3,6 +3,7 @@
 # Compiling Git for Linux and bundling Git LFS from upstream.
 #
 
+set -eu -o pipefail
 
 if [[ -z "${SOURCE}" ]]; then
   echo "Required environment variable SOURCE was not set"
@@ -141,3 +142,5 @@ GIT_CURL_VERBOSE=1 \
   PREFIX="$DESTINATION" \
   ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
 )
+
+set +eu

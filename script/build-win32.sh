@@ -8,6 +8,7 @@
 #   exit 1
 # fi
 
+set -eu -o pipefail
 
 if [ "$TARGET_ARCH" = "64" ]; then
   DEPENDENCY_ARCH="amd64"
@@ -140,3 +141,5 @@ fi
 echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
+
+set +eu
