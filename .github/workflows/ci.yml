@@ -77,8 +77,25 @@ jobs:
             dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
           path: ./output
           retention-days: 5
-      - name: Create release on tag push
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+
+  release:
+    name: Create GitHub release
+    needs: build
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: './artifacts'
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: './artifacts'
+
+      - name: Create release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -90,25 +107,17 @@ jobs:
             TODO add release notes
           draft: true
           prerelease: false
+
+      - name: Install glob for release script
+        run: npm i glob
+
       - name: Upload release assets
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
         uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           # Workaround since actions/upload-release-asset doesn't support wilcard paths
           script: |
-            const fs = require('fs');
-            const dir = './output';
-            const release_id = '${{ needs.create_release.outputs.id }}';
-            for (let file of fs.readdirSync(dir)) {
-                if (!file.endsWith('.lzma.sha256')) {
-                    console.log(`Uploading ${dir}/${file}`);
-                    await github.repos.uploadReleaseAsset({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        release_id: release_id,
-                        name: file,
-                        data: fs.readFileSync(`${dir}/${file}`)
-                    });
-                }
-            }
+            const script = require(`${process.env.GITHUB_WORKSPACE}/script/create-release.js`);
+            const artifactsDir = `${process.env.GITHUB_WORKSPACE}/artifacts`;
+            const releaseId = '${{ steps.create_release.outputs.id }}';
+            console.log(script({github, context, artifactsDir, releaseId}));
