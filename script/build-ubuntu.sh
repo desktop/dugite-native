@@ -122,8 +122,12 @@ rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
 
+set +eu
+
 echo "-- Static linking research"
 check_static_linking "$DESTINATION"
+
+set -eu -o pipefail
 
 echo "-- Testing clone operation with generated binary"
 
