@@ -97,14 +97,14 @@ jobs:
 
       - name: Get tag name without prefix
         run: |
-          fullTagName="${{ github.ref }}"
-          tagNameWithoutPrefix="${fullTagName:1}"
+          echo "DUGITE_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+          tagNameWithoutPrefix="${DUGITE_TAG:1}"
           echo "DUGITE_TAG_WITHOUT_PREFIX=${tagNameWithoutPrefix}" >> $GITHUB_ENV
 
       - name: Generate release notes
         run: |
           npm ci
-          node -r ts-node/register script/generate-release-notes.ts "${{ env.GITHUB_WORKSPACE }}/artifacts" "${{ github.ref }}" "${{ secrets.GITHUB_TOKEN }}"
+          node -r ts-node/register script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "${{ env.DUGITE_TAG }}" "${{ secrets.GITHUB_TOKEN }}"
           RELEASE_NOTES_FILE=script/release_notes.txt
           if [[ ! -f "$RELEASE_NOTES_FILE" ]]; then
               echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
