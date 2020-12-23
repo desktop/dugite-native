@@ -5,10 +5,6 @@ const fs = require('fs')
 module.exports = ({ github, context, artifactsDir, releaseId }) => {
   glob(artifactsDir + '/**/*', { nodir: true }, async function (err, files) {
     for (const file of files) {
-      if (file.endsWith('.lzma.sha256')) {
-        continue
-      }
-
       const filename = path.basename(file)
       console.log(`Uploading ${filename}`)
 
