@@ -97,7 +97,8 @@ jobs:
 
       - name: Get tag name without prefix
         run: |
-          echo "DUGITE_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+          DUGITE_TAG=${GITHUB_REF/refs\/tags\//}
+          echo "DUGITE_TAG=${DUGITE_TAG}" >> $GITHUB_ENV
           tagNameWithoutPrefix="${DUGITE_TAG:1}"
           echo "DUGITE_TAG_WITHOUT_PREFIX=${tagNameWithoutPrefix}" >> $GITHUB_ENV
 
