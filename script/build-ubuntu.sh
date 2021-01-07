@@ -3,6 +3,7 @@
 # Compiling Git for Linux and bundling Git LFS from upstream.
 #
 
+set -eu -o pipefail
 
 if [[ -z "${SOURCE}" ]]; then
   echo "Required environment variable SOURCE was not set"
@@ -19,7 +20,16 @@ if [[ -z "${CURL_INSTALL_DIR}" ]]; then
   exit 1
 fi
 
+if [ "$TARGET_ARCH" = "64" ]; then
+  DEPENDENCY_ARCH="amd64"
+else
+  DEPENDENCY_ARCH="x86"
+fi
+
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
+GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .checksum" dependencies.json)"
+
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 # shellcheck source=script/check-static-linking.sh
@@ -112,12 +122,14 @@ rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
 
+set +eu
+
 echo "-- Static linking research"
 check_static_linking "$DESTINATION"
 
-echo "-- Testing clone operation with generated binary"
+set -eu -o pipefail
 
-rm -rf "$CURL_OUTPUT_DIR"
+echo "-- Testing clone operation with generated binary"
 
 TEMP_CLONE_DIR=/tmp/clones
 mkdir -p $TEMP_CLONE_DIR
@@ -132,3 +144,5 @@ GIT_CURL_VERBOSE=1 \
   PREFIX="$DESTINATION" \
   ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
 )
+
+set +eu

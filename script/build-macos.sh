@@ -3,6 +3,8 @@
 # Compiling Git for macOS and bundling Git LFS from upstream.
 #
 
+set -eu -o pipefail
+
 MACOSX_BUILD_VERSION="10.9"
 
 if [[ -z "${SOURCE}" ]]; then
@@ -16,6 +18,7 @@ if [[ -z "${DESTINATION}" ]]; then
 fi
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 
@@ -65,3 +68,5 @@ echo "-- Removing unsupported features"
 rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
+
+set +eu

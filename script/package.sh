@@ -5,6 +5,8 @@
 # script works off the assumption that everything at $DESTINATION is
 # intended to be part of the archive.
 
+set -eu -o pipefail
+
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOURCE="./git"
 DESTINATION="/tmp/build/git"
@@ -38,7 +40,7 @@ elif [ "$TARGET_PLATFORM" == "macOS" ]; then
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.lzma"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
-  if [ "$WIN_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
+  if [ "$TARGET_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.lzma"
 else
@@ -83,3 +85,5 @@ echo "Packages created:"
 echo "${GZIP_FILE} - ${GZIP_SIZE} - checksum: ${GZIP_CHECKSUM}"
 echo "${LZMA_FILE} - ${LZMA_SIZE} - checksum: ${LZMA_CHECKSUM}"
 )
+
+set +eu

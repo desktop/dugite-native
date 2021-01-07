@@ -1,226 +1,210 @@
+import * as glob from 'glob'
+import { basename } from 'path'
+import * as fs from 'fs'
 import { Octokit } from '@octokit/rest'
-import fetch from 'node-fetch'
 
-// five targeted OS/arch combinations
-// two files for each targeted OS/arch
-// two checksum files for the previous
-const SUCCESSFUL_RELEASE_FILE_COUNT = 4 * 2 * 2
+export default class GenerateReleaseNotes {
+  // five targeted OS/arch combinations
+  // two files for each targeted OS/arch
+  // two checksum files for the previous
+  private SUCCESSFUL_RELEASE_FILE_COUNT = 4 * 2 * 2
+  private args = process.argv.slice(2)
+  private expectedArgs = [
+    {
+      key: 0,
+      name: 'artifactsDir',
+      description: 'full path to the artifacts directory',
+    },
+    {
+      key: 1,
+      name: 'tagName',
+      description:
+        'name of the GitHub tag that we use to generate the changelog',
+    },
+    {
+      key: 2,
+      name: 'githubToken',
+      description: 'GitHub API token',
+    },
+  ]
+  private expectedArgsString = this.expectedArgs
+    .map(arg => `\${${arg.name}}`)
+    .join(' ')
 
-process.on('unhandledRejection', reason => {
-  console.log(reason)
-})
+  /**
+   * Full path to the artifacts directory
+   */
+  private artifactsDir: string
 
-async function getBuildUrl(
-  octokit: Octokit,
-  owner: string,
-  repo: string,
-  ref: string
-) {
-  const response = await octokit.repos.listCommitStatusesForRef({
-    owner,
-    repo,
-    ref,
-  })
+  /**
+   * Name of the GitHub tag that we use to generate the changelog
+   */
+  private tagName: string
 
-  // Travis kicks off this build after a tag is pushed to the repository
-  const statuses = response.data
-  const travisStatus = statuses.find(
-    s => s.context === 'continuous-integration/travis-ci/push'
-  )
+  /**
+   * GitHub API token
+   */
+  private githubToken: string
 
-  if (travisStatus == null) {
-    const contexts = statuses.map(s => s.context)
-    console.log(
-      `👀 Uh-oh, I couldn't find the right commit status. Found these contexts: ${JSON.stringify(
-        contexts
-      )}`
-    )
-    console.log(
-      `Please open an issue against https://github.com/desktop/dugite-native so it can be fixed!`
-    )
-  } else {
-    console.log(
-      `👀 Follow along with the build here: ${travisStatus.target_url}`
-    )
-  }
-}
+  private owner = 'desktop'
+  private repo = 'dugite-native'
 
-async function run() {
-  const token = process.env.GITHUB_ACCESS_TOKEN
-  if (token == null) {
-    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
-    return
-  }
+  constructor() {
+    console.log('Starting to generate release notes..')
 
-  const octokit = new Octokit({ auth: `token ${token}` })
-
-  const user = await octokit.users.getAuthenticated({})
-  const me = user.data.login
-
-  console.log(`✅ Token found for ${me}`)
-  // @ts-ignore
-  const foundScopes = user.headers['x-oauth-scopes']
-  if (foundScopes && foundScopes.indexOf('public_repo') === -1) {
-    console.log(
-      `🔴 Found GITHUB_ACCESS_TOKEN does not have required scope 'public_repo' which is required to read draft releases on dugite-native`
-    )
-    return
-  }
-
-  const owner = 'desktop'
-  const repo = 'dugite-native'
-
-  console.log(`✅ Token has 'public_scope' scope to make changes to releases`)
-
-  const releases = await octokit.repos.listReleases({
-    owner,
-    repo,
-    per_page: 1,
-    page: 1,
-  })
-
-  const release = releases.data[0]
-  const { tag_name, draft, id } = release
-
-  if (!draft) {
-    console.log(`🔴 Latest published release '${tag_name}' is not a draft`)
-    return
-  }
-
-  console.log(`✅ Newest release '${tag_name}' is a draft`)
-
-  const assets = await octokit.repos.listReleaseAssets({
-    owner,
-    repo,
-    release_id: id,
-  })
-
-  if (assets.data.length !== SUCCESSFUL_RELEASE_FILE_COUNT) {
-    console.log(
-      `🔴 Draft has ${assets.data.length} assets, expecting ${SUCCESSFUL_RELEASE_FILE_COUNT}. This means the build agents are probably still going...`
-    )
-
-    await getBuildUrl(octokit, owner, repo, tag_name)
-    return
-  }
-
-  console.log(`✅ All agents have finished and uploaded artefacts`)
-
-  const entries = []
-
-  for (const { name, url } of assets.data) {
-    if (name.endsWith('.sha256')) {
-      const fileName = name.slice(0, -7)
-      const headers: Record<string, string> = {
-        Accept: 'application/octet-stream',
-        'User-Agent': 'dugite-native',
-        Authorization: `token ${token}`,
-      }
-
-      const fileContents = await fetch(url, { headers, redirect: 'manual' })
-        .then(x => {
-          // Follow one redirect but don't send the auth token to AWS. Seems
-          // request.redirected isn't implemented in node-fetch so we'll have
-          // to check the status ourselves :/
-          if (x.status === 302 && x.headers.has('location')) {
-            const redirectURL = x.headers.get('location')
-            if (redirectURL) {
-              return fetch(redirectURL, {
-                headers: { 'User-Agent': 'dugite-native' },
-              })
-            }
-          }
-
-          if (x.ok) {
-            return x
-          }
-
-          throw new Error(`Server responded with ${x.status}: ${x.statusText}`)
-        })
-        .then(x => x.text())
-
-      const checksum = fileContents.trim()
-      entries.push({ fileName, checksum })
-    }
-  }
-
-  const latestRelease = await octokit.repos.getLatestRelease({
-    owner,
-    repo,
-  })
-
-  const latestReleaseTag = latestRelease.data.tag_name
-
-  const response = await octokit.repos.compareCommits({
-    owner,
-    repo,
-    base: latestReleaseTag,
-    head: tag_name,
-  })
-
-  const commits = response.data.commits
-
-  const mergeCommitRegex = /Merge pull request #(\d{1,}) /
-
-  const mergeCommitMessages = commits
-    .filter((c: { commit: { message: string } }) =>
-      c.commit.message.match(mergeCommitRegex)
-    )
-    .map((c: { commit: { message: string } }) => c.commit.message)
-
-  const pullRequestIds = []
-
-  for (const mergeCommitMessage of mergeCommitMessages) {
-    const match = mergeCommitRegex.exec(mergeCommitMessage)
-    if (match != null && match.length === 2) {
-      const num = parseInt(match[1])
-      if (num != NaN) {
-        pullRequestIds.push(num)
-      }
-    }
-  }
-
-  const releaseNotesEntries = []
-
-  for (const pullRequestId of pullRequestIds) {
-    const result = await octokit.pulls.get({
-      owner,
-      repo,
-      pull_number: pullRequestId,
+    process.on('unhandledRejection', reason => {
+      console.error(reason)
     })
-    const { title, number, user } = result.data
-    const entry = ` - ${title} - #${number} via @${user.login}`
-    releaseNotesEntries.push(entry)
+
+    for (const arg of this.expectedArgs) {
+      if (!this.args[arg.key]) {
+        console.error(
+          `🔴 Missing CLI argument \${${arg.name}} (${arg.description}). Please run the script as follows: node -r ts-node/register script/generate-release-notes.ts ${this.expectedArgsString}`
+        )
+        process.exit(1)
+      }
+    }
+
+    this.artifactsDir = this.args[0]
+    this.tagName = this.args[1]
+    this.githubToken = this.args[2]
+
+    this.run()
   }
-  const changelogText = releaseNotesEntries.join('\n')
 
-  const fileList = entries.map(e => `**${e.fileName}**\n${e.checksum}\n`)
-  const fileListText = fileList.join('\n')
+  /**
+   * Do our magic to generate the release notes 🧙🏼‍♂️
+   */
+  async run() {
+    const Glob = glob.GlobSync
+    const files = new Glob(this.artifactsDir + '/**/*', { nodir: true })
+    let countFiles = 0
+    let shaEntries: Array<{ filename: string; checksum: string }> = []
 
-  const draftReleaseNotes = `${changelogText}
+    for (const file of files.found) {
+      if (file.endsWith('.sha256')) {
+        shaEntries.push(this.getShaContents(file))
+      }
+
+      countFiles++
+    }
+
+    console.log(`Found ${countFiles} files in artifacts directory`)
+    console.log(shaEntries)
+
+    if (this.SUCCESSFUL_RELEASE_FILE_COUNT !== countFiles) {
+      console.error(
+        `🔴 Artifacts folder has ${countFiles} assets, expecting ${this.SUCCESSFUL_RELEASE_FILE_COUNT}. Please check the GH Actions artifacts to see which are missing.`
+      )
+      process.exit(1)
+    }
+
+    const releaseEntries = await this.generateReleaseNotesEntries()
+    const draftReleaseNotes = this.generateDraftReleaseNotes(
+      releaseEntries,
+      shaEntries
+    )
+    const releaseNotesPath = __dirname + '/release_notes.txt'
+
+    fs.writeFileSync(releaseNotesPath, draftReleaseNotes, { encoding: 'utf8' })
+
+    console.log(
+      `✅ All done! The release notes have been written to ${releaseNotesPath}`
+    )
+  }
+
+  /**
+   * Returns the filename (excluding .sha256) and its contents (a SHA256 checksum).
+   */
+  getShaContents(filePath: string): { filename: string; checksum: string } {
+    const filename = basename(filePath).slice(0, -7)
+    const checksum = fs.readFileSync(filePath, 'utf8')
+
+    return { filename, checksum }
+  }
+
+  /**
+   * Compares the most recent release to the one we're creating now.
+   * Generates release note entries including attribution to the author.
+   */
+  async generateReleaseNotesEntries(): Promise<Array<string>> {
+    const octokit = new Octokit({ auth: `token ${this.githubToken}` })
+    const latestRelease = await octokit.repos.getLatestRelease({
+      owner: this.owner,
+      repo: this.repo,
+    })
+
+    const latestReleaseTag = latestRelease.data.tag_name
+
+    console.log(
+      `Comparing commits between ${latestReleaseTag} and ${this.tagName}...`
+    )
+
+    const response = await octokit.repos.compareCommits({
+      owner: this.owner,
+      repo: this.repo,
+      base: latestReleaseTag,
+      head: this.tagName,
+    })
+
+    const commits = response.data.commits
+
+    const mergeCommitRegex = /Merge pull request #(\d{1,}) /
+
+    const mergeCommitMessages = commits
+      .filter((c: { commit: { message: string } }) =>
+        c.commit.message.match(mergeCommitRegex)
+      )
+      .map((c: { commit: { message: string } }) => c.commit.message)
+
+    const pullRequestIds = []
+
+    for (const mergeCommitMessage of mergeCommitMessages) {
+      const match = mergeCommitRegex.exec(mergeCommitMessage)
+      if (match != null && match.length === 2) {
+        const num = parseInt(match[1])
+        if (num != NaN) {
+          pullRequestIds.push(num)
+        }
+      }
+    }
+
+    const releaseNotesEntries: Array<string> = []
+
+    for (const pullRequestId of pullRequestIds) {
+      const result = await octokit.pulls.get({
+        owner: this.owner,
+        repo: this.repo,
+        pull_number: pullRequestId,
+      })
+      const { title, number, user } = result.data
+      const entry = ` - ${title} - #${number} via @${user.login}`
+      releaseNotesEntries.push(entry)
+    }
+
+    return releaseNotesEntries
+  }
+
+  /**
+   * Takes the release notes entries and the SHA entries, then merges them into the full draft release notes ✨
+   */
+  generateDraftReleaseNotes(
+    releaseNotesEntries: Array<string>,
+    shaEntries: Array<{ filename: string; checksum: string }>
+  ): string {
+    const changelogText = releaseNotesEntries.join('\n')
+
+    const fileList = shaEntries.map(e => `**${e.filename}**\n${e.checksum}\n`)
+    const fileListText = fileList.join('\n')
+
+    const draftReleaseNotes = `${changelogText}
 
 ## SHA-256 hashes:
 
 ${fileListText}`
 
-  const numberWithoutPrefix = tag_name.substring(1)
-
-  const result = await octokit.repos.updateRelease({
-    owner: 'desktop',
-    repo: 'dugite-native',
-    release_id: id,
-    tag_name,
-    name: `Git ${numberWithoutPrefix}`,
-    body: draftReleaseNotes,
-  })
-
-  const { html_url } = result.data
-
-  console.log(
-    `✅ Draft for release ${tag_name} updated with changelog and artifacts`
-  )
-  console.log()
-  console.log(`💚 Please review draft release and publish: ${html_url}`)
+    return draftReleaseNotes
+  }
 }
 
-run()
+new GenerateReleaseNotes()

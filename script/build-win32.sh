@@ -3,18 +3,31 @@
 # Repackaging Git for Windows and bundling Git LFS from upstream.
 #
 
+set -eu -o pipefail
+
 if [[ -z "${DESTINATION}" ]]; then
   echo "Required environment variable DESTINATION was not set"
   exit 1
 fi
+
+if [ "$TARGET_ARCH" = "64" ]; then
+  DEPENDENCY_ARCH="amd64"
+  MINGW_DIR="mingw64"
+else
+  DEPENDENCY_ARCH="x86"
+  MINGW_DIR="mingw32"
+fi
+
+GIT_LFS_VERSION=$(jq --raw-output ".[\"git-lfs\"].version[1:]" dependencies.json)
+GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)"
+GIT_FOR_WINDOWS_URL=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .url" dependencies.json)
+GIT_FOR_WINDOWS_CHECKSUM=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 
 mkdir -p "$DESTINATION"
-
-if [ "$WIN_ARCH" -eq "64" ]; then MINGW_DIR="mingw64"; else MINGW_DIR="mingw32"; fi
 
 echo "-- Downloading MinGit from $GIT_FOR_WINDOWS_URL"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
@@ -34,7 +47,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   # download Git LFS, verify its the right contents, and unpack it
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.zip
-  if [ "$WIN_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
+  if [ "$TARGET_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
   GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
   echo "-- Downloading from $GIT_LFS_URL"
   curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
@@ -43,10 +56,6 @@ if [[ "$GIT_LFS_VERSION" ]]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
     unzip -j $GIT_LFS_FILE -x '*.md' -d "$SUBFOLDER"
-
-    # this is a workaround because Git LFS changed the names of the files in the archive
-    OLD_FILE_NAME="git-lfs-windows-$GIT_LFS_ARCH.exe"
-    mv "$SUBFOLDER/$OLD_FILE_NAME" "$SUBFOLDER/git-lfs.exe"
 
     if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
       echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
@@ -77,6 +86,8 @@ else
   echo "aborting..."
   exit 1
 fi
+
+set +eu
 
 echo "-- Setting some system configuration values"
 git config --file "$SYSTEM_CONFIG" core.symlinks "false"
@@ -111,6 +122,8 @@ git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 # certificate bypass to work.
 git config --file "$SYSTEM_CONFIG" --remove-section include
 
+set -eu -o pipefail
+
 # removing global gitattributes file
 echo "-- Removing system level gitattributes which handles certain file extensions"
 
@@ -129,3 +142,5 @@ fi
 echo "-- Removing legacy credential helpers"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
+
+set +eu

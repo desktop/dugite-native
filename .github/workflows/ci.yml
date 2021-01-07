@@ -1,0 +1,139 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  pull_request:
+
+jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run ShellCheck
+        run: |
+          sudo apt-get install shellcheck
+          shopt -s globstar; shellcheck script/**/*.sh
+
+  build:
+    name: ${{ matrix.friendlyName }} ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-11.0, windows-2019, ubuntu-20.04]
+        arch: [32, 64]
+        include:
+          - os: macos-11.0
+            friendlyName: macOS
+            targetPlatform: macOS
+          - os: windows-2019
+            friendlyName: Windows
+            targetPlatform: win32
+          - os: ubuntu-20.04
+            friendlyName: Linux
+            targetPlatform: ubuntu
+        exclude:
+          - os: macos-11.0
+            arch: 32
+          - os: ubuntu-20.04
+            arch: 32
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          # Needed for script/package.sh to work
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm install
+      - name: Check formatting
+        run: npm run prettier
+      - name: Build tools
+        run: npm run check
+      - name: Install extra dependencies for building Git on Ubuntu
+        if: matrix.targetPlatform == 'ubuntu'
+        run: sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
+      - name: Build
+        shell: bash
+        run: script/build.sh
+        env:
+          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
+          TARGET_ARCH: ${{ matrix.arch }}
+      - name: Package
+        shell: bash
+        run: script/package.sh
+        env:
+          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
+          TARGET_ARCH: ${{ matrix.arch }}
+      - name: Upload output artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name:
+            dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
+          path: ./output
+          retention-days: 5
+
+  release:
+    name: Create GitHub release
+    needs: [build, shellcheck]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: './artifacts'
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: './artifacts'
+
+      - name: Get tag name without prefix
+        run: |
+          DUGITE_TAG=${GITHUB_REF/refs\/tags\//}
+          echo "DUGITE_TAG=${DUGITE_TAG}" >> $GITHUB_ENV
+          tagNameWithoutPrefix="${DUGITE_TAG:1}"
+          echo "DUGITE_TAG_WITHOUT_PREFIX=${tagNameWithoutPrefix}" >> $GITHUB_ENV
+
+      - name: Generate release notes
+        run: |
+          npm ci
+          node -r ts-node/register script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "${{ env.DUGITE_TAG }}" "${{ secrets.GITHUB_TOKEN }}"
+          RELEASE_NOTES_FILE=script/release_notes.txt
+          if [[ ! -f "$RELEASE_NOTES_FILE" ]]; then
+              echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
+              exit 1
+          fi
+          echo 'DUGITE_RELEASE_NOTES<<EOF' >> $GITHUB_ENV
+          cat ${RELEASE_NOTES_FILE} >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Git ${{ env.DUGITE_TAG_WITHOUT_PREFIX }}
+          body: ${{ env.DUGITE_RELEASE_NOTES }}
+          draft: true
+          prerelease: false
+
+      - name: Upload release assets
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Workaround since actions/upload-release-asset doesn't support wildcard paths
+          script: |
+            const script = require(`${process.env.GITHUB_WORKSPACE}/script/create-release.js`);
+            const artifactsDir = `${process.env.GITHUB_WORKSPACE}/artifacts`;
+            const releaseId = '${{ steps.create_release.outputs.id }}';
+            console.log(script({github, context, artifactsDir, releaseId}));
