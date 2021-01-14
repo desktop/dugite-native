@@ -58,10 +58,22 @@ jobs:
       - name: Install extra dependencies for building Git on Ubuntu
         if: matrix.targetPlatform == 'ubuntu'
         run: sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
-      - name: Debug
+      - name: Debug macOS
+        if: matrix.targetPlatform == 'macOS'
         shell: bash
         run: |
+          echo "curl-config --libs"
           curl-config --libs
+          echo "curl-config --vernum"
+          curl-config --vernum
+          echo "/usr/bin/curl-config --libs"
+          /usr/bin/curl-config --libs
+          echo "/usr/bin/curl-config --vernum"
+          /usr/bin/curl-config --vernum
+          brew unlink curl
+          echo "curl-config --libs"
+          curl-config --libs
+          echo "curl-config --vernum"
           curl-config --vernum
       - name: Build
         shell: bash
