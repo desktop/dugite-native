@@ -1,8 +1,5 @@
 # Dugite - The Native Bits
 
-[![Travis Build Status](https://api.travis-ci.com/desktop/dugite-native.svg?token=vdtkHSqgzNMgfyZkfVbP&branch=master)](https://travis-ci.com/desktop/dugite-native)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/j0mmb48vs7imoour/branch/master?svg=true)](https://ci.appveyor.com/project/github-windows/dugite-native/branch/master)
-
 This project contains the tooling for building a version of Git that is optimized for
 scripted usage in applications. It also removes many non-core features:
 
@@ -46,6 +43,4 @@ Bugfixes and feature requests for Git should be discussied on the [Git mailing l
 
 The [Git for Windows](https://git-for-windows.github.io) project already
 provides a minimal environment (called 'MinGit') with each release that covers
-most of the above requirements.
-
-[Travis](https://travis-ci.org/) provide the build infrastructure for compiling and packaging Git for Windows, Linux and ARM. [CircleCI](https://circleci.com) provides the build infrastructure for compiling and packaging Git on macOS. [AppVeyor](https://appveyor.com/) also provides build infrastructure for testing Windows-specific features.
+most of the above requirements
