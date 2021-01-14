@@ -1,8 +1,5 @@
 # Dugite - The Native Bits
 
-[![Travis Build Status](https://api.travis-ci.com/desktop/dugite-native.svg?token=vdtkHSqgzNMgfyZkfVbP&branch=master)](https://travis-ci.com/desktop/dugite-native)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/j0mmb48vs7imoour/branch/master?svg=true)](https://ci.appveyor.com/project/github-windows/dugite-native/branch/master)
-
 This project contains the tooling for building a version of Git that is optimized for
 scripted usage in applications. It also removes many non-core features:
 
