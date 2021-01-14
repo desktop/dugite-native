@@ -77,7 +77,6 @@ async function run(): Promise<boolean> {
     headers: {
       Accept: 'application/octet-stream',
       'User-Agent': 'dugite-native',
-      Authorization: `token ${token}`,
     },
   }).then(x => x.text())
 
