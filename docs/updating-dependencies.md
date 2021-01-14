@@ -37,39 +37,6 @@ This is the steps that this script performs:
 - find the latest Git for Windows tag that matches this pattern
 - regenerate the `dependencies.json` file with the new content
 
-Review the changes and ensure they look accurate, and then run the
-`generate-all-config` script to refresh the build configs:
-
-```shellsession
-$ npm run generate-all-config
-
-> dugite-native@ generate-all-config /Users/shiftkey/src/dugite-native
-> npm run generate-appveyor-config && npm run generate-travis-config && npm run prettier-fix
-
-
-> dugite-native@ generate-appveyor-config /Users/shiftkey/src/dugite-native
-> node script/generate-appveyor-config.js
-
-
-> dugite-native@ generate-travis-config /Users/shiftkey/src/dugite-native
-> node script/generate-travis-config.js
-
-
-> dugite-native@ prettier-fix /Users/shiftkey/src/dugite-native
-> prettier --write **/*.y{,a}ml **/*.{js,ts,json}
-
-.travis.yml 59ms
-appveyor.yml 13ms
-script/generate-appveyor-config.js 71ms
-script/generate-release-notes.js 42ms
-script/generate-travis-config.js 30ms
-script/update-git-lfs.js 23ms
-script/update-test-harness.js 10ms
-dependencies.json 7ms
-package-lock.json 23ms
-package.json 4ms
-```
-
 You're now ready to commit these changes and create a new pull request.
 
 ### Updating Git to a specific version
