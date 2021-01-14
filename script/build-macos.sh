@@ -28,7 +28,7 @@ echo "-- Building git at $SOURCE to $DESTINATION"
   cd "$SOURCE" || exit 1
   make clean
   DESTDIR="$DESTINATION" make strip install prefix=/ \
-    CURL_LDFLAGS=-lcurl \
+    CURL_CONFIG=/usr/bin/curl-config \
     NO_PERL=1 \
     NO_TCLTK=1 \
     NO_GETTEXT=1 \
