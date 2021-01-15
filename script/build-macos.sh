@@ -27,7 +27,24 @@ echo "-- Building git at $SOURCE to $DESTINATION"
 (
   cd "$SOURCE" || exit 1
   make clean
+  # On the GitHub Actions macOS runners the curl-config command resolves to
+  # a homebrew-installed version of curl which ends up providing us with a
+  # library search path (-L/usr/local/Cellar/curl/7.74.0/lib) instead of
+  # simply `-lcurl`. This causes problems when the git binaries are used on
+  # systems that don't have the homebrew version of curl. We want to use the
+  # system-provided curl.
+  #
+  # Specifically we saw this be a problem when the git-remote-https binary
+  # was signed during the bundling process of GitHub Desktop and attempts to
+  # execute it would trigger the following error
+  #
+  # dyld: Library not loaded: /usr/local/opt/curl/lib/libcurl.4.dylib
+  # Referenced from: /Applications/GitHub Desktop.app/[...]/git-remote-https
+  # Reason: image not found
+  #
+  # For this reason we set CURL_CONFIG to the system version explicitly here.
   DESTDIR="$DESTINATION" make strip install prefix=/ \
+    CURL_CONFIG=/usr/bin/curl-config \
     NO_PERL=1 \
     NO_TCLTK=1 \
     NO_GETTEXT=1 \
