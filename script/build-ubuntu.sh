@@ -119,7 +119,6 @@ rm "$DESTINATION/bin/git-shell"
 
 echo "-- Removing unsupported features"
 rm "$DESTINATION/libexec/git-core/git-svn"
-rm "$DESTINATION/libexec/git-core/git-remote-testsvn"
 rm "$DESTINATION/libexec/git-core/git-p4"
 
 set +eu

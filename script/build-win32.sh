@@ -140,7 +140,6 @@ elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
 fi
 
 echo "-- Removing legacy credential helpers"
-rm "$DESTINATION/$MINGW_DIR/bin/git-credential-store.exe"
 rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
 
 set +eu
