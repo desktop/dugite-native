@@ -126,26 +126,9 @@ script/generate-appveyor-config.js 70ms
 script/generate-release-notes.js 46ms
 script/generate-travis-config.js 29ms
 script/update-git-lfs.js 21ms
-script/update-test-harness.js 13ms
 dependencies.json 10ms
 package-lock.json 21ms
 package.json 2ms
 ```
-
-Finally, you'll need to run the `update-test-harness` script to keep our local
-test scripts in sync with the CI config.
-
-```shellsession
-$ npm run update-test-harness
-
-> dugite-native@ update-test-harness /Users/outofambit/src/dugite-native
-> ts-node script/update-test-harness.ts
-
-Updating test harness for ubuntu...
-Updating test harness for macos...
-Updating test harness for win32...
-```
-
-This primarily updates environment variables for the scripts in `test/`.
 
 **You're now ready to commit these changes and create a new pull request.**
