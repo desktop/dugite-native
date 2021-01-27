@@ -3,7 +3,6 @@
   "description": "ad-hoc scripts for helping to contribute",
   "scripts": {
     "check": "tsc",
-    "update-test-harness": "ts-node script/update-test-harness.ts",
     "update-git": "ts-node script/update-git.ts",
     "update-git-lfs": "ts-node script/update-git-lfs.ts && npm run prettier-fix",
     "generate-release-notes": "ts-node script/generate-release-notes.ts",
