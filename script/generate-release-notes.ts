@@ -29,8 +29,8 @@ export default class GenerateReleaseNotes {
     {
       key: 3,
       name: 'githubOwner',
-      description: 'GitHub repo owner'
-    }
+      description: 'GitHub repo owner',
+    },
   ]
   private expectedArgsString = this.expectedArgs
     .map(arg => `\${${arg.name}}`)
