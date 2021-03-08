@@ -109,7 +109,13 @@ export default class GenerateReleaseNotes {
       process.exit(1)
     }
 
-    const releaseEntries = await this.generateReleaseNotesEntries()
+    let releaseEntries = [
+      `You're working on a fork, where we can't reliably generate release notes. Therefore this message acts as a placeholder.`,
+    ]
+
+    if (this.githubOwner === 'desktop') {
+      releaseEntries = await this.generateReleaseNotesEntries()
+    }
     const draftReleaseNotes = this.generateDraftReleaseNotes(
       releaseEntries,
       shaEntries
