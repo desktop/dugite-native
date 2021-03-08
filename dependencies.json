@@ -21,7 +21,7 @@
         "arch": "arm64",
         "filename": "MinGit-prerelease-2.31.0-rc1.windows.1-22-g5174918c60-20210308121614-arm64.zip",
         "url": "https://github.com/dennisameling/git/releases/download/2.30.1-rc1/MinGit-prerelease-2.31.0-rc1.windows.1-22-g5174918c60-20210308121614-arm64.zip",
-        "checksum": "d105fadcc2d407952c777577aa4c263e3878816e52230e5824169cffa0d9bdc6"
+        "checksum": "cde3d380d8031d4d5b7ce70a7c33452bc21cc980e1b60ed836f8a392a5cac584"
       }
     ]
   },
