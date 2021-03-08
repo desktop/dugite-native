@@ -117,7 +117,7 @@ jobs:
       - name: Generate release notes
         run: |
           npm ci
-          node -r ts-node/register script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "${{ env.DUGITE_TAG }}" "${{ secrets.GITHUB_TOKEN }}"
+          node -r ts-node/register script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "${{ env.DUGITE_TAG }}" "${{ secrets.GITHUB_TOKEN }}" "${{ github.repository_owner }}"
           RELEASE_NOTES_FILE=script/release_notes.txt
           if [[ ! -f "$RELEASE_NOTES_FILE" ]]; then
               echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
