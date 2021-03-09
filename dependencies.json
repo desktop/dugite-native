@@ -1,6 +1,6 @@
 {
   "git": {
-    "version": "v2.29.2",
+    "version": "v2.29.3",
     "packages": [
       {
         "platform": "windows",
