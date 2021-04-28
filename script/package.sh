@@ -37,8 +37,9 @@ if [ "$TARGET_PLATFORM" == "ubuntu" ]; then
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-ubuntu.tar.gz"
   LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-ubuntu.lzma"
 elif [ "$TARGET_PLATFORM" == "macOS" ]; then
-  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.tar.gz"
-  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS.lzma"
+  if [ "$TARGET_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="arm64"; fi
+  GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS-$ARCH.tar.gz"
+  LZMA_FILE="dugite-native-$VERSION-$BUILD_HASH-macOS-$ARCH.lzma"
 elif [ "$TARGET_PLATFORM" == "win32" ]; then
   if [ "$TARGET_ARCH" -eq "64" ]; then ARCH="x64"; else ARCH="x86"; fi
   GZIP_FILE="dugite-native-$VERSION-$BUILD_HASH-windows-$ARCH.tar.gz"

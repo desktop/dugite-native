@@ -7,6 +7,16 @@ set -eu -o pipefail
 
 MACOSX_BUILD_VERSION="10.9"
 
+if [ "$TARGET_ARCH" = "64" ]; then
+  HOST_CPU=x86_64
+  TARGET_CFLAGS="-target x86_64-apple-darwin"
+  GOARCH=amd64
+else
+  HOST_CPU=arm64
+  TARGET_CFLAGS="-target arm64-apple-darwin"
+  GOARCH=arm64
+fi
+
 if [[ -z "${SOURCE}" ]]; then
   echo "Required environment variable SOURCE was not set"
   exit 1
@@ -43,7 +53,13 @@ echo "-- Building git at $SOURCE to $DESTINATION"
   # Reason: image not found
   #
   # For this reason we set CURL_CONFIG to the system version explicitly here.
+  #
+  # HACK: There is no way of adding additional CFLAGS without running the
+  # configure script. However the Makefile prepends some developer CFLAGS that
+  # we could use to select the right target CPU to cross-compile git.
   DESTDIR="$DESTINATION" make strip install prefix=/ \
+    DEVELOPER_CFLAGS="$TARGET_CFLAGS" \
+    HOST_CPU="$HOST_CPU" \
     CURL_CONFIG=/usr/bin/curl-config \
     NO_PERL=1 \
     NO_TCLTK=1 \
@@ -60,7 +76,16 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   git clone -b "v$GIT_LFS_VERSION" "https://github.com/git-lfs/git-lfs"
   (
     cd git-lfs
-    make CGO_CFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" CGO_LDFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" BUILTIN_LD_FLAGS="-linkmode external"
+
+    # HACK: When cross-compiling, there seems to be an issue when git-lfs attempts
+    # to generate the manpage contents, and it seems that preffixing that command
+    # with `GOARCH=` to use the host architecture fixes the issue.
+    # This hack can be removed once the issue is fixed via the PR
+    # https://github.com/git-lfs/git-lfs/pull/4492 or some other solution.
+    GO_GENERATE_STRING="\$(GO) generate github.com\/git-lfs\/git-lfs\/commands"
+    sed -i -e "s/$GO_GENERATE_STRING/GOARCH= $GO_GENERATE_STRING/" Makefile
+
+    make GOARCH="$GOARCH" CGO_CFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" CGO_LDFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" BUILTIN_LD_FLAGS="-linkmode external"
   )
   GIT_LFS_BINARY_PATH="git-lfs/bin/git-lfs"
   if test -f "$GIT_LFS_BINARY_PATH"; then
