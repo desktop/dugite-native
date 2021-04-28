@@ -31,6 +31,10 @@ jobs:
           - os: macos-10.15
             friendlyName: macOS
             targetPlatform: macOS
+          - os: macos-10.15
+            friendlyName: macOS
+            targetPlatform: macOS
+            arch: arm64
           - os: windows-2019
             friendlyName: Windows
             targetPlatform: win32
@@ -44,9 +48,9 @@ jobs:
             arch: 32
     timeout-minutes: 20
     steps:
-      # We need to use Xcode 10.3 for maximum compatibility with older macOS
+      # We need to use Xcode 10.3 for maximum compatibility with older macOS (x64)
       - name: Switch to Xcode 10.3
-        if: matrix.targetPlatform == 'macOS'
+        if: matrix.targetPlatform == 'macOS' && matrix.arch == 64
         run: |
           sudo xcode-select -s /Applications/Xcode_10.3.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
@@ -66,12 +70,22 @@ jobs:
       - name: Install extra dependencies for building Git on Ubuntu
         if: matrix.targetPlatform == 'ubuntu'
         run: sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
-      - name: Build
+      - name: Build (except macOS arm64)
+        if: matrix.targetPlatform != 'macOS' || matrix.arch != arm64
         shell: bash
         run: script/build.sh
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
+      - name: Build (macOS arm64)
+        if: matrix.targetPlatform == 'macOS' && matrix.arch == arm64
+        shell: bash
+        run: script/build.sh
+        env:
+          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
+          TARGET_ARCH: ${{ matrix.arch }}
+          # Needed for macOS arm64 until hosted macos-11.0 runners become available
+          SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
       - name: Package
         shell: bash
         run: script/package.sh
