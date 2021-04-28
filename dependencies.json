@@ -40,28 +40,5 @@
         "checksum": "0e13b411ca6c2b2cfb3d82b67ae747ca5d055734d0ab2030d0823fc37ad48902"
       }
     ]
-  },
-  "smimesign": {
-    "version": "0.0.6",
-    "files": [
-      {
-        "platform": "darwin",
-        "arch": "amd64",
-        "name": "smimesign-0.0.6-macos.tgz",
-        "checksum": "771790f685176b132cb287302a9374120184f7f7973038a0232efee145781906"
-      },
-      {
-        "platform": "windows",
-        "arch": "amd64",
-        "name": "smimesign-windows-amd64-0.0.6.zip",
-        "checksum": "2a2f946e31f2d74eadcdcd97b7bfc69298cee2f11cf7cb03c604d28fa1b34cd3"
-      },
-      {
-        "platform": "windows",
-        "arch": "x86",
-        "name": "smimesign-windows-386-0.0.6.zip",
-        "checksum": "9a13d00aa02c0a5d277c030297d09f10a467f31e6740f1520a08e09a23046323"
-      }
-    ]
   }
 }
