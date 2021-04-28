@@ -27,6 +27,7 @@ jobs:
       matrix:
         os: [macos-10.15, windows-2019, ubuntu-18.04]
         arch: [32, 64]
+        go: [1.16.3]
         include:
           - os: macos-10.15
             friendlyName: macOS
@@ -61,6 +62,10 @@ jobs:
           submodules: recursive
           # Needed for script/package.sh to work
           fetch-depth: 0
+      - name: Use go ${{ matrix.go }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
       - name: Install dependencies
         run: npm install
       - name: Check formatting
