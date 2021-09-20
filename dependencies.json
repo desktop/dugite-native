@@ -1,43 +1,43 @@
 {
   "git": {
-    "version": "v2.29.3",
+    "version": "v2.32.0",
     "packages": [
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "MinGit-2.29.2.windows.4-64-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.4/MinGit-2.29.2.windows.4-64-bit.zip",
-        "checksum": "620995114a92fb96182d19088a9da0b8958270553a6086f3094f6f51ffd9a839"
+        "filename": "MinGit-2.32.0.2-64-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.32.0.windows.2/MinGit-2.32.0.2-64-bit.zip",
+        "checksum": "40e0e8a8a4ccc3399d323b2edfab34fc4ebac7350471525d679d9839b689f4a6"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "MinGit-2.29.2.windows.4-32-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.4/MinGit-2.29.2.windows.4-32-bit.zip",
-        "checksum": "fded94aeccac5a6a148d0ebf4702ac64b16397a896eddb3f43a0d0fe17b2da1e"
+        "filename": "MinGit-2.32.0.2-32-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.32.0.windows.2/MinGit-2.32.0.2-32-bit.zip",
+        "checksum": "f253b0d3dca2ab09ba616b1da6aea3dffe9a66befccd8933b61271400d15c447"
       }
     ]
   },
   "git-lfs": {
-    "version": "v2.13.2",
+    "version": "v2.13.3",
     "files": [
       {
         "platform": "linux",
         "arch": "amd64",
-        "name": "git-lfs-linux-amd64-v2.13.2.tar.gz",
-        "checksum": "7913f267c84518860551384313ece6f2e72cb5a18cf9987189a087108346267d"
+        "name": "git-lfs-linux-amd64-v2.13.3.tar.gz",
+        "checksum": "03197488f7be54cfc7b693f0ed6c75ac155f5aaa835508c64d68ec8f308b04c1"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "name": "git-lfs-windows-386-v2.13.2.zip",
-        "checksum": "27d061f9fd6b14555c220758ae0b77d81ef20f64dde0179a515d55a75f5355a8"
+        "name": "git-lfs-windows-386-v2.13.3.zip",
+        "checksum": "ba10671d021f39269f0c8374c9ae140a5acbd73a30e3b812173a80b777a2e867"
       },
       {
         "platform": "windows",
         "arch": "amd64",
-        "name": "git-lfs-windows-amd64-v2.13.2.zip",
-        "checksum": "0e13b411ca6c2b2cfb3d82b67ae747ca5d055734d0ab2030d0823fc37ad48902"
+        "name": "git-lfs-windows-amd64-v2.13.3.zip",
+        "checksum": "7997d2a6e4103af331c73db10860426cb03c5188426d27619e823358493e13e4"
       }
     ]
   }
