@@ -75,7 +75,9 @@ jobs:
         run: npm run check
       - name: Install extra dependencies for building Git on Ubuntu
         if: matrix.targetPlatform == 'ubuntu'
-        run: sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
+        run: |
+          sudo apt-get update
+          sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
       - name: Build (except macOS arm64)
         if: matrix.targetPlatform != 'macOS' || matrix.arch != 'arm64'
         shell: bash
