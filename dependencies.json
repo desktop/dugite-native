@@ -1,20 +1,20 @@
 {
   "git": {
-    "version": "v2.32.1",
+    "version": "v2.35.2",
     "packages": [
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "MinGit-2.32.1.windows.1-64-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.32.1.windows.1/MinGit-2.32.1.windows.1-64-bit.zip",
-        "checksum": "0fd57291f69d080d8f7a80ac6c35b381dd5c678eeac104d0e44024e6add96679"
+        "filename": "MinGit-2.35.2-64-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.35.2.windows.1/MinGit-2.35.2-64-bit.zip",
+        "checksum": "61f0f2d9abd7d54fbb81b30519d4aad8be66268e67cfc9d47871010d340821c5"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "MinGit-2.32.1.windows.1-32-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.32.1.windows.1/MinGit-2.32.1.windows.1-32-bit.zip",
-        "checksum": "82d20789bd6186c3de88d92b172a6f48e003b24429cccd89348e916cbbba5349"
+        "filename": "MinGit-2.35.2-32-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.35.2.windows.1/MinGit-2.35.2-32-bit.zip",
+        "checksum": "ddaa82f450140b2927369d757f68353467b65e31b1a0b85c537ad2759024157d"
       }
     ]
   },
