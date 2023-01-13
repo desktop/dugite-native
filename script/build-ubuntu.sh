@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -e -x
 #
 # Compiling Git for Linux and bundling Git LFS from upstream.
 #
