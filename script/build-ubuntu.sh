@@ -79,7 +79,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/libexec/git-core"
-    tar -xvf $GIT_LFS_FILE -C "$SUBFOLDER" --exclude='*.sh' --exclude="*.md"
+    tar -xvf $GIT_LFS_FILE -C "$SUBFOLDER" --strip-components=1 --exclude='*.sh' --exclude="*.md"
 
     if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
       echo "After extracting Git LFS the file was not found under libexec/git-core/"
