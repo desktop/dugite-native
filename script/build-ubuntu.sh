@@ -20,15 +20,17 @@ if [[ -z "${CURL_INSTALL_DIR}" ]]; then
   exit 1
 fi
 
-if [ "$TARGET_ARCH" = "64" ]; then
-  DEPENDENCY_ARCH="amd64"
-else
-  DEPENDENCY_ARCH="x86"
-fi
+case "$TARGET_ARCH" in
+  "x64") DEPENDENCY_ARCH="amd64" ;;
+  "arm64") DEPENDENCY_ARCH="arm64" ;;
+  "arm") DEPENDENCY_ARCH="arm" ;;
+  *) DEPENDENCY_ARCH="x86" ;;
+esac
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
 GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .checksum" dependencies.json)"
+GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .name" dependencies.json)"
 
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
@@ -72,7 +74,7 @@ DESTDIR="$DESTINATION" \
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.tar.gz
-  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz"
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/${GIT_LFS_FILENAME}"
   echo "-- Downloading from $GIT_LFS_URL"
   curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
   COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)
