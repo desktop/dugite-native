@@ -21,10 +21,26 @@ if [[ -z "${CURL_INSTALL_DIR}" ]]; then
 fi
 
 case "$TARGET_ARCH" in
-  "x64") DEPENDENCY_ARCH="amd64" ;;
-  "arm64") DEPENDENCY_ARCH="arm64" ;;
-  "arm") DEPENDENCY_ARCH="arm" ;;
-  *) DEPENDENCY_ARCH="x86" ;;
+  "x64") 
+    DEPENDENCY_ARCH="amd64"
+    export CC="gcc"
+    STRIP="strip"
+    HOST=""
+    TARGET="" ;;
+  "arm64")
+    DEPENDENCY_ARCH="arm64"
+    export CC="aarch64-linux-gnu-gcc"
+    STRIP="aarch64-linux-gnu-strip"
+    HOST="--host=aarch64-linux-gnu"
+    TARGET="--target=aarch64-linux-gnu" ;;
+  "arm")     
+    DEPENDENCY_ARCH="arm"
+    export CC="arm-linux-gnueabihf-gcc"
+    STRIP="arm-linux-gnueabihf-strip"
+    HOST="--host=arm-linux-gnueabihf"
+    TARGET="--target=arm-linux-gnueabihf" ;;
+  *)
+    exit 1 ;;
 esac
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -48,7 +64,7 @@ tar -xf $CURL_FILE
 
 (
 cd $CURL_FILE_NAME || exit 1
-./configure --prefix="$CURL_INSTALL_DIR"
+./configure --prefix="$CURL_INSTALL_DIR" "$HOST" "$TARGET"
 make install
 )
 echo " -- Building git at $SOURCE to $DESTINATION"
@@ -57,12 +73,12 @@ echo " -- Building git at $SOURCE to $DESTINATION"
 cd "$SOURCE" || exit 1
 make clean
 make configure
-CC='gcc' \
-  CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
-  LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
-  ./configure \
+CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
+  LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' ac_cv_iconv_omits_bom=no ac_cv_fread_reads_directories=no ac_cv_snprintf_returns_bogus=no \
+  ./configure $HOST \
   --with-curl="$CURL_INSTALL_DIR" \
   --prefix=/
+sed -i "s/STRIP = strip/STRIP = $STRIP/" Makefile
 DESTDIR="$DESTINATION" \
   NO_TCLTK=1 \
   NO_GETTEXT=1 \
@@ -130,12 +146,13 @@ check_static_linking "$DESTINATION"
 
 set -eu -o pipefail
 
+if [ "$TARGET_ARCH" == "x64" ]; then
+(
 echo "-- Testing clone operation with generated binary"
 
 TEMP_CLONE_DIR=/tmp/clones
 mkdir -p $TEMP_CLONE_DIR
 
-(
 cd "$DESTINATION/bin" || exit 1
 ./git --version
 GIT_CURL_VERBOSE=1 \
@@ -145,5 +162,6 @@ GIT_CURL_VERBOSE=1 \
   PREFIX="$DESTINATION" \
   ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
 )
+fi
 
 set +eu
