@@ -27,6 +27,12 @@ case "$TARGET_ARCH" in
     STRIP="strip"
     HOST=""
     TARGET="" ;;
+  "x86")
+    DEPENDENCY_ARCH="x86"
+    export CC="i686-linux-gnu-gcc"
+    STRIP="i686-gnu-strip"
+    HOST="--host=i686-linux-gnu"
+    TARGET="--target=i686-linux-gnu" ;;
   "arm64")
     DEPENDENCY_ARCH="arm64"
     export CC="aarch64-linux-gnu-gcc"

@@ -54,8 +54,6 @@ jobs:
         exclude:
           - os: macos-10.15
             arch: x86
-          - os: ubuntu-18.04
-            arch: x86
     timeout-minutes: 20
     steps:
       # We need to use Xcode 10.3 for maximum compatibility with older macOS (x64)
@@ -86,6 +84,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
+      - name: Install extra dependencies for building Git on Ubuntu (x86)
+        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x86'
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install gcc-i686-linux-gnu binutils-i686-gnu libcurl4-openssl-dev:i386 libssl-dev:i386 zlib1g-dev:i386 gettext
       - name: Install extra dependencies for building Git on Ubuntu (arm64)
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm64'
         run: |
