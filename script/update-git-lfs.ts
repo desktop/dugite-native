@@ -27,6 +27,12 @@ function getArch(fileName: string) {
   if (fileName.match(/-386-/)) {
     return 'x86'
   }
+  if (fileName.match(/-arm64-/)) {
+    return 'arm64'
+  }
+  if (fileName.match(/-arm-/)) {
+    return 'arm'
+  }
 
   throw new Error(`Unable to find arch for file: ${fileName}`)
 }
@@ -82,6 +88,9 @@ async function run(): Promise<boolean> {
 
   const files = [
     `git-lfs-linux-amd64-${version}.tar.gz`,
+    `git-lfs-linux-386-${version}.tar.gz`,
+    `git-lfs-linux-arm64-${version}.tar.gz`,
+    `git-lfs-linux-arm-${version}.tar.gz`,
     `git-lfs-windows-386-${version}.zip`,
     `git-lfs-windows-amd64-${version}.zip`,
   ]

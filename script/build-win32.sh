@@ -10,7 +10,7 @@ if [[ -z "${DESTINATION}" ]]; then
   exit 1
 fi
 
-if [ "$TARGET_ARCH" = "64" ]; then
+if [ "$TARGET_ARCH" = "x64" ]; then
   DEPENDENCY_ARCH="amd64"
   MINGW_DIR="mingw64"
 else
@@ -20,6 +20,7 @@ fi
 
 GIT_LFS_VERSION=$(jq --raw-output ".[\"git-lfs\"].version[1:]" dependencies.json)
 GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)"
+GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .name" dependencies.json)"
 GIT_FOR_WINDOWS_URL=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .url" dependencies.json)
 GIT_FOR_WINDOWS_CHECKSUM=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)
 
@@ -47,8 +48,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   # download Git LFS, verify its the right contents, and unpack it
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.zip
-  if [ "$TARGET_ARCH" -eq "64" ]; then GIT_LFS_ARCH="amd64"; else GIT_LFS_ARCH="386"; fi
-  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/${GIT_LFS_FILENAME}"
   echo "-- Downloading from $GIT_LFS_URL"
   curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
   COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)

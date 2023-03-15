@@ -7,7 +7,7 @@ set -eu -o pipefail
 
 MACOSX_BUILD_VERSION="10.9"
 
-if [ "$TARGET_ARCH" = "64" ]; then
+if [ "$TARGET_ARCH" = "x64" ]; then
   HOST_CPU=x86_64
   TARGET_CFLAGS="-target x86_64-apple-darwin"
   GOARCH=amd64
