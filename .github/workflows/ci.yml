@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-10.15, windows-2019, ubuntu-18.04]
+        os: [macos-10.15, windows-2019, ubuntu-20.04]
         arch: [x86, x64]
         go: [1.16.3]
         include:
@@ -40,14 +40,14 @@ jobs:
           - os: windows-2019
             friendlyName: Windows
             targetPlatform: win32
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm64
-          - os: ubuntu-18.04
+          - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm
