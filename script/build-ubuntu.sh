@@ -20,39 +20,15 @@ if [[ -z "${CURL_INSTALL_DIR}" ]]; then
   exit 1
 fi
 
-case "$TARGET_ARCH" in
-  "x64") 
-    DEPENDENCY_ARCH="amd64"
-    export CC="gcc"
-    STRIP="strip"
-    HOST=""
-    TARGET="" ;;
-  "x86")
-    DEPENDENCY_ARCH="x86"
-    export CC="i686-linux-gnu-gcc"
-    STRIP="i686-gnu-strip"
-    HOST="--host=i686-linux-gnu"
-    TARGET="--target=i686-linux-gnu" ;;
-  "arm64")
-    DEPENDENCY_ARCH="arm64"
-    export CC="aarch64-linux-gnu-gcc"
-    STRIP="aarch64-linux-gnu-strip"
-    HOST="--host=aarch64-linux-gnu"
-    TARGET="--target=aarch64-linux-gnu" ;;
-  "arm")     
-    DEPENDENCY_ARCH="arm"
-    export CC="arm-linux-gnueabihf-gcc"
-    STRIP="arm-linux-gnueabihf-strip"
-    HOST="--host=arm-linux-gnueabihf"
-    TARGET="--target=arm-linux-gnueabihf" ;;
-  *)
-    exit 1 ;;
-esac
+if [ "$TARGET_ARCH" = "64" ]; then
+  DEPENDENCY_ARCH="amd64"
+else
+  DEPENDENCY_ARCH="x86"
+fi
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
 GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .checksum" dependencies.json)"
-GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .name" dependencies.json)"
 
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
@@ -70,7 +46,7 @@ tar -xf $CURL_FILE
 
 (
 cd $CURL_FILE_NAME || exit 1
-./configure --prefix="$CURL_INSTALL_DIR" "$HOST" "$TARGET"
+./configure --prefix="$CURL_INSTALL_DIR"
 make install
 )
 echo " -- Building git at $SOURCE to $DESTINATION"
@@ -79,12 +55,12 @@ echo " -- Building git at $SOURCE to $DESTINATION"
 cd "$SOURCE" || exit 1
 make clean
 make configure
-CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
-  LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' ac_cv_iconv_omits_bom=no ac_cv_fread_reads_directories=no ac_cv_snprintf_returns_bogus=no \
-  ./configure $HOST \
+CC='gcc' \
+  CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
+  LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' \
+  ./configure \
   --with-curl="$CURL_INSTALL_DIR" \
   --prefix=/
-sed -i "s/STRIP = strip/STRIP = $STRIP/" Makefile
 DESTDIR="$DESTINATION" \
   NO_TCLTK=1 \
   NO_GETTEXT=1 \
@@ -96,7 +72,7 @@ DESTDIR="$DESTINATION" \
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.tar.gz
-  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/${GIT_LFS_FILENAME}"
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-linux-amd64-v${GIT_LFS_VERSION}.tar.gz"
   echo "-- Downloading from $GIT_LFS_URL"
   curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
   COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)
@@ -152,13 +128,12 @@ check_static_linking "$DESTINATION"
 
 set -eu -o pipefail
 
-if [ "$TARGET_ARCH" == "x64" ]; then
-(
 echo "-- Testing clone operation with generated binary"
 
 TEMP_CLONE_DIR=/tmp/clones
 mkdir -p $TEMP_CLONE_DIR
 
+(
 cd "$DESTINATION/bin" || exit 1
 ./git --version
 GIT_CURL_VERBOSE=1 \
@@ -168,6 +143,5 @@ GIT_CURL_VERBOSE=1 \
   PREFIX="$DESTINATION" \
   ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
 )
-fi
 
 set +eu
