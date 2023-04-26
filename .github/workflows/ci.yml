@@ -26,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-10.15, windows-2019, ubuntu-18.04]
-        arch: [32, 64]
+        arch: [x86, x64]
         go: [1.16.3]
         include:
           - os: macos-10.15
@@ -43,16 +43,22 @@ jobs:
           - os: ubuntu-18.04
             friendlyName: Linux
             targetPlatform: ubuntu
+          - os: ubuntu-18.04
+            friendlyName: Linux
+            targetPlatform: ubuntu
+            arch: arm64
+          - os: ubuntu-18.04
+            friendlyName: Linux
+            targetPlatform: ubuntu
+            arch: arm
         exclude:
           - os: macos-10.15
-            arch: 32
-          - os: ubuntu-18.04
-            arch: 32
+            arch: x86
     timeout-minutes: 20
     steps:
       # We need to use Xcode 10.3 for maximum compatibility with older macOS (x64)
       - name: Switch to Xcode 10.3
-        if: matrix.targetPlatform == 'macOS' && matrix.arch == 64
+        if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
         run: |
           sudo xcode-select -s /Applications/Xcode_10.3.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
@@ -73,11 +79,35 @@ jobs:
         run: npm run prettier
       - name: Build tools
         run: npm run check
-      - name: Install extra dependencies for building Git on Ubuntu
-        if: matrix.targetPlatform == 'ubuntu'
+      - name: Install extra dependencies for building Git on Ubuntu (x64)
+        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x64'
         run: |
           sudo apt-get update
           sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
+      - name: Install extra dependencies for building Git on Ubuntu (x86)
+        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x86'
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install gcc-i686-linux-gnu binutils-i686-gnu libcurl4-openssl-dev:i386 libssl-dev:i386 zlib1g-dev:i386 gettext
+      - name: Install extra dependencies for building Git on Ubuntu (arm64)
+        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm64'
+        run: |
+          sudo sed -i "s/^deb/deb [arch=amd64,i386]/g" /etc/apt/sources.list
+          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c) main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
+          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
+          sudo dpkg --add-architecture arm64
+          sudo apt-get update
+          sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu libcurl4-openssl-dev:arm64 libssl-dev:arm64 zlib1g-dev:arm64 gettext
+      - name: Install extra dependencies for building Git on Ubuntu (arm)
+        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm'
+        run: |
+          sudo sed -i "s/^deb/deb [arch=amd64,i386]/g" /etc/apt/sources.list
+          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c) main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
+          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
+          sudo dpkg --add-architecture armhf
+          sudo apt-get update
+          sudo apt-get install gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf libcurl4-openssl-dev:armhf libssl-dev:armhf zlib1g-dev:armhf gettext
       - name: Build (except macOS arm64)
         if: matrix.targetPlatform != 'macOS' || matrix.arch != 'arm64'
         shell: bash
