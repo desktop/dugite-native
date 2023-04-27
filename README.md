@@ -37,7 +37,7 @@ Bugfixes and feature requests for Git should be discussied on the [Git mailing l
 
  - Windows 7 and later
  - macOS 10.9 and up
- - Linux (tested on Ubuntu Precise/Trusty and Fedora 24)
+ - Linux (GLIBC 2.17+ on x64/arm64 systems and GLIBC 2.28+ on x86/arm32 systems)
 
 ### Credits
 
