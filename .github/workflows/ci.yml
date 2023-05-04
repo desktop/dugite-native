@@ -83,13 +83,13 @@ jobs:
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x64'
         run: |
           sudo apt-get update
-          sudo apt-get install libcurl4-openssl-dev libexpat1-dev gettext
+          sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext
       - name: Install extra dependencies for building Git on Ubuntu (x86)
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x86'
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install gcc-i686-linux-gnu binutils-i686-gnu libcurl4-openssl-dev:i386 libssl-dev:i386 zlib1g-dev:i386 gettext
+          sudo apt-get install gcc-i686-linux-gnu binutils-i686-gnu libcurl4-gnutls-dev:i386 zlib1g-dev:i386 gettext
       - name: Install extra dependencies for building Git on Ubuntu (arm64)
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm64'
         run: |
@@ -98,7 +98,7 @@ jobs:
           echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
           sudo dpkg --add-architecture arm64
           sudo apt-get update
-          sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu libcurl4-openssl-dev:arm64 libssl-dev:arm64 zlib1g-dev:arm64 gettext
+          sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu libcurl4-gnutls-dev:arm64 zlib1g-dev:arm64 gettext
       - name: Install extra dependencies for building Git on Ubuntu (arm)
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm'
         run: |
@@ -107,7 +107,7 @@ jobs:
           echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
           sudo dpkg --add-architecture armhf
           sudo apt-get update
-          sudo apt-get install gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf libcurl4-openssl-dev:armhf libssl-dev:armhf zlib1g-dev:armhf gettext
+          sudo apt-get install gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf libcurl4-gnutls-dev:armhf zlib1g-dev:armhf gettext
       - name: Build (except macOS arm64)
         if: matrix.targetPlatform != 'macOS' || matrix.arch != 'arm64'
         shell: bash
