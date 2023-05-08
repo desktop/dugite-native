@@ -52,7 +52,7 @@ jobs:
             targetPlatform: ubuntu
             arch: arm
         exclude:
-          - os: macos-10.15
+          - os: macos-11
             arch: x86
     timeout-minutes: 20
     steps:
