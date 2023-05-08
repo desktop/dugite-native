@@ -58,7 +58,7 @@ jobs:
     steps:
       # We need to use Xcode 11.7 for maximum compatibility with older macOS (x64)
       - name: Switch to Xcode 11.7
-        if: matrix.targetPlatform == 'macOS'
+        if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
         run: |
           sudo xcode-select -s /Applications/Xcode_11.7.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
@@ -122,8 +122,6 @@ jobs:
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
-          # Needed for macOS arm64 until hosted macos-11.0 runners become available
-          SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
       - name: Package
         shell: bash
         run: script/package.sh
