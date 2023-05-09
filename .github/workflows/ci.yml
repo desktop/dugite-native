@@ -25,14 +25,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-10.15, windows-2019, ubuntu-20.04]
+        os: [macos-11, windows-2019, ubuntu-20.04]
         arch: [x86, x64]
         go: [1.16.3]
         include:
-          - os: macos-10.15
+          - os: macos-11
             friendlyName: macOS
             targetPlatform: macOS
-          - os: macos-10.15
+          - os: macos-11
             friendlyName: macOS
             targetPlatform: macOS
             arch: arm64
@@ -52,17 +52,17 @@ jobs:
             targetPlatform: ubuntu
             arch: arm
         exclude:
-          - os: macos-10.15
+          - os: macos-11
             arch: x86
     timeout-minutes: 20
     steps:
-      # We need to use Xcode 10.3 for maximum compatibility with older macOS (x64)
-      - name: Switch to Xcode 10.3
+      # We need to use Xcode 11.7 for maximum compatibility with older macOS (x64)
+      - name: Switch to Xcode 11.7
         if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
         run: |
-          sudo xcode-select -s /Applications/Xcode_10.3.app/Contents/Developer/
+          sudo xcode-select -s /Applications/Xcode_11.7.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
-          # messed up with macOS SDK 10.15 stuff.
+          # messed up with macOS SDK 11 stuff.
           sudo rm -rf /Library/Developer/CommandLineTools
       - uses: actions/checkout@v2
         with:
@@ -122,8 +122,6 @@ jobs:
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
-          # Needed for macOS arm64 until hosted macos-11.0 runners become available
-          SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
       - name: Package
         shell: bash
         run: script/package.sh
