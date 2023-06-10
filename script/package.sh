@@ -7,17 +7,16 @@
 
 set -eu -o pipefail
 
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SOURCE="./git"
 DESTINATION="/tmp/build/git"
 
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 
-VERSION=$(
-  cd $SOURCE || exit 1
-  VERSION=$(git describe --exact-match HEAD)
-  EXIT_CODE=$?
+cd $SOURCE
+VERSION=$(git describe --exact-match HEAD)
+EXIT_CODE=$?
 
   if [ "$EXIT_CODE" == "128" ]; then
     echo "Git commit does not have tag, cannot use version to build from"
@@ -86,3 +85,8 @@ echo "${LZMA_FILE} - ${LZMA_SIZE} - checksum: ${LZMA_CHECKSUM}"
 )
 
 set +eu
+
+# AppVeyor and travis case these differently :/
+if [ "$CI" == "True" ] || [ "$CI" == "true" ]; then
+  node script/upload-build-asset.js $FILE
+fi

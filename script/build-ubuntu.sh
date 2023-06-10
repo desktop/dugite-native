@@ -86,8 +86,7 @@ make install
 )
 echo " -- Building git at $SOURCE to $DESTINATION"
 
-(
-cd "$SOURCE" || exit 1
+cd $SOURCE
 make clean
 make configure
 CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
