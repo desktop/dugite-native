@@ -1,73 +1,61 @@
 {
   "git": {
-    "version": "v2.29.2",
+    "version": "v2.39.3",
     "packages": [
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "MinGit-2.29.2.3-64-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.3/MinGit-2.29.2.3-64-bit.zip",
-        "checksum": "2f154719def1d48a06d292fca6c9c8af2df0ae82797a155e35754b2ffd374f8c"
+        "filename": "MinGit-2.39.3.windows.1-64-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.39.3.windows.1/MinGit-2.39.3.windows.1-64-bit.zip",
+        "checksum": "ffc5d2213ff567d35c15f3916d54f1d39a5c34e0ce70aa2450ab5b7e0551e2f8"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "MinGit-2.29.2.3-32-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.29.2.windows.3/MinGit-2.29.2.3-32-bit.zip",
-        "checksum": "e2b7302b2cb013a27984ba65aeff11030b32b7e19deb228304e3e5b85b31befd"
-      },
-      {
-        "platform": "windows",
-        "arch": "arm64",
-        "filename": "MinGit-prerelease-2.31.0-rc1.windows.1-22-g5174918c60-20210308121614-arm64.zip",
-        "url": "https://github.com/dennisameling/git/releases/download/2.30.1-rc1/MinGit-prerelease-2.31.0-rc1.windows.1-22-g5174918c60-20210308121614-arm64.zip",
-        "checksum": "cde3d380d8031d4d5b7ce70a7c33452bc21cc980e1b60ed836f8a392a5cac584"
+        "filename": "MinGit-2.39.3.windows.1-32-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.39.3.windows.1/MinGit-2.39.3.windows.1-32-bit.zip",
+        "checksum": "ac4c461ba7dd682e0c35f9675e96de3e8969938f5a4fb77c6f522b7655f834f4"
       }
     ]
   },
   "git-lfs": {
-    "version": "v2.13.2",
+    "version": "v3.3.0",
     "files": [
       {
         "platform": "linux",
         "arch": "amd64",
-        "name": "git-lfs-linux-amd64-v2.13.2.tar.gz",
-        "checksum": "7913f267c84518860551384313ece6f2e72cb5a18cf9987189a087108346267d"
+        "name": "git-lfs-linux-amd64-v3.3.0.tar.gz",
+        "checksum": "6a4e6bd7d06d5c024bc70c8ee8c9da143ffc37d2646e252a17a6126d30cdebc1"
       },
       {
-        "platform": "windows",
-        "arch": "386",
-        "name": "git-lfs-windows-386-v2.13.2.zip",
-        "checksum": "27d061f9fd6b14555c220758ae0b77d81ef20f64dde0179a515d55a75f5355a8"
+        "platform": "linux",
+        "arch": "x86",
+        "name": "git-lfs-linux-386-v3.3.0.tar.gz",
+        "checksum": "14415ebafc3ace60f178cd69d4f2e0ed42dbbf32cb2aba80e46ec3c8f7c1401f"
       },
       {
-        "platform": "windows",
-        "arch": "amd64",
-        "name": "git-lfs-windows-amd64-v2.13.2.zip",
-        "checksum": "0e13b411ca6c2b2cfb3d82b67ae747ca5d055734d0ab2030d0823fc37ad48902"
-      }
-    ]
-  },
-  "smimesign": {
-    "version": "0.0.6",
-    "files": [
-      {
-        "platform": "darwin",
-        "arch": "amd64",
-        "name": "smimesign-0.0.6-macos.tgz",
-        "checksum": "771790f685176b132cb287302a9374120184f7f7973038a0232efee145781906"
+        "platform": "linux",
+        "arch": "arm64",
+        "name": "git-lfs-linux-arm64-v3.3.0.tar.gz",
+        "checksum": "e97c477981a9b6a40026cadc1bf005541d973fc32df2de2f398643b15df6b5c6"
       },
       {
-        "platform": "windows",
-        "arch": "amd64",
-        "name": "smimesign-windows-amd64-0.0.6.zip",
-        "checksum": "2a2f946e31f2d74eadcdcd97b7bfc69298cee2f11cf7cb03c604d28fa1b34cd3"
+        "platform": "linux",
+        "arch": "arm",
+        "name": "git-lfs-linux-arm-v3.3.0.tar.gz",
+        "checksum": "df8b24cf7ff6a2f105dd1a3d0a4990c53980272ea94da67d854921e21bc5444c"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "name": "smimesign-windows-386-0.0.6.zip",
-        "checksum": "9a13d00aa02c0a5d277c030297d09f10a467f31e6740f1520a08e09a23046323"
+        "name": "git-lfs-windows-386-v3.3.0.zip",
+        "checksum": "81fd4b01719e1e0ccf347596293f19a07fba8573c6aee1e1521b2932d9b6179d"
+      },
+      {
+        "platform": "windows",
+        "arch": "amd64",
+        "name": "git-lfs-windows-amd64-v3.3.0.zip",
+        "checksum": "1df5874f22c35c679159f0aaf9e24333051f52768eade0204d22200b79141743"
       }
     ]
   }

@@ -10,31 +10,19 @@ if [[ -z "${DESTINATION}" ]]; then
   exit 1
 fi
 
-case $TARGET_ARCH in
-  64)
-    GIT_ARCH="amd64"
-    MINGW_DIR="mingw64"
-    GIT_LFS_ARCH="amd64"
-    ;;
-  32)
-    GIT_ARCH="x86"
-    MINGW_DIR="mingw32"
-    GIT_LFS_ARCH="386"
-    ;;
-  arm64)
-    GIT_ARCH="arm64"
-    MINGW_DIR="arm64"
-    GIT_LFS_ARCH="386"
-    ;;
-  *)
-	  die "Unsupported architecture: $TARGET_ARCH"
-	  ;;
-esac
+if [ "$TARGET_ARCH" = "x64" ]; then
+  DEPENDENCY_ARCH="amd64"
+  MINGW_DIR="mingw64"
+else
+  DEPENDENCY_ARCH="x86"
+  MINGW_DIR="mingw32"
+fi
 
 GIT_LFS_VERSION=$(jq --raw-output ".[\"git-lfs\"].version[1:]" dependencies.json)
-GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$GIT_LFS_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)"
-GIT_FOR_WINDOWS_URL=$(jq --raw-output ".git.packages[] | select(.arch == \"$GIT_ARCH\" and .platform == \"windows\") | .url" dependencies.json)
-GIT_FOR_WINDOWS_CHECKSUM=$(jq --raw-output ".git.packages[] | select(.arch == \"$GIT_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)
+GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)"
+GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .name" dependencies.json)"
+GIT_FOR_WINDOWS_URL=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .url" dependencies.json)
+GIT_FOR_WINDOWS_CHECKSUM=$(jq --raw-output ".git.packages[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"windows\") | .checksum" dependencies.json)
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=script/compute-checksum.sh
@@ -60,7 +48,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   # download Git LFS, verify its the right contents, and unpack it
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.zip
-  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/git-lfs-windows-${GIT_LFS_ARCH}-v${GIT_LFS_VERSION}.zip"
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/${GIT_LFS_FILENAME}"
   echo "-- Downloading from $GIT_LFS_URL"
   curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
   COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)
@@ -150,5 +138,8 @@ if [[ -f "$DESTINATION/etc/gitattributes" ]]; then
 elif [[ -f "$DESTINATION/$MINGW_DIR/etc/gitattributes" ]]; then
   rm "$DESTINATION/$MINGW_DIR/etc/gitattributes"
 fi
+
+echo "-- Removing legacy credential helpers"
+rm "$DESTINATION/$MINGW_DIR/bin/git-credential-wincred.exe"
 
 set +eu
