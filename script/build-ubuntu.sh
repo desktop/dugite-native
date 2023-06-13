@@ -98,6 +98,7 @@ sed -i "s/STRIP = strip/STRIP = $STRIP/" Makefile
 DESTDIR="$DESTINATION" \
   NO_TCLTK=1 \
   NO_GETTEXT=1 \
+  USE_LIBPCRE1=1 \
   NO_INSTALL_HARDLINKS=1 \
   NO_R_TO_GCC_LINKER=1 \
   make strip install
@@ -205,6 +206,3 @@ GIT_CURL_VERBOSE=1 \
   PREFIX="$DESTINATION" \
   ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
 )
-fi
-
-set +eu
