@@ -34,9 +34,10 @@ source "$CURRENT_DIR/compute-checksum.sh"
 
 echo "-- Building git at $SOURCE to $DESTINATION"
 
-cd $SOURCE
-make clean
-DESTDIR="$DESTINATION" make install prefix=/ \
+(
+  cd "$SOURCE" || exit 1
+  make clean
+  DESTDIR="$DESTINATION" make strip install prefix=/ \
     NO_PERL=1 \
     NO_TCLTK=1 \
     USE_LIBPCRE=1 \
