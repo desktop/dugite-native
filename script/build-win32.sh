@@ -30,13 +30,13 @@ source "$CURRENT_DIR/compute-checksum.sh"
 
 mkdir -p "$DESTINATION"
 
-echo "-- Downloading MinGit from $GIT_FOR_WINDOWS_URL"
+echo "-- Downloading MinGit"
 GIT_FOR_WINDOWS_FILE=git-for-windows.zip
-curl -sL -o $GIT_FOR_WINDOWS_FILE "$GIT_FOR_WINDOWS_URL"
-COMPUTED_SHA256=$(compute_checksum $GIT_FOR_WINDOWS_FILE)
+curl -sL -o $GIT_FOR_WINDOWS_FILE $GIT_FOR_WINDOWS_URL
+COMPUTED_SHA256=$(computeChecksum $GIT_FOR_WINDOWS_FILE)
 if [ "$COMPUTED_SHA256" = "$GIT_FOR_WINDOWS_CHECKSUM" ]; then
   echo "MinGit: checksums match"
-  unzip -qq $GIT_FOR_WINDOWS_FILE -d "$DESTINATION"
+  unzip -qq $GIT_FOR_WINDOWS_FILE -d $DESTINATION
 else
   echo "MinGit: expected checksum $GIT_FOR_WINDOWS_CHECKSUM but got $COMPUTED_SHA256"
   echo "aborting..."
@@ -122,7 +122,8 @@ git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 # certificate bypass to work.
 git config --file "$SYSTEM_CONFIG" --remove-section include
 
-set -eu -o pipefail
+git config --file $SYSTEM_CONFIG http.sslBackend "schannel"
+echo "-- Setting the system configuration to use SChannel for the SSL backend"
 
 # removing global gitattributes file
 echo "-- Removing system level gitattributes which handles certain file extensions"

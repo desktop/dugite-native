@@ -1,29 +1,20 @@
 # Making Changes
 
-This document outlines how to make changes to the scripts and processes around
-`dugite-native`.
+To improve the `dugite-native` toolchain, just find the appropriate hook.
 
-## Updating Dependencies
+## Update Git
 
-If you need to update a dependency, refer to the [Updating Dependencies](https://github.com/desktop/dugite-native/blob/master/docs/updating-dependencies.md)
-document for more information, as there should be an scripted process for each
-dependency.
+If you want to incorporate a new version of Git, first ensure the submodule is
+checked out to the correct tag, e.g:
 
-## Changes to build configuration
+```
+cd git
+git checkout v2.11.1
+```
 
-To avoid manual changes to build configurations, which can be brittle and might
-introduce bugs, scripts are used to consume the `dependencies.json` file at the
-root of the repository and generate the required build configuration scripts.
-
-The base config and scripts are found in these files:
-
- - [Travis CI](https://github.com/desktop/dugite-native/blob/master/script/generate-travis-config.js)
- - [Appveyor](https://github.com/desktop/dugite-native/blob/master/script/generate-appveyor-config.js)
-
-Maintainers should make a change to the relevant script and then run
-`npm run generate-all-config` to regenerate all configurations, which will
-combine the latest contents from `dependencies.json` with the base config
-template.
+The package scripts will look for this tag, so non-tagged builds are not
+currently supported. Commit this submodule change and publish a pull request
+to test the packaging changes.
 
 ## Change how Git is built
 
@@ -37,8 +28,20 @@ Git for each platform:
 Ideally we should be using the same flags wherever possible, but sometimes we
 need to do platform-specific things.
 
-Windows doesn't need to be built from source, however it should be updated in
-step with the other Git releases. When a new [Git for Windows](https://github.com/git-for-windows/git)
-release is made available, just update the `GIT_FOR_WINDOWS_URL` and
-`GIT_FOR_WINDOWS_CHECKSUM` variables in `.travis.yml` and `appveyor.yml` to use
-their MinGit build.
+## Update Git LFS
+
+Packages are published for each platform from the [Git LFS](https://github.com/git-lfs/git-lfs)
+repository. These are defined as environment variables in the `.travis.yml` and
+`appveyor.yml` files - update the `GIT_LFS_URL` and `GIT_LFS_CHECKSUM` for all
+platforms and commit the change.
+
+## Add a new component
+
+If there is some component you think should be incorporated into this package,
+please [open a new issue](https://github.com/desktop/dugite/issues/new) with
+as much detail as possible about what the package is and why you think it is
+valuable.
+
+If the maintainers agree that this is a worthy addition, you are
+then welcome to contribute a pull request to incorporate this. Note that this
+package is intended to be as lean as possible, so make a good case for it!

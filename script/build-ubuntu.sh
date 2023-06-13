@@ -86,8 +86,7 @@ make install
 )
 echo " -- Building git at $SOURCE to $DESTINATION"
 
-(
-cd "$SOURCE" || exit 1
+cd $SOURCE
 make clean
 make configure
 CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
@@ -99,6 +98,7 @@ sed -i "s/STRIP = strip/STRIP = $STRIP/" Makefile
 DESTDIR="$DESTINATION" \
   NO_TCLTK=1 \
   NO_GETTEXT=1 \
+  USE_LIBPCRE1=1 \
   NO_INSTALL_HARDLINKS=1 \
   NO_R_TO_GCC_LINKER=1 \
   make strip install
@@ -144,6 +144,16 @@ if [[ ! -f "$DESTINATION/ssl/cacert.pem" ]]; then
   echo "-- Skipped bundling of CA certificates (failed to download them)"
 fi
 
+mkdir -p "$DESTINATION/etc"
+SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
+touch $SYSTEM_CONFIG
+
+echo "-- Setting status.showUntrackedFiles=all to ensure all untracked files shown by default"
+git config --file $SYSTEM_CONFIG status.showUntrackedFiles all
+
+cd "$DESTINATION"
+PREFIX=$DESTINATION ./bin/git config --system -l --show-origin
+cd - > /dev/null
 
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
@@ -156,7 +166,24 @@ echo "-- Removing unsupported features"
 rm "$DESTINATION/libexec/git-core/git-svn"
 rm "$DESTINATION/libexec/git-core/git-p4"
 
-set +eu
+
+checkStaticLinking() {
+  if [ -z "$1" ] ; then
+    # no parameter provided, fail hard
+    exit 1
+  fi
+
+  # ermagherd there's two whitespace characters between 'LSB' and 'executable'
+  # when running this on Travis - why is everything so terrible?
+  if file $1 | grep -q 'ELF 64-bit LSB'; then
+    if readelf -d $1 | grep -q 'Shared library'; then
+      echo "File: $file"
+      # this is done twice rather than storing in a bash variable because
+      # it's easier than trying to preserve the line endings
+      readelf -d $1 | grep 'Shared library'
+    fi
+  fi
+}
 
 echo "-- Static linking research"
 check_static_linking "$DESTINATION"
@@ -179,6 +206,3 @@ GIT_CURL_VERBOSE=1 \
   PREFIX="$DESTINATION" \
   ./git clone https://github.com/git/git.github.io "$TEMP_CLONE_DIR/git.github.io"
 )
-fi
-
-set +eu
