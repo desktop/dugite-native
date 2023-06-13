@@ -122,7 +122,8 @@ git config --file "$SYSTEM_CONFIG" http.schannelUseSSLCAInfo "false"
 # certificate bypass to work.
 git config --file "$SYSTEM_CONFIG" --remove-section include
 
-set -eu -o pipefail
+git config --file $SYSTEM_CONFIG http.sslBackend "schannel"
+echo "-- Setting the system configuration to use SChannel for the SSL backend"
 
 # removing global gitattributes file
 echo "-- Removing system level gitattributes which handles certain file extensions"

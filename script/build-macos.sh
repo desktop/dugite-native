@@ -75,6 +75,17 @@ else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
 
+mkdir -p "$DESTINATION/etc"
+SYSTEM_CONFIG="$DESTINATION/etc/gitconfig"
+touch $SYSTEM_CONFIG
+
+echo "-- Setting status.showUntrackedFiles=all to ensure all untracked files shown by default"
+git config --file $SYSTEM_CONFIG status.showUntrackedFiles all
+
+cd "$DESTINATION"
+PREFIX=$DESTINATION ./bin/git config --system -l --show-origin
+cd - > /dev/null
+
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
 rm "$DESTINATION/bin/git-receive-pack"
