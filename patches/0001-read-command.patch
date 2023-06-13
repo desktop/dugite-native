@@ -1,0 +1,139 @@
+From 2dc5a576b97464d18ae0cc582df6a547ad39f7ea Mon Sep 17 00:00:00 2001
+From: Markus Olsson <j.markus.olsson@gmail.com>
+Date: Mon, 21 Nov 2016 12:22:35 +0100
+Subject: [PATCH] read-command: new, read git commands from stdin
+
+---
+ .gitignore             |  1 +
+ Makefile               |  1 +
+ builtin.h              |  1 +
+ builtin/read-command.c | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ git.c                  |  1 +
+ 5 files changed, 72 insertions(+)
+ create mode 100644 builtin/read-command.c
+
+diff --git a/.gitignore b/.gitignore
+index 4e55fc1c37..0ac3fb3074 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -111,6 +111,7 @@
+ /git-pull
+ /git-push
+ /git-quiltimport
++/git-read-command
+ /git-read-tree
+ /git-rebase
+ /git-rebase--am
+diff --git a/Makefile b/Makefile
+index 60a76995d3..c52c855e27 100644
+--- a/Makefile
++++ b/Makefile
+@@ -943,6 +943,7 @@ BUILTIN_OBJS += builtin/prune-packed.o
+ BUILTIN_OBJS += builtin/prune.o
+ BUILTIN_OBJS += builtin/pull.o
+ BUILTIN_OBJS += builtin/push.o
++BUILTIN_OBJS += builtin/read-command.o
+ BUILTIN_OBJS += builtin/read-tree.o
+ BUILTIN_OBJS += builtin/rebase--helper.o
+ BUILTIN_OBJS += builtin/receive-pack.o
+diff --git a/builtin.h b/builtin.h
+index 9e4a89816d..687b0082e2 100644
+--- a/builtin.h
++++ b/builtin.h
+@@ -102,6 +102,7 @@ extern int cmd_prune(int argc, const char **argv, const char *prefix);
+ extern int cmd_prune_packed(int argc, const char **argv, const char *prefix);
+ extern int cmd_pull(int argc, const char **argv, const char *prefix);
+ extern int cmd_push(int argc, const char **argv, const char *prefix);
++extern int cmd_read_command(int argc, const char **argv, const char *prefix);
+ extern int cmd_read_tree(int argc, const char **argv, const char *prefix);
+ extern int cmd_rebase__helper(int argc, const char **argv, const char *prefix);
+ extern int cmd_receive_pack(int argc, const char **argv, const char *prefix);
+diff --git a/builtin/read-command.c b/builtin/read-command.c
+new file mode 100644
+index 0000000000..d6e75630c2
+--- /dev/null
++++ b/builtin/read-command.c
+@@ -0,0 +1,68 @@
++/*
++ * GIT - The information manager from hell
++ *
++ * Copyright (C) Linus Torvalds, 2005
++ */
++
++#include "builtin.h"
++#include "pkt-line.h"
++#include "argv-array.h"
++
++int read_arg(char *buffer, unsigned size) {
++	int r = packet_read(0, NULL, NULL, buffer, size, 0);
++
++	if (r < 0)
++		die("unexpected end of input");
++
++	if (strlen(buffer) < r)
++		die("arguments can't contain \\0");
++
++	return r;
++}
++
++int read_int_arg(char *buffer, unsigned size) {
++	if (!read_arg(buffer, size))
++		die("expected integer");
++
++	int val = atoi(buffer);
++
++	if (val < 0)
++		die("expected positive integer");
++
++	return val;
++}
++
++int cmd_read_command(int argc, const char **argv, const char *prefix)
++{
++	int i;
++	struct argv_array new_argv = ARGV_ARRAY_INIT;
++	char buf[LARGE_PACKET_MAX];
++
++	int envc = read_int_arg(buf, sizeof(buf));
++
++	for (i = 0; i < envc; i++) {
++		if (!read_arg(buf, sizeof(buf)))
++			die("expected environment variable, got empty packet");
++
++		char *value = strchr(buf, '=');
++
++		if (!value) {
++			value = "";
++		} else {
++			*value++ = '\0';
++		}
++
++		setenv(buf, value, 1);
++	}
++
++	int new_argc = read_int_arg(buf, sizeof(buf));
++
++	argv_array_push(&new_argv, "git");
++
++	for (i = 0; i < new_argc; i++) {
++		read_arg(buf, sizeof(buf));
++		argv_array_push(&new_argv, buf);
++	}
++
++	return cmd_main(new_argv.argc, new_argv.argv);
++}
+diff --git a/git.c b/git.c
+index 4818d26b8e..2e79a5f46e 100644
+--- a/git.c
++++ b/git.c
+@@ -470,6 +470,7 @@ static struct cmd_struct commands[] = {
+ 	{ "prune-packed", cmd_prune_packed, RUN_SETUP },
+ 	{ "pull", cmd_pull, RUN_SETUP | NEED_WORK_TREE },
+ 	{ "push", cmd_push, RUN_SETUP },
++	{ "read-command", cmd_read_command },
+ 	{ "read-tree", cmd_read_tree, RUN_SETUP | SUPPORT_SUPER_PREFIX},
+ 	{ "rebase--helper", cmd_rebase__helper, RUN_SETUP | NEED_WORK_TREE },
+ 	{ "receive-pack", cmd_receive_pack },
+-- 
+2.13.1.windows.2.6.g8f9761e85c.dirty
+

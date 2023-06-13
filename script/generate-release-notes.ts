@@ -26,6 +26,11 @@ export default class GenerateReleaseNotes {
       name: 'githubToken',
       description: 'GitHub API token',
     },
+    {
+      key: 3,
+      name: 'githubOwner',
+      description: 'GitHub repo owner',
+    },
   ]
   private expectedArgsString = this.expectedArgs
     .map(arg => `\${${arg.name}}`)
@@ -46,7 +51,11 @@ export default class GenerateReleaseNotes {
    */
   private githubToken: string
 
-  private owner = 'desktop'
+  /**
+   * GitHub repo owner (different for forks)
+   */
+  private githubOwner: string
+
   private repo = 'dugite-native'
 
   constructor() {
@@ -68,6 +77,7 @@ export default class GenerateReleaseNotes {
     this.artifactsDir = this.args[0]
     this.tagName = this.args[1]
     this.githubToken = this.args[2]
+    this.githubOwner = this.args[3]
 
     this.run()
   }
@@ -99,7 +109,13 @@ export default class GenerateReleaseNotes {
       process.exit(1)
     }
 
-    const releaseEntries = await this.generateReleaseNotesEntries()
+    let releaseEntries = [
+      `You're working on a fork, where we can't reliably generate release notes. Therefore this message acts as a placeholder.`,
+    ]
+
+    if (this.githubOwner === 'desktop') {
+      releaseEntries = await this.generateReleaseNotesEntries()
+    }
     const draftReleaseNotes = this.generateDraftReleaseNotes(
       releaseEntries,
       shaEntries
@@ -130,7 +146,7 @@ export default class GenerateReleaseNotes {
   async generateReleaseNotesEntries(): Promise<Array<string>> {
     const octokit = new Octokit({ auth: `token ${this.githubToken}` })
     const latestRelease = await octokit.repos.getLatestRelease({
-      owner: this.owner,
+      owner: this.githubOwner,
       repo: this.repo,
     })
 
@@ -141,7 +157,7 @@ export default class GenerateReleaseNotes {
     )
 
     const response = await octokit.repos.compareCommits({
-      owner: this.owner,
+      owner: this.githubOwner,
       repo: this.repo,
       base: latestReleaseTag,
       head: this.tagName,
@@ -173,7 +189,7 @@ export default class GenerateReleaseNotes {
 
     for (const pullRequestId of pullRequestIds) {
       const result = await octokit.pulls.get({
-        owner: this.owner,
+        owner: this.githubOwner,
         repo: this.repo,
         pull_number: pullRequestId,
       })
