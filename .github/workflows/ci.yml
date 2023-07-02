@@ -7,7 +7,6 @@ on:
     tags:
       - v*
   pull_request:
-
 jobs:
   shellcheck:
     name: Shellcheck
@@ -15,183 +14,47 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run ShellCheck
-        run: |
-          sudo apt-get install shellcheck
-          shopt -s globstar; shellcheck script/**/*.sh
-
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: script
   build:
-    name: ${{ matrix.friendlyName }} ${{ matrix.arch }}
+    name: ${{ matrix.friendlyName }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-11, windows-2019, ubuntu-20.04]
-        arch: [x86, x64]
-        go: [1.16.3]
+        os: [macos-10.15, windows-2019, ubuntu-18.04]
+        arch: [32, 64]
         include:
-          - os: macos-11
+          - os: macos-10.15
             friendlyName: macOS
             targetPlatform: macOS
-          - os: macos-11
-            friendlyName: macOS
-            targetPlatform: macOS
-            arch: arm64
-            go: 1.16.3
           - os: windows-2019
             friendlyName: Windows
             targetPlatform: win32
-          - os: ubuntu-20.04
+          - os: ubuntu-18.04
             friendlyName: Linux
             targetPlatform: ubuntu
-          - os: ubuntu-20.04
-            friendlyName: Linux
-            targetPlatform: ubuntu
-            arch: arm64
-          - os: ubuntu-20.04
-            friendlyName: Linux
-            targetPlatform: ubuntu
-            arch: arm
         exclude:
-          - os: macos-11
-            arch: x86
-    timeout-minutes: 20
+          - os: macos-10.15
+            arch: 32
+    timeout-minutes: 45
     steps:
-      # We need to use Xcode 11.7 for maximum compatibility with older macOS (x64)
-      - name: Switch to Xcode 11.7
-        if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
-        run: |
-          sudo xcode-select -s /Applications/Xcode_11.7.app/Contents/Developer/
-          # Delete the command line tools to make sure they don't get our builds
-          # messed up with macOS SDK 11 stuff.
-          sudo rm -rf /Library/Developer/CommandLineTools
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-          # Needed for script/package.sh to work
-          fetch-depth: 0
-      - name: Use go ${{ matrix.go }}
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.go }}
       - name: Install dependencies
         run: npm install
       - name: Check formatting
         run: npm run prettier
       - name: Build tools
         run: npm run check
-      - name: Install extra dependencies for building Git on Ubuntu (x64)
-        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x64'
-        run: |
-          sudo apt-get update
-          sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext
-      - name: Install extra dependencies for building Git on Ubuntu (x86)
-        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x86'
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install gcc-i686-linux-gnu binutils-i686-gnu libcurl4-gnutls-dev:i386 zlib1g-dev:i386 gettext
-      - name: Install extra dependencies for building Git on Ubuntu (arm64)
-        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm64'
-        run: |
-          sudo sed -i "s/^deb/deb [arch=amd64,i386]/g" /etc/apt/sources.list
-          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c) main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
-          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
-          sudo dpkg --add-architecture arm64
-          sudo apt-get update
-          sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu libcurl4-gnutls-dev:arm64 zlib1g-dev:arm64 gettext
-      - name: Install extra dependencies for building Git on Ubuntu (arm)
-        if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm'
-        run: |
-          sudo sed -i "s/^deb/deb [arch=amd64,i386]/g" /etc/apt/sources.list
-          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c) main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
-          echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
-          sudo dpkg --add-architecture armhf
-          sudo apt-get update
-          sudo apt-get install gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf libcurl4-gnutls-dev:armhf zlib1g-dev:armhf gettext
-      - name: Build (except macOS arm64)
-        if: matrix.targetPlatform != 'macOS' || matrix.arch != 'arm64'
-        shell: bash
-        run: script/build.sh
-        env:
-          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
-          TARGET_ARCH: ${{ matrix.arch }}
-      - name: Build (macOS arm64)
-        if: matrix.targetPlatform == 'macOS' && matrix.arch == 'arm64'
-        shell: bash
+      - name: Build
         run: script/build.sh
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
       - name: Package
-        shell: bash
         run: script/package.sh
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
-          TARGET_ARCH: ${{ matrix.arch }}
-      - name: Upload output artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name:
-            dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
-          path: ./output
-          retention-days: 5
-
-  release:
-    name: Create GitHub release
-    needs: [build, shellcheck]
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v2
-        with:
-          path: './artifacts'
-
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: './artifacts'
-
-      - name: Get tag name without prefix
-        run: |
-          DUGITE_TAG=${GITHUB_REF/refs\/tags\//}
-          echo "DUGITE_TAG=${DUGITE_TAG}" >> $GITHUB_ENV
-          tagNameWithoutPrefix="${DUGITE_TAG:1}"
-          echo "DUGITE_TAG_WITHOUT_PREFIX=${tagNameWithoutPrefix}" >> $GITHUB_ENV
-
-      - name: Generate release notes
-        run: |
-          npm ci
-          node -r ts-node/register script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "${{ env.DUGITE_TAG }}" "${{ secrets.GITHUB_TOKEN }}"
-          RELEASE_NOTES_FILE=script/release_notes.txt
-          if [[ ! -f "$RELEASE_NOTES_FILE" ]]; then
-              echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
-              exit 1
-          fi
-          echo 'DUGITE_RELEASE_NOTES<<EOF' >> $GITHUB_ENV
-          cat ${RELEASE_NOTES_FILE} >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Git ${{ env.DUGITE_TAG_WITHOUT_PREFIX }}
-          body: ${{ env.DUGITE_RELEASE_NOTES }}
-          draft: true
-          prerelease: false
-
-      - name: Upload release assets
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          # Workaround since actions/upload-release-asset doesn't support wildcard paths
-          script: |
-            const script = require(`${process.env.GITHUB_WORKSPACE}/script/create-release.js`);
-            const artifactsDir = `${process.env.GITHUB_WORKSPACE}/artifacts`;
-            const releaseId = '${{ steps.create_release.outputs.id }}';
-            console.log(script({github, context, artifactsDir, releaseId}));
