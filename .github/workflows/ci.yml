@@ -22,12 +22,12 @@ jobs:
   build:
     name: ${{ matrix.friendlyName }} ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.image }}
     strategy:
       fail-fast: false
       matrix:
         os: [macos-11, windows-2019, ubuntu-20.04]
         arch: [x86, x64]
-        go: [1.16.3]
         include:
           - os: macos-11
             friendlyName: macOS
@@ -36,26 +36,44 @@ jobs:
             friendlyName: macOS
             targetPlatform: macOS
             arch: arm64
-            go: 1.16.3
           - os: windows-2019
             friendlyName: Windows
             targetPlatform: win32
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
+            image: ubuntu:18.04
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm64
+            image: ubuntu:18.04
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm
+            image: ubuntu:18.04
         exclude:
           - os: macos-11
             arch: x86
     timeout-minutes: 20
     steps:
+      - name: Install dependencies into dockerfile on Ubuntu
+        if: matrix.targetPlatform == 'ubuntu'
+        run: |
+          # ubuntu dockerfile is very minimal (only 122 packages are installed)
+          # add dependencies expected by scripts
+          apt update
+          apt install -y software-properties-common lsb-release sudo wget curl build-essential jq autoconf automake pkg-config ca-certificates
+          # install new enough git to run actions/checkout
+          sudo add-apt-repository ppa:git-core/ppa -y
+          sudo apt update
+          sudo apt install -y git
+          # install new enough npm/nodejs to build dugite-native
+          curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+          # avoid "fatal: detected dubious ownership in repository at '/__w/dugite-native/dugite-native'" error
+          git config --global --add safe.directory '*'
       # We need to use Xcode 11.7 for maximum compatibility with older macOS (x64)
       - name: Switch to Xcode 11.7
         if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
@@ -69,10 +87,9 @@ jobs:
           submodules: recursive
           # Needed for script/package.sh to work
           fetch-depth: 0
-      - name: Use go ${{ matrix.go }}
+      - name: Install go
+        if: matrix.targetPlatform == 'macOS'
         uses: actions/setup-go@v2
-        with:
-          go-version: ${{ matrix.go }}
       - name: Install dependencies
         run: npm install
       - name: Check formatting
@@ -83,13 +100,13 @@ jobs:
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x64'
         run: |
           sudo apt-get update
-          sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext
+          sudo apt-get install -y libcurl4-gnutls-dev libexpat1-dev zlib1g-dev gettext libssl-dev
       - name: Install extra dependencies for building Git on Ubuntu (x86)
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'x86'
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install gcc-i686-linux-gnu binutils-i686-gnu libcurl4-gnutls-dev:i386 zlib1g-dev:i386 gettext
+          sudo apt-get install -y gcc-i686-linux-gnu binutils-i686-gnu libcurl4-gnutls-dev:i386 zlib1g-dev:i386 libssl-dev:i386 gettext
       - name: Install extra dependencies for building Git on Ubuntu (arm64)
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm64'
         run: |
@@ -98,7 +115,7 @@ jobs:
           echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
           sudo dpkg --add-architecture arm64
           sudo apt-get update
-          sudo apt-get install gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu libcurl4-gnutls-dev:arm64 zlib1g-dev:arm64 gettext
+          sudo apt-get install -y gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu libcurl4-gnutls-dev:arm64 zlib1g-dev:arm64 libssl-dev:arm64 gettext
       - name: Install extra dependencies for building Git on Ubuntu (arm)
         if: matrix.targetPlatform == 'ubuntu' && matrix.arch == 'arm'
         run: |
@@ -107,7 +124,7 @@ jobs:
           echo "deb [arch=arm64,armhf] http://azure.ports.ubuntu.com/ $(lsb_release -s -c)-updates main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list
           sudo dpkg --add-architecture armhf
           sudo apt-get update
-          sudo apt-get install gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf libcurl4-gnutls-dev:armhf zlib1g-dev:armhf gettext
+          sudo apt-get install -y gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf libcurl4-gnutls-dev:armhf zlib1g-dev:armhf libssl-dev:armhf gettext
       - name: Build (except macOS arm64)
         if: matrix.targetPlatform != 'macOS' || matrix.arch != 'arm64'
         shell: bash
