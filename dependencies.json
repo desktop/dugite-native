@@ -1,61 +1,61 @@
 {
   "git": {
-    "version": "v2.39.3",
+    "version": "v2.43.3",
     "packages": [
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "MinGit-2.39.3.windows.1-64-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.39.3.windows.1/MinGit-2.39.3.windows.1-64-bit.zip",
-        "checksum": "ffc5d2213ff567d35c15f3916d54f1d39a5c34e0ce70aa2450ab5b7e0551e2f8"
+        "filename": "MinGit-2.43.0-64-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.43.0.windows.1/MinGit-2.43.0-64-bit.zip",
+        "checksum": "1905d93068e986258fafc69517df8fddff829bb2a289c1fa4dcc6cdf720ddf36"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "MinGit-2.39.3.windows.1-32-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.39.3.windows.1/MinGit-2.39.3.windows.1-32-bit.zip",
-        "checksum": "ac4c461ba7dd682e0c35f9675e96de3e8969938f5a4fb77c6f522b7655f834f4"
+        "filename": "MinGit-2.43.0-32-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.43.0.windows.1/MinGit-2.43.0-32-bit.zip",
+        "checksum": "d46fac9c17b55627f714aefa36c3b00d81651d2bb4076a12b4455b5f841f1a9e"
       }
     ]
   },
   "git-lfs": {
-    "version": "v3.3.0",
+    "version": "v3.5.1",
     "files": [
       {
         "platform": "linux",
         "arch": "amd64",
-        "name": "git-lfs-linux-amd64-v3.3.0.tar.gz",
-        "checksum": "6a4e6bd7d06d5c024bc70c8ee8c9da143ffc37d2646e252a17a6126d30cdebc1"
+        "name": "git-lfs-linux-amd64-v3.5.1.tar.gz",
+        "checksum": "6f28eb19faa7a968882dca190d92adc82493378b933958d67ceaeb9ebe4d731e"
       },
       {
         "platform": "linux",
         "arch": "x86",
-        "name": "git-lfs-linux-386-v3.3.0.tar.gz",
-        "checksum": "14415ebafc3ace60f178cd69d4f2e0ed42dbbf32cb2aba80e46ec3c8f7c1401f"
+        "name": "git-lfs-linux-386-v3.5.1.tar.gz",
+        "checksum": "4436bbc404427b2ca24108582cb1945dd806851d8634d287b8f37fb211718bee"
       },
       {
         "platform": "linux",
         "arch": "arm64",
-        "name": "git-lfs-linux-arm64-v3.3.0.tar.gz",
-        "checksum": "e97c477981a9b6a40026cadc1bf005541d973fc32df2de2f398643b15df6b5c6"
+        "name": "git-lfs-linux-arm64-v3.5.1.tar.gz",
+        "checksum": "4f8700aacaa0fd26ae5300fb0996aed14d1fd0ce1a63eb690629c132ff5163a9"
       },
       {
         "platform": "linux",
         "arch": "arm",
-        "name": "git-lfs-linux-arm-v3.3.0.tar.gz",
-        "checksum": "df8b24cf7ff6a2f105dd1a3d0a4990c53980272ea94da67d854921e21bc5444c"
+        "name": "git-lfs-linux-arm-v3.5.1.tar.gz",
+        "checksum": "03923d8badf5c382920390414ad7084c5d87b246b180474d09961e3831f552e2"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "name": "git-lfs-windows-386-v3.3.0.zip",
-        "checksum": "81fd4b01719e1e0ccf347596293f19a07fba8573c6aee1e1521b2932d9b6179d"
+        "name": "git-lfs-windows-386-v3.5.1.zip",
+        "checksum": "ea5138789c4f19ed71d30c3e407f43bd270771028d37e5292378a8ea2c154377"
       },
       {
         "platform": "windows",
         "arch": "amd64",
-        "name": "git-lfs-windows-amd64-v3.3.0.zip",
-        "checksum": "1df5874f22c35c679159f0aaf9e24333051f52768eade0204d22200b79141743"
+        "name": "git-lfs-windows-amd64-v3.5.1.zip",
+        "checksum": "94435072f6b3a6f9064b277760c8340e432b5ede0db8205d369468b9be52c6b6"
       }
     ]
   }
