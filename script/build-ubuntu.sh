@@ -148,7 +148,7 @@ rm "$DESTINATION/libexec/git-core/git-p4"
 
 echo "-- Copying dugite custom system gitconfig"
 mkdir "$DESTINATION/etc"
-cp "$CURRENT_DIR/../resources/gitconfig" "$DESTINATION/etc/gitconfig"
+cp "$CURRENT_DIR/../resources/posix.gitconfig" "$DESTINATION/etc/gitconfig"
 
 set +eu
 
