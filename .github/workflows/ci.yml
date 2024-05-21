@@ -82,7 +82,7 @@ jobs:
           # Delete the command line tools to make sure they don't get our builds
           # messed up with macOS SDK 11 stuff.
           sudo rm -rf /Library/Developer/CommandLineTools
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
           # Needed for script/package.sh to work
