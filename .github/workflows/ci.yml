@@ -89,7 +89,7 @@ jobs:
           fetch-depth: 0
       - name: Install go
         if: matrix.targetPlatform == 'macOS'
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
       - name: Install dependencies
         run: npm install
       - name: Check formatting
