@@ -1,0 +1,13 @@
+# This is dugite's own custom system-wide gitconfig file for macOS and Linux.
+# On Windows we ship a contained Git environment (minGit) where we can control
+# the system-level configuration but on macOS and Linux /etc/gitconfig is used
+# as the system-wide configuration file and we're unable to modify it.
+#
+# So in order to be able to provide our own sane defaults that can be overriden
+# by the user's global and local configuration we'll tell Git that this file
+# is the system level config (and import the actual system level config)
+[include]
+  path=/etc/gitconfig
+
+[credential "https://dev.azure.com"]
+  useHttpPath = true
