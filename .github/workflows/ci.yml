@@ -13,7 +13,7 @@ jobs:
     name: Shellcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Run ShellCheck
         run: |
           sudo apt-get install shellcheck
@@ -82,7 +82,7 @@ jobs:
           # Delete the command line tools to make sure they don't get our builds
           # messed up with macOS SDK 11 stuff.
           sudo rm -rf /Library/Developer/CommandLineTools
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           # Needed for script/package.sh to work
@@ -146,7 +146,7 @@ jobs:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
       - name: Upload output artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name:
             dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
@@ -161,10 +161,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: './artifacts'
 
