@@ -94,6 +94,7 @@ git config --file "$SYSTEM_CONFIG" core.symlinks "false"
 git config --file "$SYSTEM_CONFIG" core.autocrlf "true"
 git config --file "$SYSTEM_CONFIG" core.fscache "true"
 git config --file "$SYSTEM_CONFIG" http.sslBackend "schannel"
+git config --file "$SYSTEM_CONFIG" credential.https://dev.azure.com.useHttpPath "true"
 
 # See https://github.com/desktop/desktop/issues/4817#issuecomment-393241303
 # Even though it's not set openssl will auto-discover the one we ship because
