@@ -6,6 +6,7 @@ import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
 import yargs from 'yargs'
 import fetch from 'node-fetch'
+import { fetchAssetChecksum } from './fetch-asset-checksum'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -72,27 +73,6 @@ async function getLatestStableRelease() {
   return latestTag.toString()
 }
 
-async function calculateAssetChecksum(uri: string) {
-  return new Promise<string>((resolve, reject) => {
-    const hs = crypto.createHash('sha256', { encoding: 'hex' })
-    hs.on('finish', () => resolve(hs.read()))
-
-    const headers: Record<string, string> = {
-      'User-Agent': 'dugite-native',
-      accept: 'application/octet-stream',
-    }
-
-    fetch(uri, { headers })
-      .then(x =>
-        x.ok
-          ? Promise.resolve(x)
-          : Promise.reject(new Error(`Server responded with ${x.status}`))
-      )
-      .then(x => x.buffer())
-      .then(x => hs.end(x))
-  })
-}
-
 async function getPackageDetails(
   assets: ReleaseAssets,
   body: string,
@@ -119,7 +99,7 @@ async function getPackageDetails(
   let checksum: string
   if (match == null || match.length !== 2) {
     console.log(`🔴 No checksum for ${archValue} in release notes body`)
-    checksum = await calculateAssetChecksum(minGitFile.browser_download_url)
+    checksum = await fetchAssetChecksum(minGitFile.browser_download_url)
     console.log(`✅ Calculated checksum for ${archValue} from downloaded asset`)
   } else {
     console.log(`✅ Got checksum for ${archValue} from release notes body`)
