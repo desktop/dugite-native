@@ -99,6 +99,40 @@ else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
 
+GCM_VERSION="$(jq --raw-output '.["git-credential-manager"].version[1:]' dependencies.json)"
+GCM_CHECKSUM="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .checksum" dependencies.json)"
+GCM_FILENAME="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .name" dependencies.json)"
+GCM_URL="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .url" dependencies.json)"
+
+if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then
+  echo "-- Bundling GCM"
+  GCM_FILE=git-credential-manager.tar.gz
+  echo "-- Downloading from $GCM_URL"
+  curl -sL -o $GCM_FILE "$GCM_URL"
+  COMPUTED_SHA256=$(compute_checksum $GCM_FILE)
+  if [ "$COMPUTED_SHA256" = "$GCM_CHECKSUM" ]; then
+    echo "GCM: checksums match"
+    SUBFOLDER="$DESTINATION/libexec/git-core"
+    tar -xvkf $GCM_FILE -C "$SUBFOLDER"
+
+    if [[ ! -f "$SUBFOLDER/git-credential-manager" ]]; then
+      echo "After extracting GCM the file was not found under libexec/git-core/"
+      echo "aborting..."
+      exit 1
+    fi
+  else
+    echo "GCM: expected checksum $GCM_CHECKSUM but got $COMPUTED_SHA256"
+    echo "aborting..."
+    exit 1
+  fi
+else
+  if [ -z "$GCM_URL" ]; then
+    echo "-- No download URL for GCM on macOS/$GOARCH, skipping bundling"
+  else
+    echo "-- Skipped bundling GCM (set GCM_VERSION to include it in the bundle)"
+  fi
+fi
+
 echo "-- Removing server-side programs"
 rm "$DESTINATION/bin/git-cvsserver"
 rm "$DESTINATION/bin/git-receive-pack"
