@@ -1,11 +1,9 @@
 import path from 'path'
-import crypto from 'crypto'
 import ChildProcess from 'child_process'
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest'
 import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
 import yargs from 'yargs'
-import fetch from 'node-fetch'
 import { fetchAssetChecksum } from './fetch-asset-checksum'
 
 process.on('unhandledRejection', reason => {
