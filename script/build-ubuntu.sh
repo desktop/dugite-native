@@ -57,7 +57,6 @@ GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$D
 
 GCM_VERSION="$(jq --raw-output '.["git-credential-manager"].version[1:]' dependencies.json)"
 GCM_CHECKSUM="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .checksum" dependencies.json)"
-GCM_FILENAME="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .name" dependencies.json)"
 GCM_URL="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .url" dependencies.json)"
 
 # shellcheck source=script/compute-checksum.sh

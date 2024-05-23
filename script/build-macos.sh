@@ -101,7 +101,6 @@ fi
 
 GCM_VERSION="$(jq --raw-output '.["git-credential-manager"].version[1:]' dependencies.json)"
 GCM_CHECKSUM="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .checksum" dependencies.json)"
-GCM_FILENAME="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .name" dependencies.json)"
 GCM_URL="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .url" dependencies.json)"
 
 if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then
