@@ -119,6 +119,7 @@ if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then
       echo "aborting..."
       exit 1
     fi
+    chmod +x "$SUBFOLDER/git-credential-manager"
   else
     echo "GCM: expected checksum $GCM_CHECKSUM but got $COMPUTED_SHA256"
     echo "aborting..."
