@@ -55,6 +55,10 @@ GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)
 GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .checksum" dependencies.json)"
 GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .name" dependencies.json)"
 
+GCM_VERSION="$(jq --raw-output '.["git-credential-manager"].version[1:]' dependencies.json)"
+GCM_CHECKSUM="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .checksum" dependencies.json)"
+GCM_URL="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"linux\") | .url" dependencies.json)"
+
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 # shellcheck source=script/check-static-linking.sh
@@ -120,6 +124,34 @@ else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
 
+if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then
+  echo "-- Bundling GCM"
+  GCM_FILE=git-credential-manager.tar.gz
+  echo "-- Downloading from $GCM_URL"
+  curl -sL -o $GCM_FILE "$GCM_URL"
+  COMPUTED_SHA256=$(compute_checksum $GCM_FILE)
+  if [ "$COMPUTED_SHA256" = "$GCM_CHECKSUM" ]; then
+    echo "GCM: checksums match"
+    SUBFOLDER="$DESTINATION/libexec/git-core"
+    tar -xvkf $GCM_FILE -C "$SUBFOLDER"
+
+    if [[ ! -f "$SUBFOLDER/git-credential-manager" ]]; then
+      echo "After extracting GCM the file was not found under libexec/git-core/"
+      echo "aborting..."
+      exit 1
+    fi
+  else
+    echo "GCM: expected checksum $GCM_CHECKSUM but got $COMPUTED_SHA256"
+    echo "aborting..."
+    exit 1
+  fi
+else
+  if [ -z "$GCM_URL" ]; then
+    echo "-- No download URL for GCM on Linux/$DEPENDENCY_ARCH, skipping bundling"
+  else
+    echo "-- Skipped bundling GCM (set GCM_VERSION to include it in the bundle)"
+  fi
+fi
 
 (
 # download CA bundle and write straight to temp folder

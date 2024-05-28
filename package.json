@@ -5,6 +5,7 @@
     "check": "tsc",
     "update-git": "ts-node script/update-git.ts",
     "update-git-lfs": "ts-node script/update-git-lfs.ts && npm run prettier-fix",
+    "update-git-credential-manager": "ts-node script/update-git-credential-manager.ts && npm run prettier-fix",
     "generate-release-notes": "ts-node script/generate-release-notes.ts",
     "prettier": "prettier -l \"**/*.y{,a}ml\" \"**/*.{js,ts,json}\"",
     "prettier-fix": "prettier --write \"**/*.y{,a}ml\" \"**/*.{js,ts,json}\""

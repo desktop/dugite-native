@@ -86,3 +86,33 @@ export function updateGitLfsDependencies(
 
   fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
 }
+
+export function updateGitCredentialManagerDependencies(
+  version: string,
+  files: Array<{
+    platform: string
+    arch: string
+    name: string
+    checksum: string
+  }>
+) {
+  const dependenciesPath = path.resolve(
+    __dirname,
+    '..',
+    '..',
+    'dependencies.json'
+  )
+  const dependenciesText = fs.readFileSync(dependenciesPath, 'utf8')
+  const dependencies = JSON.parse(dependenciesText)
+
+  const gcm = {
+    version: version,
+    files: files,
+  }
+
+  const updatedDependencies = { ...dependencies, 'git-credential-manager': gcm }
+
+  const newDepedenciesText = JSON.stringify(updatedDependencies, null, 2)
+
+  fs.writeFileSync(dependenciesPath, newDepedenciesText, 'utf8')
+}
