@@ -59,8 +59,8 @@ jobs:
         run: |
           # ubuntu dockerfile is very minimal (only 122 packages are installed)
           # add dependencies expected by scripts
-          apt update
-          apt install -y software-properties-common lsb-release sudo wget curl build-essential jq autoconf automake pkg-config ca-certificates
+          sudo apt update
+          sudo apt install -y software-properties-common lsb-release sudo wget curl build-essential jq autoconf automake pkg-config ca-certificates
           # install new enough git to run actions/checkout
           sudo add-apt-repository ppa:git-core/ppa -y
           sudo apt update
