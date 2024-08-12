@@ -25,13 +25,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-11, windows-2019, ubuntu-20.04]
+        os: [macos-14, windows-2019, ubuntu-20.04]
         arch: [x86, x64]
         include:
-          - os: macos-11
+          - os: macos-14
             friendlyName: macOS
             targetPlatform: macOS
-          - os: macos-11
+          - os: macos-14
             friendlyName: macOS
             targetPlatform: macOS
             arch: arm64
@@ -50,7 +50,7 @@ jobs:
             targetPlatform: ubuntu
             arch: arm
         exclude:
-          - os: macos-11
+          - os: macos-14
             arch: x86
     timeout-minutes: 20
     steps:
