@@ -70,11 +70,11 @@ jobs:
           sudo apt-get install -y nodejs
           # avoid "fatal: detected dubious ownership in repository at '/__w/dugite-native/dugite-native'" error
           git config --global --add safe.directory '*'
-      # We need to use Xcode 11.7 for maximum compatibility with older macOS (x64)
-      - name: Switch to Xcode 11.7
+      # We need to use Xcode 13.1 for maximum compatibility with older macOS (x64)
+      - name: Switch to Xcode 13.1
         if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
         run: |
-          sudo xcode-select -s /Applications/Xcode_11.7.app/Contents/Developer/
+          sudo xcode-select -s /Applications/Xcode_13.1.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
           # messed up with macOS SDK 11 stuff.
           sudo rm -rf /Library/Developer/CommandLineTools
