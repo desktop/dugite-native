@@ -22,7 +22,6 @@ jobs:
   build:
     name: ${{ matrix.friendlyName }} ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.image }}
     strategy:
       fail-fast: false
       matrix:
@@ -42,17 +41,14 @@ jobs:
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
-            image: ubuntu:18.04
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm64
-            image: ubuntu:18.04
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm
-            image: ubuntu:18.04
         exclude:
           - os: macos-11
             arch: x86
