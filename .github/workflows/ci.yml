@@ -22,17 +22,16 @@ jobs:
   build:
     name: ${{ matrix.friendlyName }} ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.image }}
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-11, windows-2019, ubuntu-20.04]
+        os: [macos-12, windows-2019, ubuntu-20.04]
         arch: [x86, x64]
         include:
-          - os: macos-11
+          - os: macos-12
             friendlyName: macOS
             targetPlatform: macOS
-          - os: macos-11
+          - os: macos-12
             friendlyName: macOS
             targetPlatform: macOS
             arch: arm64
@@ -42,19 +41,16 @@ jobs:
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
-            image: ubuntu:18.04
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm64
-            image: ubuntu:18.04
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
             arch: arm
-            image: ubuntu:18.04
         exclude:
-          - os: macos-11
+          - os: macos-12
             arch: x86
     timeout-minutes: 20
     steps:
@@ -63,8 +59,8 @@ jobs:
         run: |
           # ubuntu dockerfile is very minimal (only 122 packages are installed)
           # add dependencies expected by scripts
-          apt update
-          apt install -y software-properties-common lsb-release sudo wget curl build-essential jq autoconf automake pkg-config ca-certificates
+          sudo apt update
+          sudo apt install -y software-properties-common lsb-release sudo wget curl build-essential jq autoconf automake pkg-config ca-certificates
           # install new enough git to run actions/checkout
           sudo add-apt-repository ppa:git-core/ppa -y
           sudo apt update
@@ -74,11 +70,11 @@ jobs:
           sudo apt-get install -y nodejs
           # avoid "fatal: detected dubious ownership in repository at '/__w/dugite-native/dugite-native'" error
           git config --global --add safe.directory '*'
-      # We need to use Xcode 11.7 for maximum compatibility with older macOS (x64)
-      - name: Switch to Xcode 11.7
+      # We need to use Xcode 13.1 for maximum compatibility with older macOS (x64)
+      - name: Switch to Xcode 13.1
         if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
         run: |
-          sudo xcode-select -s /Applications/Xcode_11.7.app/Contents/Developer/
+          sudo xcode-select -s /Applications/Xcode_13.1.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
           # messed up with macOS SDK 11 stuff.
           sudo rm -rf /Library/Developer/CommandLineTools
@@ -146,7 +142,7 @@ jobs:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
       - name: Upload output artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name:
             dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
@@ -164,7 +160,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: './artifacts'
 
