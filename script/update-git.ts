@@ -74,9 +74,13 @@ async function getLatestStableRelease() {
 async function getPackageDetails(
   assets: ReleaseAssets,
   body: string,
-  arch: string
+  arch: 'amd64' | 'x86' | 'arm64'
 ) {
-  const archValue = arch === 'amd64' ? '64-bit' : '32-bit'
+  const archValue = {
+    amd64: '64-bit',
+    x86: '32-bit',
+    arm64: 'arm64',
+  }[arch]
 
   const minGitFile = assets.find(
     a => a.name.indexOf('MinGit') !== -1 && a.name.indexOf(archValue) !== -1
@@ -181,12 +185,17 @@ async function run() {
 
   const package64bit = await getPackageDetails(assets, body, 'amd64')
   const package32bit = await getPackageDetails(assets, body, 'x86')
+  const packagearm64 = await getPackageDetails(assets, body, 'arm64')
 
-  if (package64bit == null || package32bit == null) {
+  if (package64bit == null || package32bit == null || packagearm64 == null) {
     return
   }
 
-  updateGitDependencies(latestGitVersion, [package64bit, package32bit])
+  updateGitDependencies(latestGitVersion, [
+    package64bit,
+    package32bit,
+    packagearm64,
+  ])
 
   console.log(
     `✅ Updated dependencies metadata to Git ${latestGitVersion} (Git for Windows ${version})`
