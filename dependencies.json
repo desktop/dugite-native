@@ -26,43 +26,49 @@
     ]
   },
   "git-lfs": {
-    "version": "v3.5.1",
+    "version": "v3.6.0",
     "files": [
       {
         "platform": "linux",
         "arch": "amd64",
-        "name": "git-lfs-linux-amd64-v3.5.1.tar.gz",
-        "checksum": "6f28eb19faa7a968882dca190d92adc82493378b933958d67ceaeb9ebe4d731e"
+        "name": "git-lfs-linux-amd64-v3.6.0.tar.gz",
+        "checksum": "fff4746159aa7a7b42ef1aa30fed03b534df48a7dbe116d65296c0f0c43c594d"
       },
       {
         "platform": "linux",
         "arch": "x86",
-        "name": "git-lfs-linux-386-v3.5.1.tar.gz",
-        "checksum": "4436bbc404427b2ca24108582cb1945dd806851d8634d287b8f37fb211718bee"
+        "name": "git-lfs-linux-386-v3.6.0.tar.gz",
+        "checksum": "10da3c2ec46aa76287653a8d8576c271701d1fa899432f5bc3ace2a33c2116f0"
       },
       {
         "platform": "linux",
         "arch": "arm64",
-        "name": "git-lfs-linux-arm64-v3.5.1.tar.gz",
-        "checksum": "4f8700aacaa0fd26ae5300fb0996aed14d1fd0ce1a63eb690629c132ff5163a9"
+        "name": "git-lfs-linux-arm64-v3.6.0.tar.gz",
+        "checksum": "9509504b3b825054c3d07af5edc1cc9c00732c6f0fd4a060f04bfbf0f1279fca"
       },
       {
         "platform": "linux",
         "arch": "arm",
-        "name": "git-lfs-linux-arm-v3.5.1.tar.gz",
-        "checksum": "03923d8badf5c382920390414ad7084c5d87b246b180474d09961e3831f552e2"
+        "name": "git-lfs-linux-arm-v3.6.0.tar.gz",
+        "checksum": "bc7190755703017d193bee182a4edbf610d6df6d006d6fdd6ad411d552468456"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "name": "git-lfs-windows-386-v3.5.1.zip",
-        "checksum": "ea5138789c4f19ed71d30c3e407f43bd270771028d37e5292378a8ea2c154377"
+        "name": "git-lfs-windows-386-v3.6.0.zip",
+        "checksum": "58b3029f60d51b8775a0cbb21a39b8504967577a8bb4b3feabb1f1a48bf7fb33"
       },
       {
         "platform": "windows",
         "arch": "amd64",
-        "name": "git-lfs-windows-amd64-v3.5.1.zip",
-        "checksum": "94435072f6b3a6f9064b277760c8340e432b5ede0db8205d369468b9be52c6b6"
+        "name": "git-lfs-windows-amd64-v3.6.0.zip",
+        "checksum": "62fce4cfd453493966c387db167ba1aa46ecee730ae24a5b902a1d05650fb4ce"
+      },
+      {
+        "platform": "windows",
+        "arch": "arm64",
+        "name": "git-lfs-windows-arm64-v3.6.0.zip",
+        "checksum": "6e8d6051760bd90372ed7dfcace02f80dddec374bab61b9525e263722f97de7b"
       }
     ]
   },
