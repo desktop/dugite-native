@@ -24,9 +24,9 @@ case $TARGET_ARCH in
     MINGW_DIR="clangarm64"
     ;;
   *)
-	  echo "Unsupported architecture: $TARGET_ARCH"
+    echo "Unsupported architecture: $TARGET_ARCH"
     exit 1
-	  ;;
+    ;;
 esac
 
 GIT_LFS_VERSION=$(jq --raw-output ".[\"git-lfs\"].version[1:]" dependencies.json)
