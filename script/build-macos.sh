@@ -29,6 +29,9 @@ fi
 
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 GIT_LFS_VERSION="$(jq --raw-output '.["git-lfs"].version[1:]' dependencies.json)"
+GIT_LFS_CHECKSUM="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"darwin\") | .checksum" dependencies.json)"
+GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$DEPENDENCY_ARCH\" and .platform == \"darwin\") | .name" dependencies.json)"
+
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
 
@@ -71,27 +74,23 @@ echo "-- Building git at $SOURCE to $DESTINATION"
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
-  # build steps from https://github.com/git-lfs/git-lfs/wiki/Installation#source
-  # git tags for git-lfs are the version number prefixed with "v"
-  git clone -b "v$GIT_LFS_VERSION" "https://github.com/git-lfs/git-lfs"
-  (
-    cd git-lfs
+  GIT_LFS_FILE=git-lfs.tar.gz
+  GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/${GIT_LFS_FILENAME}"
+  echo "-- Downloading from $GIT_LFS_URL"
+  curl -sL -o $GIT_LFS_FILE "$GIT_LFS_URL"
+  COMPUTED_SHA256=$(compute_checksum $GIT_LFS_FILE)
+  if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
+    echo "Git LFS: checksums match"
+    SUBFOLDER="$DESTINATION/libexec/git-core"
+    unzip -j $GIT_LFS_FILE -d "$SUBFOLDER" "*/git-lfs"
 
-    # HACK: When cross-compiling, there seems to be an issue when git-lfs attempts
-    # to generate the manpage contents, and it seems that preffixing that command
-    # with `GOARCH=` to use the host architecture fixes the issue.
-    # This hack can be removed once the issue is fixed via the PR
-    # https://github.com/git-lfs/git-lfs/pull/4492 or some other solution.
-    GO_GENERATE_STRING="\$(GO) generate github.com\/git-lfs\/git-lfs\/commands"
-    sed -i -e "s/$GO_GENERATE_STRING/GOARCH= $GO_GENERATE_STRING/" Makefile
-
-    make GOARCH="$GOARCH" CGO_CFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" CGO_LDFLAGS="-mmacosx-version-min=$MACOSX_BUILD_VERSION" BUILTIN_LD_FLAGS="-linkmode external"
-  )
-  GIT_LFS_BINARY_PATH="git-lfs/bin/git-lfs"
-  if test -f "$GIT_LFS_BINARY_PATH"; then
-    cp "$GIT_LFS_BINARY_PATH" "$DESTINATION/libexec/git-core/"
+    if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
+      echo "After extracting Git LFS the file was not found under libexec/git-core/"
+      echo "aborting..."
+      exit 1
+    fi
   else
-    echo "The git-lfs binary is missing, the build must have failed"
+    echo "Git LFS: expected checksum $GIT_LFS_CHECKSUM but got $COMPUTED_SHA256"
     echo "aborting..."
     exit 1
   fi

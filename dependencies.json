@@ -56,6 +56,18 @@
         "arch": "amd64",
         "name": "git-lfs-windows-amd64-v3.6.1.zip",
         "checksum": "aaca788e04f91676e58654d5ecf96cf03c76768a63b3a6918281a9678884c20c"
+      },
+      {
+        "platform": "darwin",
+        "arch": "amd64",
+        "name": "git-lfs-darwin-amd64-v3.6.1.zip",
+        "checksum": "b53c361e6c85479507ed39ba99b87ec0888ac52f5afd2084fc68af4103081391"
+      },
+      {
+        "platform": "darwin",
+        "arch": "arm64",
+        "name": "git-lfs-darwin-arm64-v3.6.1.zip",
+        "checksum": "83b4ea3b0c72ba19e3bc46e47e92476f4505cc96693333b9fa0a314dddacc4ba"
       }
     ]
   },
