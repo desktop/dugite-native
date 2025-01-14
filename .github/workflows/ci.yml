@@ -87,7 +87,7 @@ jobs:
         if: matrix.targetPlatform == 'macOS'
         uses: actions/setup-go@v5
         with:
-          go-version: '1.23.x'
+          go-version: '1.22.x'
       - name: Install dependencies
         run: npm install
       - name: Check formatting
