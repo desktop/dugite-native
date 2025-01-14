@@ -11,10 +11,12 @@ if [ "$TARGET_ARCH" = "x64" ]; then
   HOST_CPU=x86_64
   TARGET_CFLAGS="-target x86_64-apple-darwin"
   GOARCH=amd64
+  DEPENDENCY_ARCH="amd64"
 else
   HOST_CPU=arm64
   TARGET_CFLAGS="-target arm64-apple-darwin"
   GOARCH=arm64
+  DEPENDENCY_ARCH="arm64"
 fi
 
 if [[ -z "${SOURCE}" ]]; then
