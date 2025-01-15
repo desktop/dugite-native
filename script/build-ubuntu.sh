@@ -100,6 +100,7 @@ DESTDIR="$DESTINATION" \
   make strip install
 )
 
+set -o xtrace
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.tar.gz
@@ -112,6 +113,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
     SUBFOLDER="$DESTINATION/libexec/git-core"
 
     verify_lfs_contents "$GIT_LFS_FILE"
+
     tar -zxvf "$GIT_LFS_FILE" --strip-components=1 -C "$SUBFOLDER" "*/git-lfs"
 
     if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
@@ -127,6 +129,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
 else
   echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
 fi
+set +o xtrace
 
 if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then
   echo "-- Bundling GCM"
