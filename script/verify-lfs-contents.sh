@@ -27,5 +27,5 @@ verify_lfs_contents() {
   grep -qvE "^(CHANGELOG\.md|README\.md|git-lfs(\.exe)?|install\.sh|man)$" <<< "$TOPLEVEL" && {
     echo "Git LFS: unexpected files in the LFS archive, aborting..."
     exit 1
-  }
+  } || true
 }
