@@ -27,6 +27,8 @@ GIT_FOR_WINDOWS_CHECKSUM=$(jq --raw-output ".git.packages[] | select(.arch == \"
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
+# shellcheck source=script/verify-lfs-contents.sh
+source "$CURRENT_DIR/verify-lfs-contents.sh"
 
 mkdir -p "$DESTINATION"
 
@@ -55,6 +57,9 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/$MINGW_DIR/libexec/git-core"
+
+    verify_lfs_contents "$GIT_LFS_FILE"
+
     unzip -j $GIT_LFS_FILE -x '*.md' -d "$SUBFOLDER"
 
     if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
