@@ -5,7 +5,7 @@
 
 set -eu -o pipefail
 
-MACOSX_BUILD_VERSION="10.9"
+MACOSX_BUILD_VERSION="10.11"
 
 if [ "$TARGET_ARCH" = "x64" ]; then
   HOST_CPU=x86_64
