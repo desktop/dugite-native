@@ -114,7 +114,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
 
     verify_lfs_contents "$GIT_LFS_FILE"
 
-    tar -zxvf "$GIT_LFS_FILE" --strip-components=1 -C "$SUBFOLDER" "*/git-lfs"
+    tar -zxvf "$GIT_LFS_FILE" --strip-components=1 -C "$SUBFOLDER" --wildcards "*/git-lfs"
 
     if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
       echo "After extracting Git LFS the file was not found under libexec/git-core/"
