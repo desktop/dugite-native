@@ -25,10 +25,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-12, windows-2019, ubuntu-20.04]
+        os: [macos-13, windows-2019, ubuntu-20.04]
         arch: [x86, x64, arm64]
         include:
-          - os: macos-12
+          - os: macos-13
             friendlyName: macOS
             targetPlatform: macOS
           - os: windows-2019
@@ -42,7 +42,7 @@ jobs:
             targetPlatform: ubuntu
             arch: arm
         exclude:
-          - os: macos-12
+          - os: macos-13
             arch: x86
     timeout-minutes: 20
     steps:
@@ -62,11 +62,11 @@ jobs:
           sudo apt-get install -y nodejs
           # avoid "fatal: detected dubious ownership in repository at '/__w/dugite-native/dugite-native'" error
           git config --global --add safe.directory '*'
-      # We need to use Xcode 13.1 for maximum compatibility with older macOS (x64)
-      - name: Switch to Xcode 13.1
+      # We need to use macos-14 14.1 for maximum compatibility with older macOS (x64)
+      - name: Switch to Xcode 14.1
         if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
         run: |
-          sudo xcode-select -s /Applications/Xcode_13.1.app/Contents/Developer/
+          sudo xcode-select -s /Applications/Xcode_14.1.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
           # messed up with macOS SDK 11 stuff.
           sudo rm -rf /Library/Developer/CommandLineTools
@@ -78,6 +78,8 @@ jobs:
       - name: Install go
         if: matrix.targetPlatform == 'macOS'
         uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
       - name: Install dependencies
         run: npm install
       - name: Check formatting

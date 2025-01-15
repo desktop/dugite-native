@@ -1,100 +1,99 @@
 {
   "git": {
-    "version": "v2.47.1",
+    "version": "v2.45.3",
     "packages": [
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "MinGit-2.47.1-64-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/MinGit-2.47.1-64-bit.zip",
-        "checksum": "50b04b55425b5c465d076cdb184f63a0cd0f86f6ec8bb4d5860114a713d2c29a"
+        "filename": "MinGit-2.45.2.2-64-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.45.2.windows.2/MinGit-2.45.2.2-64-bit.zip",
+        "checksum": "93ce6daa762cd82b7558162b7caee6fc60dc6e630b0b4b1a15307e7480a0c64d"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "MinGit-2.47.1-32-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/MinGit-2.47.1-32-bit.zip",
-        "checksum": "3c0fa6e3096c2304f8c6af9cb6bb35623b2e615771cf7be45f9632af83bd9864"
-      },
-      {
-        "platform": "windows",
-        "arch": "arm64",
-        "filename": "MinGit-2.47.1-arm64.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/MinGit-2.47.1-arm64.zip",
-        "checksum": "fc5747e187a70147404a94da104dc9f6005a3d45a78a56dbfa132075ad4a45e4"
+        "filename": "MinGit-2.45.2.2-32-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.45.2.windows.2/MinGit-2.45.2.2-32-bit.zip",
+        "checksum": "f1b3272a303435c89e60645e2f1460b9c6679032f6ff15b21713b7d44044dd3e"
       }
     ]
   },
   "git-lfs": {
-    "version": "v3.6.0",
+    "version": "v3.6.1",
     "files": [
       {
         "platform": "linux",
         "arch": "amd64",
-        "name": "git-lfs-linux-amd64-v3.6.0.tar.gz",
-        "checksum": "fff4746159aa7a7b42ef1aa30fed03b534df48a7dbe116d65296c0f0c43c594d"
+        "name": "git-lfs-linux-amd64-v3.6.1.tar.gz",
+        "checksum": "2138d2e405a12f1a088272e06790b76699b79cb90d0317b77aafaf35de908d76"
       },
       {
         "platform": "linux",
         "arch": "x86",
-        "name": "git-lfs-linux-386-v3.6.0.tar.gz",
-        "checksum": "10da3c2ec46aa76287653a8d8576c271701d1fa899432f5bc3ace2a33c2116f0"
+        "name": "git-lfs-linux-386-v3.6.1.tar.gz",
+        "checksum": "62dd22e2cde54c051faaf58b5432f033a0cb6bf366d00648b1bc1b9ed1e819e1"
       },
       {
         "platform": "linux",
         "arch": "arm64",
-        "name": "git-lfs-linux-arm64-v3.6.0.tar.gz",
-        "checksum": "9509504b3b825054c3d07af5edc1cc9c00732c6f0fd4a060f04bfbf0f1279fca"
+        "name": "git-lfs-linux-arm64-v3.6.1.tar.gz",
+        "checksum": "1c2720ff53528fbe769633d448d830aa7b682141e3c4f6a9f26b9cf3b2548d0a"
       },
       {
         "platform": "linux",
         "arch": "arm",
-        "name": "git-lfs-linux-arm-v3.6.0.tar.gz",
-        "checksum": "bc7190755703017d193bee182a4edbf610d6df6d006d6fdd6ad411d552468456"
+        "name": "git-lfs-linux-arm-v3.6.1.tar.gz",
+        "checksum": "7e3e7df9d7cc663efab9d996c67af17d99afe8b0ce2fc002703cac0b8826f4f7"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "name": "git-lfs-windows-386-v3.6.0.zip",
-        "checksum": "58b3029f60d51b8775a0cbb21a39b8504967577a8bb4b3feabb1f1a48bf7fb33"
+        "name": "git-lfs-windows-386-v3.6.1.zip",
+        "checksum": "74fd0d4c9ea314719b6890667b0e528c4467726e1a7302e68221afba806a69b5"
       },
       {
         "platform": "windows",
         "arch": "amd64",
-        "name": "git-lfs-windows-amd64-v3.6.0.zip",
-        "checksum": "62fce4cfd453493966c387db167ba1aa46ecee730ae24a5b902a1d05650fb4ce"
+        "name": "git-lfs-windows-amd64-v3.6.1.zip",
+        "checksum": "aaca788e04f91676e58654d5ecf96cf03c76768a63b3a6918281a9678884c20c"
       },
       {
-        "platform": "windows",
+        "platform": "darwin",
+        "arch": "amd64",
+        "name": "git-lfs-darwin-amd64-v3.6.1.zip",
+        "checksum": "b53c361e6c85479507ed39ba99b87ec0888ac52f5afd2084fc68af4103081391"
+      },
+      {
+        "platform": "darwin",
         "arch": "arm64",
-        "name": "git-lfs-windows-arm64-v3.6.0.zip",
-        "checksum": "6e8d6051760bd90372ed7dfcace02f80dddec374bab61b9525e263722f97de7b"
+        "name": "git-lfs-darwin-arm64-v3.6.1.zip",
+        "checksum": "83b4ea3b0c72ba19e3bc46e47e92476f4505cc96693333b9fa0a314dddacc4ba"
       }
     ]
   },
   "git-credential-manager": {
-    "version": "2.5.0",
+    "version": "2.6.1",
     "files": [
       {
-        "name": "gcm-linux_amd64.2.5.0.tar.gz",
+        "name": "gcm-linux_amd64.2.6.1.tar.gz",
         "platform": "linux",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.5.0/gcm-linux_amd64.2.5.0.tar.gz",
-        "checksum": "3adb86ab82111c94a22256980efd01a064ed9a06b882b138ab631ba6996d5752"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz",
+        "checksum": "e01f84d3b362c3c52de6825d4e28228adb89246c9aee102b18a311f923f24115"
       },
       {
-        "name": "gcm-osx-arm64-2.5.0.tar.gz",
+        "name": "gcm-osx-arm64-2.6.1.tar.gz",
         "platform": "darwin",
         "arch": "arm64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.5.0/gcm-osx-arm64-2.5.0.tar.gz",
-        "checksum": "e3960aa72784ffb6e94294e1de14f0f5e96b6632854712ef4fa8837496032831"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-osx-arm64-2.6.1.tar.gz",
+        "checksum": "8e61494a6ffc1789fc5ec12ef129be84257909f315dcaf102a8f882aa32e9a2d"
       },
       {
-        "name": "gcm-osx-x64-2.5.0.tar.gz",
+        "name": "gcm-osx-x64-2.6.1.tar.gz",
         "platform": "darwin",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.5.0/gcm-osx-x64-2.5.0.tar.gz",
-        "checksum": "4c7087492310a641318d0ab79de3554ea07de599431b5ac1bd0d43efbf4fa7f7"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-osx-x64-2.6.1.tar.gz",
+        "checksum": "427be39f1d2cac60ed74f765df11a4a004c639f4353d111f122b067ee2842871"
       }
     ]
   }
