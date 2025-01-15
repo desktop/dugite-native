@@ -18,13 +18,13 @@ verify_lfs_contents() {
     exit 1
   }
   
-  UNKNOWN=$(echo "$CONTENTS" | cut -d/ -f2 | sort | uniq | grep -vE "^(CHANGELOG\.md|README\.md|git-lfs(\.exe)?|install\.sh|man)$")
-
   # Sanity check to make sure we react if git-lfs starts adding more stuff to
   # their release packages. Note that this only looks that the top
   # (technically second) level folder so new stuff in the man folder won't
   # get caught here.
-  test -z "$UNKNOWN" || {
+  (echo "$CONTENTS" | cut -d/ -f2 | sort | uniq | grep -vE "^(CHANGELOG\.md|README\.md|git-lfs(\.exe)?|install\.sh|man)$")
+
+  [[ 0 -eq $? ]] && {
     echo "Git LFS: unexpected files in the LFS archive, aborting..."
     exit 1
   }
