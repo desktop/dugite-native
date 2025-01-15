@@ -1,11 +1,13 @@
+#!/bin/bash -e
+
 verify_lfs_contents() {
 
   CONTENTS=""
 
   if [[ "$1" == *.zip ]]; then
-    CONTENTS="$(unzip -qql $1)"
+    CONTENTS=$(unzip -qql "$1")
   elif [[ "$1" == *.tar.gz ]]; then
-    CONTENTS="$(tar -tzf "$1")"
+    CONTENTS=$(tar -tzf "$1")
   else
     echo "Unknown file type for $1"
     exit 1
