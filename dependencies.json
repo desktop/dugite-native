@@ -65,6 +65,12 @@
         "checksum": "aaca788e04f91676e58654d5ecf96cf03c76768a63b3a6918281a9678884c20c"
       },
       {
+        "platform": "windows",
+        "arch": "arm64",
+        "name": "git-lfs-windows-arm64-v3.6.1.zip",
+        "checksum": "ad40ab00a73ef4bf63c969472d0e5a824686b495dbc01ea8e9e4cc456c49a4b0"
+      },
+      {
         "platform": "darwin",
         "arch": "amd64",
         "name": "git-lfs-darwin-amd64-v3.6.1.zip",
