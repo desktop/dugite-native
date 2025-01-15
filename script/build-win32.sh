@@ -60,7 +60,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
 
     verify_lfs_contents "$GIT_LFS_FILE"
 
-    unzip -j $GIT_LFS_FILE -x '*.md' -d "$SUBFOLDER"
+    unzip -j $GIT_LFS_FILE -d "$SUBFOLDER" "*/git-lfs.exe"
 
     if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
       echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
