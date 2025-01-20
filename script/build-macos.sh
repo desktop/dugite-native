@@ -36,6 +36,8 @@ GIT_LFS_FILENAME="$(jq --raw-output ".\"git-lfs\".files[] | select(.arch == \"$D
 
 # shellcheck source=script/compute-checksum.sh
 source "$CURRENT_DIR/compute-checksum.sh"
+# shellcheck source=script/verify-lfs-contents.sh
+source "$CURRENT_DIR/verify-lfs-contents.sh"
 
 echo "-- Building git at $SOURCE to $DESTINATION"
 
@@ -84,6 +86,9 @@ if [[ "$GIT_LFS_VERSION" ]]; then
   if [ "$COMPUTED_SHA256" = "$GIT_LFS_CHECKSUM" ]; then
     echo "Git LFS: checksums match"
     SUBFOLDER="$DESTINATION/libexec/git-core"
+
+    verify_lfs_contents "$GIT_LFS_FILE"
+
     unzip -j $GIT_LFS_FILE -d "$SUBFOLDER" "*/git-lfs"
 
     if [[ ! -f "$SUBFOLDER/git-lfs" ]]; then
