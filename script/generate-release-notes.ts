@@ -7,7 +7,7 @@ export default class GenerateReleaseNotes {
   // Eight targeted OS/arch combinations
   // two files for each targeted OS/arch
   // two checksum files for the previous
-  private SUCCESSFUL_RELEASE_FILE_COUNT = 8 * 2 * 2
+  private SUCCESSFUL_RELEASE_FILE_COUNT = 9 * 2 * 2
   private args = process.argv.slice(2)
   private expectedArgs = [
     {
