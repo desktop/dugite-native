@@ -26,25 +26,17 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-13, windows-2019, ubuntu-20.04]
-        arch: [x86, x64]
+        arch: [x86, x64, arm64]
         include:
           - os: macos-13
             friendlyName: macOS
             targetPlatform: macOS
-          - os: macos-13
-            friendlyName: macOS
-            targetPlatform: macOS
-            arch: arm64
           - os: windows-2019
             friendlyName: Windows
             targetPlatform: win32
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
-          - os: ubuntu-20.04
-            friendlyName: Linux
-            targetPlatform: ubuntu
-            arch: arm64
           - os: ubuntu-20.04
             friendlyName: Linux
             targetPlatform: ubuntu
@@ -118,15 +110,7 @@ jobs:
           sudo dpkg --add-architecture armhf
           sudo apt-get update
           sudo apt-get install -y gcc-arm-linux-gnueabihf binutils-arm-linux-gnueabihf libcurl4-gnutls-dev:armhf zlib1g-dev:armhf libssl-dev:armhf gettext
-      - name: Build (except macOS arm64)
-        if: matrix.targetPlatform != 'macOS' || matrix.arch != 'arm64'
-        shell: bash
-        run: script/build.sh
-        env:
-          TARGET_PLATFORM: ${{ matrix.targetPlatform }}
-          TARGET_ARCH: ${{ matrix.arch }}
-      - name: Build (macOS arm64)
-        if: matrix.targetPlatform == 'macOS' && matrix.arch == 'arm64'
+      - name: Build
         shell: bash
         run: script/build.sh
         env:

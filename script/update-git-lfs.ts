@@ -93,6 +93,7 @@ async function run(): Promise<boolean> {
     `git-lfs-linux-arm-${version}.tar.gz`,
     `git-lfs-windows-386-${version}.zip`,
     `git-lfs-windows-amd64-${version}.zip`,
+    `git-lfs-windows-arm64-${version}.zip`,
     `git-lfs-darwin-amd64-${version}.zip`,
     `git-lfs-darwin-arm64-${version}.zip`,
   ]
