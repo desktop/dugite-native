@@ -25,22 +25,22 @@ case "$TARGET_ARCH" in
     DEPENDENCY_ARCH="amd64"
     export CC="gcc"
     STRIP="strip"
-    HOST=""
+    HOST="" ;;
   "x86")
     DEPENDENCY_ARCH="x86"
     export CC="i686-linux-gnu-gcc"
     STRIP="i686-gnu-strip"
-    HOST="--host=i686-linux-gnu"
+    HOST="--host=i686-linux-gnu" ;;
   "arm64")
     DEPENDENCY_ARCH="arm64"
     export CC="aarch64-linux-gnu-gcc"
     STRIP="aarch64-linux-gnu-strip"
-    HOST="--host=aarch64-linux-gnu"
+    HOST="--host=aarch64-linux-gnu" ;;
   "arm")
     DEPENDENCY_ARCH="arm"
     export CC="arm-linux-gnueabihf-gcc"
     STRIP="arm-linux-gnueabihf-strip"
-    HOST="--host=arm-linux-gnueabihf"
+    HOST="--host=arm-linux-gnueabihf" ;;
   *)
     exit 1 ;;
 esac
