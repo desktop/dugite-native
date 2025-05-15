@@ -81,8 +81,6 @@ DESTDIR="$DESTINATION" \
   make strip install
 )
 
-objdump -p "$DESTINATION/libexec/git-core/git-remote-http"
-
 if [[ "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.tar.gz
