@@ -25,26 +25,22 @@ case "$TARGET_ARCH" in
     DEPENDENCY_ARCH="amd64"
     export CC="gcc"
     STRIP="strip"
-    HOST=""
-    TARGET="" ;;
+    HOST="" ;;
   "x86")
     DEPENDENCY_ARCH="x86"
     export CC="i686-linux-gnu-gcc"
     STRIP="i686-gnu-strip"
-    HOST="--host=i686-linux-gnu"
-    TARGET="--target=i686-linux-gnu" ;;
+    HOST="--host=i686-linux-gnu" ;;
   "arm64")
     DEPENDENCY_ARCH="arm64"
     export CC="aarch64-linux-gnu-gcc"
     STRIP="aarch64-linux-gnu-strip"
-    HOST="--host=aarch64-linux-gnu"
-    TARGET="--target=aarch64-linux-gnu" ;;
+    HOST="--host=aarch64-linux-gnu" ;;
   "arm")
     DEPENDENCY_ARCH="arm"
     export CC="arm-linux-gnueabihf-gcc"
     STRIP="arm-linux-gnueabihf-strip"
-    HOST="--host=arm-linux-gnueabihf"
-    TARGET="--target=arm-linux-gnueabihf" ;;
+    HOST="--host=arm-linux-gnueabihf" ;;
   *)
     exit 1 ;;
 esac
@@ -66,20 +62,6 @@ source "$CURRENT_DIR/check-static-linking.sh"
 # shellcheck source=script/verify-lfs-contents.sh
 source "$CURRENT_DIR/verify-lfs-contents.sh"
 
-echo " -- Building vanilla curl at $CURL_INSTALL_DIR instead of distro-specific version"
-
-CURL_FILE_NAME="curl-7.61.1"
-CURL_FILE="$CURL_FILE_NAME.tar.gz"
-
-cd /tmp || exit 1
-curl -LO "https://curl.haxx.se/download/$CURL_FILE"
-tar -xf $CURL_FILE
-
-(
-cd $CURL_FILE_NAME || exit 1
-./configure --prefix="$CURL_INSTALL_DIR" "$HOST" "$TARGET"
-make install
-)
 echo " -- Building git at $SOURCE to $DESTINATION"
 
 (
@@ -89,7 +71,6 @@ make configure
 CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -U_FORTIFY_SOURCE' \
   LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' ac_cv_iconv_omits_bom=no ac_cv_fread_reads_directories=no ac_cv_snprintf_returns_bogus=no \
   ./configure $HOST \
-  --with-curl="$CURL_INSTALL_DIR" \
   --prefix=/
 sed -i "s/STRIP = strip/STRIP = $STRIP/" Makefile
 DESTDIR="$DESTINATION" \
