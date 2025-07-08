@@ -25,13 +25,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, windows-2019, ubuntu-22.04]
+        os: [macos-13, windows-2025, ubuntu-22.04]
         arch: [x86, x64, arm64]
         include:
           - os: macos-13
             friendlyName: macOS
             targetPlatform: macOS
-          - os: windows-2019
+          - os: windows-2025
             friendlyName: Windows
             targetPlatform: win32
           - os: ubuntu-22.04
