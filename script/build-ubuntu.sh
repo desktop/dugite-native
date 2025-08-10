@@ -81,7 +81,7 @@ DESTDIR="$DESTINATION" \
   make strip install
 )
 
-if [[ "$GIT_LFS_VERSION" ]]; then
+if [[ "${NO_GIT_LFS:-}" != "1" && "$GIT_LFS_VERSION" ]]; then
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.tar.gz
   GIT_LFS_URL="https://github.com/git-lfs/git-lfs/releases/download/v${GIT_LFS_VERSION}/${GIT_LFS_FILENAME}"
@@ -107,7 +107,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
     exit 1
   fi
 else
-  echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
+  echo "-- Skipped bundling Git LFS"
 fi
 
 if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then

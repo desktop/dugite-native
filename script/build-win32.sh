@@ -57,7 +57,7 @@ else
 fi
 
 
-if [[ "$GIT_LFS_VERSION" ]]; then
+if [[ "${NO_GIT_LFS:-}" != "1" && "$GIT_LFS_VERSION" ]]; then
   # download Git LFS, verify its the right contents, and unpack it
   echo "-- Bundling Git LFS"
   GIT_LFS_FILE=git-lfs.zip
@@ -84,7 +84,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
     exit 1
   fi
 else
-  echo "-- Skipped bundling Git LFS (set GIT_LFS_VERSION to include it in the bundle)"
+  echo "-- Skipped bundling Git LFS"
 fi
 
 if [[ -f "$DESTINATION/etc/gitconfig" ]]; then
