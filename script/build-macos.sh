@@ -109,7 +109,7 @@ GCM_VERSION="$(jq --raw-output '.["git-credential-manager"].version[1:]' depende
 GCM_CHECKSUM="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .checksum" dependencies.json)"
 GCM_URL="$(jq --raw-output ".\"git-credential-manager\".files[] | select(.arch == \"$GOARCH\" and .platform == \"darwin\") | .url" dependencies.json)"
 
-if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then
+if [[ "${NO_GCM:-}" != "1" && "$GCM_VERSION" && "$GCM_URL" ]]; then
   echo "-- Bundling GCM"
   GCM_FILE=git-credential-manager.tar.gz
   echo "-- Downloading from $GCM_URL"
@@ -135,7 +135,7 @@ else
   if [ -z "$GCM_URL" ]; then
     echo "-- No download URL for GCM on macOS/$GOARCH, skipping bundling"
   else
-    echo "-- Skipped bundling GCM (set GCM_VERSION to include it in the bundle)"
+    echo "-- Skipped bundling GCM"
   fi
 fi
 
