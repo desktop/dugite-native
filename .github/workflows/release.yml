@@ -49,9 +49,6 @@ jobs:
               echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
               exit 1
           fi
-          echo 'DUGITE_RELEASE_NOTES<<EOF' >> $GITHUB_ENV
-          cat ${RELEASE_NOTES_FILE} >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
 
       - name: Get author name
         id: get_author
@@ -71,7 +68,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{ env.DUGITE_RELEASE_NOTES }}
+          body_path: ${{ github.workspace }}/script/release_notes.txt
           tag_name: ${{ github.event.inputs.version }}
           draft: true
           prerelease: false
