@@ -1,6 +1,5 @@
 import { Octokit } from '@octokit/rest'
 import { updateGitLfsDependencies } from './lib/dependencies'
-import fetch from 'node-fetch'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
