@@ -63,12 +63,8 @@ jobs:
       - name: Prettify
         run: npm run prettier-fix
       - name: Generate PR contents
-        id: pr-title
+        id: pr-contents
         env:
-          GIT_VERSION: ${{ github.event.inputs.git }}
-          G4W_VERSION: ${{ github.event.inputs.g4w }}
-          LFS_VERSION: ${{ github.event.inputs.lfs }}
-          GCM_VERSION: ${{ github.event.inputs.gcm }}
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_ACTION_RUN_URL:
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{
@@ -85,7 +81,7 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           branch: update-dependencies-auto-${{ github.run_id }}
           delete-branch: true
-          commit-message: Update dependencies
-          title: ${{ steps.pr-title.outputs.title }}
+          commit-message: ${{ steps.pr-contents.outputs.commit-message }}
+          title: ${{ steps.pr-contents.outputs.title }}
           body-path: ./pr-body.md
           draft: false

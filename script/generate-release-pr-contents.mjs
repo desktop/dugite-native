@@ -1,20 +1,61 @@
 import { createWriteStream } from 'fs'
+import dependencies from '../dependencies.json' with { type: 'json' }
+import { execFile } from 'child_process'
+import { promisify } from 'util'
 
-const git = process.env.GIT_VERSION
-const g4w = process.env.G4W_VERSION
-const lfs = process.env.LFS_VERSION
-const gcm = process.env.GCM_VERSION
+const execFileAsync = promisify(execFile)
 
-const parts = [
-  ...(git ? [g4w !== git ? `Git to ${git} (G4W ${g4w})` : `Git ${git}`] : []),
-  ...(lfs ? [`Git LFS to ${lfs}`] : []),
-  ...(gcm ? [`GCM to ${gcm}`] : []),
-]
+const { stdout } = await execFileAsync('git', ['show', '30dfdbcd0d3a29c8df689e86a2a0d80fd3cc9423:dependencies.json'])
+const previousDependencies = JSON.parse(stdout)
+const currentDependencies = dependencies
 
-const msg =
-  parts.length > 0 ? `Update ${parts.join(', ')}` : 'Update dependencies'
+const listFormatter = new Intl.ListFormat('en')
 
-console.log(`title=${msg}`)
+const findG4WVersion = (deps) => {
+  const url = deps.git.packages.find(x => x.platform === 'windows')?.url
+
+  if (url) {
+    const re = /git\/releases\/download\/([^\/]+)\/.*\.zip$/
+    const match = url.match(re)
+    return match ? match[1] : undefined
+  } else {
+    return undefined
+  }
+}
+
+const updates = {
+  "Git": currentDependencies.git.version !== previousDependencies.git.version ? {
+    from: previousDependencies.git.version,
+    to: currentDependencies.git.version
+  } : undefined,
+  "G4W": findG4WVersion(currentDependencies) !== findG4WVersion(previousDependencies) ? {
+    from: findG4WVersion(previousDependencies),
+    to: findG4WVersion(currentDependencies)
+  } : undefined,
+  "LFS": currentDependencies['git-lfs'].version !== previousDependencies['git-lfs'].version ? {
+    from: previousDependencies['git-lfs'].version,
+    to: currentDependencies['git-lfs'].version
+  } : undefined,
+  "GCM": currentDependencies['git-credential-manager'].version !== previousDependencies['git-credential-manager'].version ? {
+    from: previousDependencies['git-credential-manager'].version,
+    to: currentDependencies['git-credential-manager'].version
+  } : undefined,
+}
+
+const updatedComponents = Array.from(Object.entries(updates).filter(([_, v]) => v !== undefined).map(([k]) => k))
+
+if (updatedComponents.length === 0) {
+  console.log('title=Update dependencies')
+} else {
+  console.log(`title=Update ${listFormatter.format(updatedComponents)}`)
+}
+
+if (updatedComponents.length === 0) {
+  console.log('commit-message=Update dependencies')
+} else {
+  const parts = Object.entries(updates).filter(([_, v]) => v !== undefined).map(([k, v]) => `${k} to ${v.to}`)
+  console.log(`commit-message=Update ${listFormatter.format(parts)}`)
+}
 
 const bodyStream = createWriteStream('pr-body.md', 'utf8')
 
@@ -25,20 +66,20 @@ wl(
 )
 wl(``)
 
-if (git) {
-  if (g4w && g4w !== git) {
-    wl(`- Updated Git to ${git} (G4W ${g4w})`)
-  } else {
-    wl(`- Updated Git to ${git}`)
-  }
+if (updates.Git) {
+    wl(`- Updated Git from ${updates.Git.from} to ${updates.Git.to}`)
 }
 
-if (lfs) {
-  wl(`- Updated Git LFS to ${lfs}`)
+if (updates.G4W) {
+    wl(`- Updated G4W from ${updates.G4W.from} to ${updates.G4W.to}`)
 }
 
-if (gcm) {
-  wl(`- Updated GCM to ${gcm}`)
+if (updates.LFS) {
+    wl(`- Updated Git LFS from ${updates.LFS.from} to ${updates.LFS.to}`)
+}
+
+if (updates.GCM) {
+  wl(`- Updated GCM from ${updates.GCM.from} to ${updates.GCM.to}`)
 }
 
 bodyStream.end()
