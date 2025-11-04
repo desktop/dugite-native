@@ -1,0 +1,77 @@
+name: Publish release
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: The git ref to publish from
+        required: false
+        type: string
+        default: 'main'
+      version:
+        description: The version to release (e.g., "v1.2.3")
+        required: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ github.event.inputs.ref }}
+  release:
+    name: Create GitHub release
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref }}
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: './artifacts'
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: './artifacts'
+
+      - name: Install dependencies
+        run: npm i
+      - name: Generate release notes
+        run: |
+          npx tsx script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "${{ inputs.ref }}" "${{ secrets.GITHUB_TOKEN }}"
+          RELEASE_NOTES_FILE=script/release_notes.txt
+          if [[ ! -f "$RELEASE_NOTES_FILE" ]]; then
+              echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
+              exit 1
+          fi
+          echo 'DUGITE_RELEASE_NOTES<<EOF' >> $GITHUB_ENV
+          cat ${RELEASE_NOTES_FILE} >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Get author name
+        id: get_author
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo name=`gh api users/${{ github.actor }} | jq -j .name` >> $GITHUB_OUTPUT
+      - name: Create tag
+        env:
+          GIT_AUTHOR_NAME: ${{steps.get_author.outputs.name || github.actor}}
+          GIT_AUTHOR_EMAIL: ${{github.actor_id}}+${{github.actor}}@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          git tag ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs.version }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{ env.DUGITE_RELEASE_NOTES }}
+          tag_name: ${{ github.event.inputs.version }}
+          draft: true
+          prerelease: false
+          files: ${{ github.workspace }}/artifacts/**/*
+          fail_on_unmatched_files: true
