@@ -57,7 +57,7 @@ jobs:
         run: |
           echo name=`gh api users/${{ github.actor }} | jq -j .name` >> $GITHUB_OUTPUT
       - name: Prettify
-        run: npm run prettier:fix
+        run: npm run prettier-fix
       - name: Commit changes
         env:
           GIT_AUTHOR_NAME: ${{steps.get_author.outputs.name || github.actor}}
