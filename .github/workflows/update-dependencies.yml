@@ -62,25 +62,20 @@ jobs:
           echo name=`gh api users/${{ github.actor }} | jq -j .name` >> $GITHUB_OUTPUT
       - name: Prettify
         run: npm run prettier-fix
-      - name: Commit changes
-        env:
-          GIT_AUTHOR_NAME: ${{steps.get_author.outputs.name || github.actor}}
-          GIT_AUTHOR_EMAIL: ${{github.actor_id}}+${{github.actor}}@users.noreply.github.com
-          GIT_COMMITTER_NAME: github-actions[bot]
-          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-        run: git commit -a -m "Update dependencies"
-      - name: Push changes
-        run: git push origin HEAD:update-dependencies-auto-${{ github.run_id }}
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v5
+      - uses: actions/create-github-app-token@v1
+        id: generate-token
         with:
-          token: ${{ github.token }}
-          commit-message: Update dependencies
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
           branch: update-dependencies-auto-${{ github.run_id }}
+          delete-branch: true
+          commit-message: Update dependencies
           title: Update dependencies
           body: |
             This is an automated pull request to update dependencies triggered
             by @${{ github.actor }} in ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}.
-
-            Please mark PR as ready for review in order to kick off CI.
-          draft: true
+          draft: always-true
