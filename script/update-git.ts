@@ -170,11 +170,11 @@ async function run() {
   console.log(`✅ Using Git for Windows version '${version}'`)
 
   if (!version.startsWith(latestGitVersion)) {
-    console.log(
+    console.error(
       `🔴 Latest Git for Windows version is ${version} which is a different series to Git version ${latestGitVersion}`
     )
     if (argv['ignore-version-mismatch'] !== true) {
-      return
+      process.exit(1)
     }
   }
 
@@ -183,7 +183,8 @@ async function run() {
   const packagearm64 = await getPackageDetails(assets, body, 'arm64')
 
   if (package64bit == null || package32bit == null || packagearm64 == null) {
-    return
+    console.error(`🔴 Unable to find all required Git for Windows packages`)
+    process.exit(1)
   }
 
   updateGitDependencies(latestGitVersion, [
