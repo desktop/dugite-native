@@ -25,7 +25,7 @@ jobs:
           fi
       - name: Verify tag does not already exist by using ls-remote
         run: |
-          if git ls-remote --tags ${{ github.server_url }}/${{ github.repository_owner }}/${{github.repository}} | grep -q "${{ github.event.inputs.version }}"; then
+          if git ls-remote --tags ${{ github.server_url }}/${{github.repository}} | grep -q "${{ github.event.inputs.version }}"; then
             echo "Error: Tag '${{ github.event.inputs.version }}' already exists."
             exit 1
           fi
