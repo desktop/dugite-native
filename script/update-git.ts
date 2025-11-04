@@ -5,6 +5,7 @@ import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
 import yargs from 'yargs'
 import { fetchAssetChecksum } from './fetch-asset-checksum'
+import { coerceVersionPrefix } from './lib/coerce-version'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -121,11 +122,16 @@ async function run() {
   const argv = yargs
     .usage('Usage: update-git [options]')
     .version(false)
-    .option('tag', { default: 'latest', desc: 'The Git tag to use' })
+    .option('tag', {
+      default: 'latest',
+      desc: 'The Git tag to use',
+      coerce: coerceVersionPrefix,
+    })
     .option('g4w-tag', {
       alias: 'g4w',
       default: 'latest',
       desc: 'The Git for Windows tag to use',
+      coerce: coerceVersionPrefix,
     })
     .option('ignore-version-mismatch', {
       desc:

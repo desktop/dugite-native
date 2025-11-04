@@ -2,6 +2,7 @@ import { Octokit } from '@octokit/rest'
 import { updateGitCredentialManagerDependencies } from './lib/dependencies'
 import { fetchAssetChecksum } from './fetch-asset-checksum'
 import yargs from 'yargs'
+import { coerceVersionPrefix } from './lib/coerce-version'
 
 process.on('unhandledRejection', reason => {
   console.error(reason)
@@ -11,7 +12,11 @@ async function run(): Promise<boolean> {
   const { argv } = yargs
     .usage('Usage: update-git [options]')
     .version(false)
-    .option('tag', { default: 'latest', desc: 'The Git LFS tag to use' })
+    .option('tag', {
+      default: 'latest',
+      desc: 'The Git LFS tag to use',
+      coerce: coerceVersionPrefix,
+    })
 
   const token = process.env.GITHUB_ACCESS_TOKEN
   const octokit = new Octokit(token ? { auth: `token ${token}` } : {})
