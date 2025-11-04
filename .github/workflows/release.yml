@@ -3,22 +3,20 @@ name: Publish release
 on:
   workflow_dispatch:
     inputs:
-      ref:
-        description: The git ref to publish from
-        required: false
-        type: string
-        default: 'main'
       version:
         description: The version to release (e.g., "v1.2.3")
         required: true
+      dry-run:
+        description: Perform a dry run without creating a release
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
     permissions:
       contents: read
     uses: ./.github/workflows/ci.yml
-    with:
-      ref: ${{ github.event.inputs.ref }}
   release:
     name: Create GitHub release
     needs: [build]
@@ -27,8 +25,6 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.ref }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -69,9 +65,10 @@ jobs:
           GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
         run: |
           git tag ${{ github.event.inputs.version }}
-          git push origin ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs['dry-run'] == 'true' && '--dry-run ' || ''  }}${{ github.event.inputs.version }}
       - name: Release
         uses: softprops/action-gh-release@v2
+        if: ${{ github.event.inputs['dry-run'] != 'true' }}
         with:
           body_path: ${{ github.workspace }}/script/release_notes.txt
           tag_name: ${{ github.event.inputs.version }}
