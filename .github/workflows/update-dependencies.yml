@@ -1,0 +1,74 @@
+name: Update dependencies
+
+on:
+  workflow_dispatch:
+    inputs:
+      git:
+        description: Update Git ("latest", version, or "skip")
+        required: true
+        default: 'latest'
+      g4w:
+        description: Update Git for Windows ("latest", version, or "skip")
+        required: true
+        default: 'latest'
+      lfs:
+        description: Update Git LFS ("latest", version, or "skip")
+        required: true
+        default: 'latest'
+      gcm:
+        description:
+          Update Git Credential Manager ("latest", version, or "skip")
+        required: true
+        default: 'latest'
+
+jobs:
+  update-dependencies:
+    name: Update dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install dependencies
+        run: npm install
+      - name: Update Git
+        if: ${{ github.event.inputs.git != 'skip' }}
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx tsx script/update-git.ts git --tag "${{ github.event.inputs.git }}" --g4w-tag "${{ github.event.inputs.g4w }}"
+      - name: Update Git LFS
+        if: ${{ github.event.inputs.lfs != 'skip' }}
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx tsx script/update-git-lfs.ts lfs --tag "${{ github.event.inputs.lfs }}"
+      - name: Update Git Credential Manager
+        if: ${{ github.event.inputs.gcm != 'skip' }}
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx tsx script/update-git-credential-manager.ts --tag "${{ github.event.inputs.gcm }}"
+      - name: Get author name
+        id: get_author
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo name=`gh api users/${{ github.actor }} | jq -j .name` >> $GITHUB_OUTPUT
+      - name: Prettify
+        run: npm run prettier:fix
+      - name: Commit changes
+        env:
+          GIT_AUTHOR_NAME: ${{steps.get_author.outputs.name || github.actor}}
+          GIT_AUTHOR_EMAIL: ${{github.actor_id}}+${{github.actor}}@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: git commit -a -m "Update dependencies"
+      - name: Push changes
+        run: git push origin HEAD:update-dependencies-auto-${{ github.run_id }}
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ github.token }}
+          commit-message: Update dependencies
+          branch: update-dependencies-auto-${{ github.run_id }}
+          title: Update dependencies
+          body: This is an automated pull request to update dependencies.
