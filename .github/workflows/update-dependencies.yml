@@ -65,8 +65,8 @@ jobs:
       - uses: actions/create-github-app-token@v1
         id: generate-token
         with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          app-id: ${{ vars.RELEASES_APP_ID }}
+          private-key: ${{ secrets.RELEASES_APP_KEY }}
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
         with:
