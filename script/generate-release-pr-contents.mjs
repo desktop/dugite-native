@@ -5,7 +5,7 @@ import { promisify } from 'util'
 
 const execFileAsync = promisify(execFile)
 
-const { stdout } = await execFileAsync('git', ['show', '30dfdbcd0d3a29c8df689e86a2a0d80fd3cc9423:dependencies.json'])
+const { stdout } = await execFileAsync('git', ['show', 'HEAD:dependencies.json'])
 const previousDependencies = JSON.parse(stdout)
 const currentDependencies = dependencies
 
