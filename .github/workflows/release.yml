@@ -24,6 +24,8 @@ jobs:
             exit 1
           fi
       - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
 
       - name: Verify tag does not already exist
         run: |
