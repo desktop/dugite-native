@@ -2,6 +2,10 @@ import { basename, join } from 'path'
 import * as fs from 'fs'
 import { Octokit } from '@octokit/rest'
 import { readdir } from 'fs/promises'
+import { execFile } from 'child_process'
+import { promisify } from 'util'
+
+const execFileAsync = promisify(execFile)
 
 export default class GenerateReleaseNotes {
   // Nine targeted OS/arch combinations
@@ -15,17 +19,6 @@ export default class GenerateReleaseNotes {
       name: 'artifactsDir',
       description: 'full path to the artifacts directory',
     },
-    {
-      key: 1,
-      name: 'tagName',
-      description:
-        'name of the GitHub tag that we use to generate the changelog',
-    },
-    {
-      key: 2,
-      name: 'githubToken',
-      description: 'GitHub API token',
-    },
   ]
   private expectedArgsString = this.expectedArgs
     .map(arg => `\${${arg.name}}`)
@@ -37,14 +30,9 @@ export default class GenerateReleaseNotes {
   private artifactsDir: string
 
   /**
-   * Name of the GitHub tag that we use to generate the changelog
-   */
-  private tagName: string
-
-  /**
    * GitHub API token
    */
-  private githubToken: string
+  private githubToken: string | undefined
 
   private owner = 'desktop'
   private repo = 'dugite-native'
@@ -66,8 +54,7 @@ export default class GenerateReleaseNotes {
     }
 
     this.artifactsDir = this.args[0]
-    this.tagName = this.args[1]
-    this.githubToken = this.args[2]
+    this.githubToken = process.env.GITHUB_TOKEN
 
     this.run()
   }
@@ -135,7 +122,9 @@ export default class GenerateReleaseNotes {
    * Generates release note entries including attribution to the author.
    */
   async generateReleaseNotesEntries(): Promise<Array<string>> {
-    const octokit = new Octokit({ auth: `token ${this.githubToken}` })
+    const octokit = new Octokit({
+      auth: this.githubToken ? `token ${this.githubToken}` : undefined,
+    })
     const latestRelease = await octokit.repos.getLatestRelease({
       owner: this.owner,
       repo: this.repo,
@@ -143,30 +132,20 @@ export default class GenerateReleaseNotes {
 
     const latestReleaseTag = latestRelease.data.tag_name
 
-    console.log(
-      `Comparing commits between ${latestReleaseTag} and ${this.tagName}...`
-    )
+    console.log(`Comparing commits between ${latestReleaseTag} and HEAD...`)
 
-    const response = await octokit.repos.compareCommits({
-      owner: this.owner,
-      repo: this.repo,
-      base: latestReleaseTag,
-      head: this.tagName,
-    })
-
-    const commits = response.data.commits
+    const { stdout } = await execFileAsync('git', [
+      'log',
+      '-z',
+      '--format=%s',
+      '--merges',
+      `${latestReleaseTag}..HEAD`,
+    ])
 
     const mergeCommitRegex = /Merge pull request #(\d{1,}) /
-
-    const mergeCommitMessages = commits
-      .filter((c: { commit: { message: string } }) =>
-        c.commit.message.match(mergeCommitRegex)
-      )
-      .map((c: { commit: { message: string } }) => c.commit.message)
-
     const pullRequestIds = []
 
-    for (const mergeCommitMessage of mergeCommitMessages) {
+    for (const mergeCommitMessage of stdout.split('\0')) {
       const match = mergeCommitRegex.exec(mergeCommitMessage)
       if (match != null && match.length === 2) {
         const num = parseInt(match[1])

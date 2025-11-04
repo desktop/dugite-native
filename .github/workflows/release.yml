@@ -52,6 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: './artifacts'
+          merge-multiple: true
 
       - name: Display structure of downloaded files
         run: ls -R
@@ -60,14 +61,9 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Generate release notes
-        run: |
-          npx tsx script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "${{ github.ref }}" "${{ secrets.GITHUB_TOKEN }}"
-          RELEASE_NOTES_FILE=script/release_notes.txt
-          if [[ ! -f "$RELEASE_NOTES_FILE" ]]; then
-              echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
-              exit 1
-          fi
-
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx tsx script/generate-release-notes.ts
       - name: Get author name
         id: get_author
         env:
