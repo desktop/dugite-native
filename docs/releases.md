@@ -15,11 +15,14 @@ Examples:
 
 ### Release Process
 
-1. `git tag {version}` the version you wish to publish.
-1. `git push --follow-tags` to ensure all new commits (and the tag) are pushed
-   to the remote. Pushing the tag will start the release process.
-1. Wait a few minutes for the build to finish (look for the build in
-   https://github.com/desktop/dugite-native/actions)
+1. Use the
+   [Update dependencies](https://github.com/desktop/dugite-native/actions/workflows/update-dependencies.yml)
+   workflow to update the components you wish to include in the release (e.g.,
+   Git, Git LFS)
+1. Use the
+   [Publish Release](https://github.com/desktop/dugite-native/actions/workflows/release.yml)
+   workflow to create a new release
+1. Wait a few minutes for the build to finish
 1. Once the build is complete it will create a new draft release with all of the
    assets and suggested release notes
 
