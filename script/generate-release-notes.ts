@@ -76,8 +76,14 @@ export default class GenerateReleaseNotes {
    * Do our magic to generate the release notes 🧙🏼‍♂️
    */
   async run() {
-    const files = await readdir(this.artifactsDir, { withFileTypes: true, recursive: true })
-      .then((paths) => paths.filter((path) => path.isFile()).map((path) => join(this.artifactsDir, path.name)))
+    const files = await readdir(this.artifactsDir, {
+      withFileTypes: true,
+      recursive: true,
+    }).then(paths =>
+      paths
+        .filter(path => path.isFile())
+        .map(path => join(this.artifactsDir, path.name))
+    )
 
     let countFiles = 0
     let shaEntries: Array<{ filename: string; checksum: string }> = []
