@@ -50,7 +50,7 @@ for the Git submodule (which covers macOS and Linux) and for Git for Windows.
 $ npm run update-git -- --help
 
 > dugite-native@ update-git /Users/markus/GitHub/dugite-native
-> ts-node script/update-git.ts "--help"
+> tsx script/update-git.ts "--help"
 
 Usage: update-git [options]
 
@@ -70,7 +70,7 @@ submodule to version `v2.20.0`
 $ npm run update-git -- --tag v2.20.0 --g4w v2.19.2.windows.3 --ignore-version-mismatch
 
 > dugite-native@ update-git /Users/markus/GitHub/dugite-native
-> ts-node script/update-git.ts "--tag" "v2.20.0" "--g4w" "v2.19.2.windows.3" "--ignore-version-mismatch"
+> tsx script/update-git.ts "--tag" "v2.20.0" "--g4w" "v2.19.2.windows.3" "--ignore-version-mismatch"
 
 ✅ Using Git version 'v2.20.0'
 🔴 No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.
