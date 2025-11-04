@@ -63,7 +63,7 @@ jobs:
       - name: Generate release notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx tsx script/generate-release-notes.ts
+        run: npx tsx script/generate-release-notes.mts
       - name: Get author name
         id: get_author
         env:
