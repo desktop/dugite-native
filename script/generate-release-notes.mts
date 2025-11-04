@@ -112,13 +112,8 @@ for (const file of files) {
     process.exit(1)
   }
   if (file.name.endsWith('.sha256')) {
-    const sourceFile = join(
-      file.parentPath,
-      file.name.slice(0, -'.sha256'.length)
-    )
-
     shaEntries.push({
-      filename: sourceFile,
+      filename: file.name.slice(0, -'.sha256'.length),
       checksum: (
         await readFile(
           join(import.meta.dirname, '..', 'artifacts', file.name),
