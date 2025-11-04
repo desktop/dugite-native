@@ -1,7 +1,7 @@
 import { basename, join } from 'path'
 import * as fs from 'fs'
 import { Octokit } from '@octokit/rest'
-import { glob, readdir } from 'fs/promises'
+import { readdir } from 'fs/promises'
 
 export default class GenerateReleaseNotes {
   // Nine targeted OS/arch combinations
