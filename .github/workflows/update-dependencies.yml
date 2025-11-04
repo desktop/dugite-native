@@ -62,6 +62,18 @@ jobs:
           echo name=`gh api users/${{ github.actor }} | jq -j .name` >> $GITHUB_OUTPUT
       - name: Prettify
         run: npm run prettier-fix
+      - name: Generate PR contents
+        id: pr-title
+        env:
+          GIT_VERSION: ${{ github.event.inputs.git }}
+          G4W_VERSION: ${{ github.event.inputs.g4w }}
+          LFS_VERSION: ${{ github.event.inputs.lfs }}
+          GCM_VERSION: ${{ github.event.inputs.gcm }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_ACTION_RUN_URL:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{
+            github.run_id }}
+        run: node ./script/generate-release-pr-title.mjs >> $GITHUB_OUTPUT
       - uses: actions/create-github-app-token@v1
         id: generate-token
         with:
@@ -74,8 +86,6 @@ jobs:
           branch: update-dependencies-auto-${{ github.run_id }}
           delete-branch: true
           commit-message: Update dependencies
-          title: Update dependencies
-          body: |
-            This is an automated pull request to update dependencies triggered
-            by @${{ github.actor }} in ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}.
-          draft: always-true
+          title: ${{ steps.pr-title.outputs.title }}
+          body-path: ./pr-body.md
+          draft: false

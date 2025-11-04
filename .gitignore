@@ -9,3 +9,5 @@ output
 *.lzma
 *.sha256
 .node-version
+
+pr-body.md
