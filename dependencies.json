@@ -31,63 +31,63 @@
       {
         "platform": "linux",
         "arch": "amd64",
-        "name": "git-lfs-linux-amd64-v3.7.1.tar.gz",
+        "filename": "git-lfs-linux-amd64-v3.7.1.tar.gz",
         "checksum": "1c0b6ee5200ca708c5cebebb18fdeb0e1c98f1af5c1a9cba205a4c0ab5a5ec08",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-amd64-v3.7.1.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "x86",
-        "name": "git-lfs-linux-386-v3.7.1.tar.gz",
+        "filename": "git-lfs-linux-386-v3.7.1.tar.gz",
         "checksum": "a49eed4612d9a33db848db8cb9079b15d5f3116bbca2c1a11cb89a70e3218921",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-386-v3.7.1.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "arm64",
-        "name": "git-lfs-linux-arm64-v3.7.1.tar.gz",
+        "filename": "git-lfs-linux-arm64-v3.7.1.tar.gz",
         "checksum": "73a9c90eeb4312133a63c3eaee0c38c019ea7bfa0953d174809d25b18588dd8d",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-arm64-v3.7.1.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "arm",
-        "name": "git-lfs-linux-arm-v3.7.1.tar.gz",
+        "filename": "git-lfs-linux-arm-v3.7.1.tar.gz",
         "checksum": "567002d2735ceb0e876e326736f1b72895931d5ac156002cc8561b072a4ce9a3",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-arm-v3.7.1.tar.gz"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "name": "git-lfs-windows-386-v3.7.1.zip",
+        "filename": "git-lfs-windows-386-v3.7.1.zip",
         "checksum": "06c05c06523abf3930301b3022527ad881b1a7f8bf036ed6d93c8e68569041bb",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-windows-386-v3.7.1.zip"
       },
       {
         "platform": "windows",
         "arch": "amd64",
-        "name": "git-lfs-windows-amd64-v3.7.1.zip",
+        "filename": "git-lfs-windows-amd64-v3.7.1.zip",
         "checksum": "8683cdc3d6c029b49393dcebbaa6265bd6efd9abdcf837be855b4cd42e5e80b6",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-windows-amd64-v3.7.1.zip"
       },
       {
         "platform": "windows",
         "arch": "arm64",
-        "name": "git-lfs-windows-arm64-v3.7.1.zip",
+        "filename": "git-lfs-windows-arm64-v3.7.1.zip",
         "checksum": "9441383a3928a7f387223711929292a46ace95580ceed443d61e7b8a4d9615c3",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-windows-arm64-v3.7.1.zip"
       },
       {
         "platform": "darwin",
         "arch": "amd64",
-        "name": "git-lfs-darwin-amd64-v3.7.1.zip",
+        "filename": "git-lfs-darwin-amd64-v3.7.1.zip",
         "checksum": "b5b1b641c0648c83661fa9eda991cd3eff945264dabc2cdf411a80dfe7ec0970",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-darwin-amd64-v3.7.1.zip"
       },
       {
         "platform": "darwin",
         "arch": "arm64",
-        "name": "git-lfs-darwin-arm64-v3.7.1.zip",
+        "filename": "git-lfs-darwin-arm64-v3.7.1.zip",
         "checksum": "76260fb34f4ee622ff0a66b857e5954aa49c7e343a92e57a1ec4a760618c94b2",
         "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-darwin-arm64-v3.7.1.zip"
       }
@@ -97,21 +97,21 @@
     "version": "2.6.1",
     "files": [
       {
-        "name": "gcm-linux_amd64.2.6.1.tar.gz",
+        "filename": "gcm-linux_amd64.2.6.1.tar.gz",
         "platform": "linux",
         "arch": "amd64",
         "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz",
         "checksum": "e01f84d3b362c3c52de6825d4e28228adb89246c9aee102b18a311f923f24115"
       },
       {
-        "name": "gcm-osx-arm64-2.6.1.tar.gz",
+        "filename": "gcm-osx-arm64-2.6.1.tar.gz",
         "platform": "darwin",
         "arch": "arm64",
         "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-osx-arm64-2.6.1.tar.gz",
         "checksum": "8e61494a6ffc1789fc5ec12ef129be84257909f315dcaf102a8f882aa32e9a2d"
       },
       {
-        "name": "gcm-osx-x64-2.6.1.tar.gz",
+        "filename": "gcm-osx-x64-2.6.1.tar.gz",
         "platform": "darwin",
         "arch": "amd64",
         "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-osx-x64-2.6.1.tar.gz",

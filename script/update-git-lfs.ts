@@ -122,7 +122,7 @@ async function run(): Promise<boolean> {
       newFiles.push({
         platform,
         arch: getArch(file),
-        name: file,
+        filename: file,
         checksum: match[1],
         url: assets.data.find(x => x.name === file)?.browser_download_url,
       })

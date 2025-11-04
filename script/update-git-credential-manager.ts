@@ -77,7 +77,13 @@ async function run(): Promise<boolean> {
     console.log(`⏳ Fetching checksum for ${ft.name}`)
     const checksum = await fetchAssetChecksum(url)
     console.log(`🔑 ${checksum}`)
-    files.push({ ...ft, url, checksum })
+    files.push({
+      filename: ft.name,
+      platform: ft.platform,
+      arch: ft.arch,
+      url,
+      checksum,
+    })
   }
 
   updateGitCredentialManagerDependencies(version, files)

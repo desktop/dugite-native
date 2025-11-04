@@ -62,7 +62,7 @@ export function updateGitLfsDependencies(
   files: Array<{
     platform: string
     arch: string
-    name: string
+    filename: string
     checksum: string
   }>
 ) {
@@ -92,7 +92,7 @@ export function updateGitCredentialManagerDependencies(
   files: Array<{
     platform: string
     arch: string
-    name: string
+    filename: string
     checksum: string
   }>
 ) {
