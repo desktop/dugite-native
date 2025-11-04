@@ -87,5 +87,5 @@ jobs:
           tag_name: ${{ github.event.inputs.version }}
           draft: true
           prerelease: false
-          files: ${{ github.workspace }}/artifacts/**/*
+          files: ${{ github.workspace }}/artifacts/dugite-*
           fail_on_unmatched_files: true

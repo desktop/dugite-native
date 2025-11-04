@@ -12,17 +12,6 @@ export default class GenerateReleaseNotes {
   // two files for each targeted OS/arch
   // two checksum files for the previous
   private SUCCESSFUL_RELEASE_FILE_COUNT = 9 * 2 * 2
-  private args = process.argv.slice(2)
-  private expectedArgs = [
-    {
-      key: 0,
-      name: 'artifactsDir',
-      description: 'full path to the artifacts directory',
-    },
-  ]
-  private expectedArgsString = this.expectedArgs
-    .map(arg => `\${${arg.name}}`)
-    .join(' ')
 
   /**
    * Full path to the artifacts directory
@@ -44,16 +33,7 @@ export default class GenerateReleaseNotes {
       console.error(reason)
     })
 
-    for (const arg of this.expectedArgs) {
-      if (!this.args[arg.key]) {
-        console.error(
-          `🔴 Missing CLI argument \${${arg.name}} (${arg.description}). Please run the script as follows: npx tsx script/generate-release-notes.ts ${this.expectedArgsString}`
-        )
-        process.exit(1)
-      }
-    }
-
-    this.artifactsDir = this.args[0]
+    this.artifactsDir = join(__dirname, '..', 'artifacts')
     this.githubToken = process.env.GITHUB_TOKEN
 
     this.run()
@@ -65,19 +45,23 @@ export default class GenerateReleaseNotes {
   async run() {
     const files = await readdir(this.artifactsDir, {
       withFileTypes: true,
-      recursive: true,
-    }).then(paths =>
-      paths
-        .filter(path => path.isFile())
-        .map(path => join(this.artifactsDir, path.name))
-    )
+      recursive: false,
+    })
 
     let countFiles = 0
     let shaEntries: Array<{ filename: string; checksum: string }> = []
 
     for (const file of files) {
-      if (file.endsWith('.sha256')) {
-        shaEntries.push(this.getShaContents(file))
+      if (!file.name.startsWith('dugite-')) {
+        console.error('🔴 Unexpected file in artifacts directory:', file)
+        process.exit(1)
+      }
+      if (!file.isFile()) {
+        console.error('🔴 Unexpected entry in artifacts directory:', file)
+        process.exit(1)
+      }
+      if (file.name.endsWith('.sha256')) {
+        shaEntries.push(this.getShaContents(join(file.parentPath, file.name)))
       }
 
       countFiles++
