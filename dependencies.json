@@ -94,7 +94,7 @@
     ]
   },
   "git-credential-manager": {
-    "version": "2.6.1",
+    "version": "v2.6.1",
     "files": [
       {
         "filename": "gcm-linux_amd64.2.6.1.tar.gz",

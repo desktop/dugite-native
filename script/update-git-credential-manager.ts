@@ -36,9 +36,9 @@ async function run(): Promise<boolean> {
       : await octokit.repos.getReleaseByTag({ owner, repo, tag: argv['tag'] })
 
   const { tag_name, id } = release.data
-  const version = tag_name.replace(/^v/, '')
+  const clean_version = tag_name.replace(/^v/, '')
 
-  console.log(`✅ Using git-credential-manager version '${version}'`)
+  console.log(`✅ Using git-credential-manager version '${tag_name}'`)
 
   const assets = await octokit.repos.listReleaseAssets({
     owner,
@@ -48,17 +48,17 @@ async function run(): Promise<boolean> {
 
   const fileTemplates = [
     {
-      name: `gcm-linux_amd64.${version}.tar.gz`,
+      name: `gcm-linux_amd64.${clean_version}.tar.gz`,
       platform: 'linux',
       arch: 'amd64',
     },
     {
-      name: `gcm-osx-arm64-${version}.tar.gz`,
+      name: `gcm-osx-arm64-${clean_version}.tar.gz`,
       platform: 'darwin',
       arch: 'arm64',
     },
     {
-      name: `gcm-osx-x64-${version}.tar.gz`,
+      name: `gcm-osx-x64-${clean_version}.tar.gz`,
       platform: 'darwin',
       arch: 'amd64',
     },
@@ -86,10 +86,10 @@ async function run(): Promise<boolean> {
     })
   }
 
-  updateGitCredentialManagerDependencies(version, files)
+  updateGitCredentialManagerDependencies(tag_name, files)
 
   console.log(
-    `✅ Updated dependencies metadata to Git credential manager '${version}'`
+    `✅ Updated dependencies metadata to Git credential manager '${clean_version}'`
   )
   return true
 }
