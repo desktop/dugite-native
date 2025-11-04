@@ -17,6 +17,8 @@ on:
 
 jobs:
   shellcheck:
+    permissions:
+      contents: read
     name: Shellcheck
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +31,8 @@ jobs:
           shopt -s globstar; shellcheck script/**/*.sh
 
   build:
+    permissions:
+      contents: read
     name: ${{ matrix.friendlyName }} ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
     strategy:
