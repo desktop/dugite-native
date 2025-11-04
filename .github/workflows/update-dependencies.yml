@@ -83,4 +83,4 @@ jobs:
             by @${{ github.actor }} in ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}.
 
             Please convert this draft PR to a regular PR in order to enable CI.
-          draft: always-true
+          draft: true
