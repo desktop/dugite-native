@@ -15,7 +15,8 @@ const root = path.dirname(__dirname)
 const gitDir = path.join(root, 'git')
 
 // OMG
-type ReleaseAssets = RestEndpointMethodTypes['repos']['getLatestRelease']['response']['data']['assets']
+type ReleaseAssets =
+  RestEndpointMethodTypes['repos']['getLatestRelease']['response']['data']['assets']
 
 function spawn(cmd: string, args: Array<string>, cwd: string): Promise<string> {
   return new Promise((resolve, reject) => {
