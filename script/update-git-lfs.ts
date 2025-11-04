@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest'
 import { updateGitLfsDependencies } from './lib/dependencies'
+import yargs from 'yargs'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -37,28 +38,32 @@ function getArch(fileName: string) {
 }
 
 async function run(): Promise<boolean> {
+  const { argv } = yargs
+    .usage('Usage: update-git [options]')
+    .version(false)
+    .option('tag', { default: 'latest', desc: 'The Git LFS tag to use' })
+
   const token = process.env.GITHUB_ACCESS_TOKEN
-  if (token == null) {
-    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
-    return false
+  const octokit = new Octokit(token ? { auth: `token ${token}` } : {})
+
+  if (!token) {
+    console.log(
+      `⚠️ No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
+    )
   }
-
-  const octokit = new Octokit({ auth: `token ${token}` })
-
-  const user = await octokit.users.getAuthenticated({})
-  const me = user.data.login
-
-  console.log(`✅ Token found for ${me}`)
 
   const owner = 'git-lfs'
   const repo = 'git-lfs'
 
-  const release = await octokit.repos.getLatestRelease({ owner, repo })
+  const release =
+    argv['tag'] === 'latest'
+      ? await octokit.repos.getLatestRelease({ owner, repo })
+      : await octokit.repos.getReleaseByTag({ owner, repo, tag: argv['tag'] })
 
   const { tag_name, id } = release.data
   const version = tag_name
 
-  console.log(`✅ Newest git-lfs release '${version}'`)
+  console.log(`✅ Using git-lfs version '${version}'`)
 
   const assets = await octokit.repos.listReleaseAssets({
     owner,

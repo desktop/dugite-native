@@ -146,14 +146,9 @@ async function run() {
   const token = process.env.GITHUB_ACCESS_TOKEN
   const octokit = new Octokit(token ? { auth: `token ${token}` } : {})
 
-  if (token) {
-    const user = await octokit.users.getAuthenticated({})
-    const me = user.data.login
-
-    console.log(`✅ Token found for ${me}`)
-  } else {
+  if (!token) {
     console.log(
-      `🔴 No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
+      `⚠️ No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
     )
   }
 
