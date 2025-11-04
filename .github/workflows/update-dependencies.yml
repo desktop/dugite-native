@@ -81,7 +81,7 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           branch: update-dependencies-auto-${{ github.run_id }}
           delete-branch: true
-          commit-message: ${{ steps.pr-contents.outputs.commit-message }}
+          commit-message: ${{ steps.pr-contents.outputs.title }}
           title: ${{ steps.pr-contents.outputs.title }}
           body-path: ./pr-body.md
           draft: false
