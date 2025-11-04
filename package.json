@@ -19,6 +19,9 @@
   "bugs": {
     "url": "https://github.com/desktop/dugite-native/issues"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "devDependencies": {
     "@octokit/rest": "^18.0.9",
