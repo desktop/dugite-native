@@ -1,7 +1,7 @@
-import * as glob from 'glob'
-import { basename } from 'path'
+import { basename, join } from 'path'
 import * as fs from 'fs'
 import { Octokit } from '@octokit/rest'
+import { readdir } from 'fs/promises'
 
 export default class GenerateReleaseNotes {
   // Nine targeted OS/arch combinations
@@ -59,7 +59,7 @@ export default class GenerateReleaseNotes {
     for (const arg of this.expectedArgs) {
       if (!this.args[arg.key]) {
         console.error(
-          `🔴 Missing CLI argument \${${arg.name}} (${arg.description}). Please run the script as follows: node -r ts-node/register script/generate-release-notes.ts ${this.expectedArgsString}`
+          `🔴 Missing CLI argument \${${arg.name}} (${arg.description}). Please run the script as follows: npx tsx script/generate-release-notes.ts ${this.expectedArgsString}`
         )
         process.exit(1)
       }
@@ -76,12 +76,19 @@ export default class GenerateReleaseNotes {
    * Do our magic to generate the release notes 🧙🏼‍♂️
    */
   async run() {
-    const Glob = glob.GlobSync
-    const files = new Glob(this.artifactsDir + '/**/*', { nodir: true })
+    const files = await readdir(this.artifactsDir, {
+      withFileTypes: true,
+      recursive: true,
+    }).then(paths =>
+      paths
+        .filter(path => path.isFile())
+        .map(path => join(this.artifactsDir, path.name))
+    )
+
     let countFiles = 0
     let shaEntries: Array<{ filename: string; checksum: string }> = []
 
-    for (const file of files.found) {
+    for (const file of files) {
       if (file.endsWith('.sha256')) {
         shaEntries.push(this.getShaContents(file))
       }

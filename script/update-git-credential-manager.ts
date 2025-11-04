@@ -1,34 +1,44 @@
 import { Octokit } from '@octokit/rest'
 import { updateGitCredentialManagerDependencies } from './lib/dependencies'
 import { fetchAssetChecksum } from './fetch-asset-checksum'
+import yargs from 'yargs'
+import { coerceVersionPrefix } from './lib/coerce-version'
 
 process.on('unhandledRejection', reason => {
   console.error(reason)
 })
 
 async function run(): Promise<boolean> {
+  const { argv } = yargs
+    .usage('Usage: update-git [options]')
+    .version(false)
+    .option('tag', {
+      default: 'latest',
+      desc: 'The Git LFS tag to use',
+      coerce: coerceVersionPrefix,
+    })
+
   const token = process.env.GITHUB_ACCESS_TOKEN
-  if (token == null) {
-    console.log(`🔴 No GITHUB_ACCESS_TOKEN environment variable set`)
-    return false
+  const octokit = new Octokit(token ? { auth: `token ${token}` } : {})
+
+  if (!token) {
+    console.log(
+      `⚠️ No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
+    )
   }
-
-  const octokit = new Octokit({ auth: `token ${token}` })
-
-  const user = await octokit.users.getAuthenticated({})
-  const me = user.data.login
-
-  console.log(`✅ Token found for ${me}`)
 
   const owner = 'git-ecosystem'
   const repo = 'git-credential-manager'
 
-  const release = await octokit.repos.getLatestRelease({ owner, repo })
+  const release =
+    argv['tag'] === 'latest'
+      ? await octokit.repos.getLatestRelease({ owner, repo })
+      : await octokit.repos.getReleaseByTag({ owner, repo, tag: argv['tag'] })
 
   const { tag_name, id } = release.data
   const version = tag_name.replace(/^v/, '')
 
-  console.log(`✅ Newest git-credential-manager release '${version}'`)
+  console.log(`✅ Using git-credential-manager version '${version}'`)
 
   const assets = await octokit.repos.listReleaseAssets({
     owner,

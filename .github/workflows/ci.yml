@@ -7,6 +7,13 @@ on:
     tags:
       - v*
   pull_request:
+  workflow_call:
+    inputs:
+      ref:
+        description: The git ref to checkout
+        required: false
+        type: string
+        default: 'main'
 
 jobs:
   shellcheck:
@@ -14,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
       - name: Run ShellCheck
         run: |
           sudo apt-get install shellcheck
@@ -75,6 +84,7 @@ jobs:
           submodules: recursive
           # Needed for script/package.sh to work
           fetch-depth: 0
+          ref: ${{ inputs.ref }}
       - name: Install dependencies
         run: npm install
       - name: Check formatting
@@ -129,45 +139,3 @@ jobs:
             dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
           path: ./output
           retention-days: 5
-
-  release:
-    name: Create GitHub release
-    needs: [build, shellcheck]
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: './artifacts'
-
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: './artifacts'
-
-      - name: Generate release notes
-        run: |
-          npm ci
-          DUGITE_TAG=${GITHUB_REF/refs\/tags\//}
-          node -r ts-node/register script/generate-release-notes.ts "${{ github.workspace }}/artifacts" "$DUGITE_TAG" "${{ secrets.GITHUB_TOKEN }}"
-          RELEASE_NOTES_FILE=script/release_notes.txt
-          if [[ ! -f "$RELEASE_NOTES_FILE" ]]; then
-              echo "$RELEASE_NOTES_FILE does not exist. Something might have gone wrong while generating the release notes."
-              exit 1
-          fi
-          echo 'DUGITE_RELEASE_NOTES<<EOF' >> $GITHUB_ENV
-          cat ${RELEASE_NOTES_FILE} >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        with:
-          body: ${{ env.DUGITE_RELEASE_NOTES }}
-          draft: true
-          prerelease: false
-          files: ${{ github.workspace }}/artifacts/**/*
-          fail_on_unmatched_files: true

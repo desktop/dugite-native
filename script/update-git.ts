@@ -5,6 +5,7 @@ import semver from 'semver'
 import { updateGitDependencies } from './lib/dependencies'
 import yargs from 'yargs'
 import { fetchAssetChecksum } from './fetch-asset-checksum'
+import { coerceVersionPrefix } from './lib/coerce-version'
 
 process.on('unhandledRejection', reason => {
   console.log(reason)
@@ -121,11 +122,16 @@ async function run() {
   const argv = yargs
     .usage('Usage: update-git [options]')
     .version(false)
-    .option('tag', { default: 'latest', desc: 'The Git tag to use' })
+    .option('tag', {
+      default: 'latest',
+      desc: 'The Git tag to use',
+      coerce: coerceVersionPrefix,
+    })
     .option('g4w-tag', {
       alias: 'g4w',
       default: 'latest',
       desc: 'The Git for Windows tag to use',
+      coerce: coerceVersionPrefix,
     })
     .option('ignore-version-mismatch', {
       desc:
@@ -146,14 +152,9 @@ async function run() {
   const token = process.env.GITHUB_ACCESS_TOKEN
   const octokit = new Octokit(token ? { auth: `token ${token}` } : {})
 
-  if (token) {
-    const user = await octokit.users.getAuthenticated({})
-    const me = user.data.login
-
-    console.log(`✅ Token found for ${me}`)
-  } else {
+  if (!token) {
     console.log(
-      `🔴 No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
+      `⚠️ No GITHUB_ACCESS_TOKEN environment variable set. Requests may be rate limited.`
     )
   }
 
@@ -175,11 +176,11 @@ async function run() {
   console.log(`✅ Using Git for Windows version '${version}'`)
 
   if (!version.startsWith(latestGitVersion)) {
-    console.log(
+    console.error(
       `🔴 Latest Git for Windows version is ${version} which is a different series to Git version ${latestGitVersion}`
     )
     if (argv['ignore-version-mismatch'] !== true) {
-      return
+      process.exit(1)
     }
   }
 
@@ -188,7 +189,8 @@ async function run() {
   const packagearm64 = await getPackageDetails(assets, body, 'arm64')
 
   if (package64bit == null || package32bit == null || packagearm64 == null) {
-    return
+    console.error(`🔴 Unable to find all required Git for Windows packages`)
+    process.exit(1)
   }
 
   updateGitDependencies(latestGitVersion, [
