@@ -1,9 +1,37 @@
 import { join } from 'path'
-import * as fs from 'fs'
 import { Octokit } from '@octokit/rest'
-import { readdir, readFile } from 'fs/promises'
+import { readdir, readFile, writeFile } from 'fs/promises'
 import { execFile } from 'child_process'
 import { promisify } from 'util'
+import z from 'zod'
+
+const DependencyInfoSchema = z.record(
+  z.literal(['git', 'git-lfs', 'git-credential-manager']),
+  z.object({
+    version: z.string(),
+    files: z.array(
+      z.object({
+        platform: z.string(),
+        arch: z.string(),
+        url: z.string(),
+        checksum: z.string(),
+        filename: z.string(),
+      })
+    ),
+  })
+)
+
+const findG4WVersion = (deps: z.infer<typeof DependencyInfoSchema>) => {
+  const url = deps.git.files.find(x => x.platform === 'windows')?.url
+
+  if (url) {
+    const re = /git\/releases\/download\/([^\/]+)\/.*\.zip$/
+    const match = url.match(re)
+    return match ? match[1] : undefined
+  } else {
+    return undefined
+  }
+}
 
 const execFileAsync = promisify(execFile)
 const SUCCESSFUL_RELEASE_FILE_COUNT = 9 * 2 * 2
@@ -19,16 +47,42 @@ process.on('unhandledRejection', reason => {
 /**
  * Takes the release notes entries and the SHA entries, then merges them into the full draft release notes ✨
  */
-function generateDraftReleaseNotes(
+async function generateDraftReleaseNotes(
   releaseNotesEntries: Array<string>,
   shaEntries: Array<{ filename: string; checksum: string }>
-): string {
+) {
   const changelogText = releaseNotesEntries.join('\n')
 
   const fileList = shaEntries.map(e => `**${e.filename}**\n${e.checksum}\n`)
   const fileListText = fileList.join('\n')
 
+  const dependencies = DependencyInfoSchema.parse(
+    JSON.parse(
+      await readFile(
+        join(import.meta.dirname, '..', 'dependencies.json'),
+        'utf8'
+      )
+    )
+  )
+
+  const g4wVersion = findG4WVersion(dependencies)
+
+  if (!g4wVersion) {
+    console.error(
+      '🔴 Could not determine Git for Windows version from dependencies.json'
+    )
+
+    process.exit(1)
+  }
+
   const draftReleaseNotes = `${changelogText}
+
+## Versions
+
+- Git: ${dependencies.git.version}
+- Git for Windows: ${g4wVersion}
+- Git LFS: ${dependencies['git-lfs'].version}
+- Git Credential Manager: ${dependencies['git-credential-manager'].version}
 
 ## SHA-256 hashes:
 
@@ -135,10 +189,13 @@ if (SUCCESSFUL_RELEASE_FILE_COUNT !== files.length) {
 }
 
 const releaseEntries = await generateReleaseNotesEntries()
-const draftReleaseNotes = generateDraftReleaseNotes(releaseEntries, shaEntries)
+const draftReleaseNotes = await generateDraftReleaseNotes(
+  releaseEntries,
+  shaEntries
+)
 const releaseNotesPath = join(import.meta.dirname, 'release_notes.txt')
 
-fs.writeFileSync(releaseNotesPath, draftReleaseNotes, { encoding: 'utf8' })
+await writeFile(releaseNotesPath, draftReleaseNotes, { encoding: 'utf8' })
 
 console.log(
   `✅ All done! The release notes have been written to ${releaseNotesPath}`
