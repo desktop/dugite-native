@@ -132,9 +132,9 @@ jobs:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
       - name: Upload output artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name:
             dugite-native-${{ matrix.targetPlatform }}-${{ matrix.arch }}-output
-          path: ./output
+          path: ./output/dugite-native-*
           retention-days: 5
