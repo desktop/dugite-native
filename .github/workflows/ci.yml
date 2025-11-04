@@ -8,12 +8,6 @@ on:
       - v*
   pull_request:
   workflow_call:
-    inputs:
-      ref:
-        description: The git ref to checkout
-        required: false
-        type: string
-        default: 'main'
 
 jobs:
   shellcheck:
