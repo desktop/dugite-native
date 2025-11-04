@@ -1,7 +1,7 @@
 {
   "git": {
     "version": "v2.47.3",
-    "packages": [
+    "files": [
       {
         "platform": "windows",
         "arch": "amd64",

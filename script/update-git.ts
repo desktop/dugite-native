@@ -189,7 +189,7 @@ async function run() {
   const packagearm64 = await getPackageDetails(assets, body, 'arm64')
 
   if (package64bit == null || package32bit == null || packagearm64 == null) {
-    console.error(`🔴 Unable to find all required Git for Windows packages`)
+    console.error(`🔴 Unable to find all required Git for Windows files`)
     process.exit(1)
   }
 

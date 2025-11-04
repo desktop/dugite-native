@@ -47,7 +47,7 @@ export function updateGitDependencies(
 
   const git = {
     version: version,
-    packages: packages,
+    files: packages,
   }
 
   const updatedDependencies: Dependencies = { ...dependencies, git }

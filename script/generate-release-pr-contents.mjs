@@ -18,7 +18,7 @@ const currentDependencies = JSON.parse(
 const listFormatter = new Intl.ListFormat('en')
 
 const findG4WVersion = deps => {
-  const url = deps.git.packages.find(x => x.platform === 'windows')?.url
+  const url = deps.git.files.find(x => x.platform === 'windows')?.url
 
   if (url) {
     const re = /git\/releases\/download\/([^\/]+)\/.*\.zip$/
