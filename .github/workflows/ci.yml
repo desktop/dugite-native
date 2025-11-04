@@ -136,6 +136,8 @@ jobs:
         env:
           TARGET_PLATFORM: ${{ matrix.targetPlatform }}
           TARGET_ARCH: ${{ matrix.arch }}
+      - name: Ensure a clean working directory
+        run: git diff --name-status --exit-code
       - name: Upload output artifacts
         uses: actions/upload-artifact@v4
         with:
