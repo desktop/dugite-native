@@ -55,7 +55,7 @@ jobs:
           merge-multiple: true
 
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls -aR
         working-directory: './artifacts'
 
       - name: Install dependencies
