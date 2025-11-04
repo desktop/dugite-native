@@ -124,6 +124,7 @@ async function run(): Promise<boolean> {
         arch: getArch(file),
         name: file,
         checksum: match[1],
+        url: assets.data.find(x => x.name === file)?.browser_download_url,
       })
     }
   }
