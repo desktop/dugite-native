@@ -25,6 +25,7 @@
   "homepage": "https://github.com/desktop/dugite-native#readme",
   "devDependencies": {
     "@octokit/rest": "^18.0.9",
+    "@tsconfig/node22": "^22.0.2",
     "@types/node": "^22.14.0",
     "@types/semver": "^6.0.0",
     "@types/yargs": "^13.0.3",
