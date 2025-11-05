@@ -1,0 +1,6 @@
+# This file defines code ownership for the dugite-native repository.
+# Each line is a file pattern followed by one or more owners.
+# For more information, see: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# The @desktop/engineering team is the owner of everything in this repository
+* @desktop/engineering
