@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - master
-    tags:
-      - v*
+      - main
   pull_request:
   workflow_call:
 
