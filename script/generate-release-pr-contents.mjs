@@ -8,7 +8,7 @@ const execFileAsync = promisify(execFile)
 
 const { stdout } = await execFileAsync('git', [
   'show',
-  'HEAD~50:dependencies.json',
+  'HEAD:dependencies.json',
 ])
 const previousDependencies = JSON.parse(stdout)
 const currentDependencies = JSON.parse(

@@ -29,10 +29,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, windows-2025, ubuntu-22.04]
+        os: [macos-15, windows-2025, ubuntu-22.04]
         arch: [x86, x64, arm64]
         include:
-          - os: macos-13
+          - os: macos-15
             friendlyName: macOS
             targetPlatform: macOS
           - os: windows-2025
@@ -46,7 +46,7 @@ jobs:
             targetPlatform: ubuntu
             arch: arm
         exclude:
-          - os: macos-13
+          - os: macos-15
             arch: x86
     timeout-minutes: 20
     steps:
@@ -66,13 +66,17 @@ jobs:
           sudo apt-get install -y nodejs
           # avoid "fatal: detected dubious ownership in repository at '/__w/dugite-native/dugite-native'" error
           git config --global --add safe.directory '*'
-      # We need to use macos-14 14.1 for maximum compatibility with older macOS (x64)
-      - name: Switch to Xcode 14.1
+      # We try to use an old enough version of XCode for any given macOS runner
+      # image such that it maximizes the number of supported macOS versions
+      # for the resulting binaries. See https://developer.apple.com/support/xcode/
+      # to determine which XCode version to use for the macOS versions we wish
+      # to support.
+      - name: Switch to Xcode 16.4
         if: matrix.targetPlatform == 'macOS' && matrix.arch == 'x64'
         run: |
-          sudo xcode-select -s /Applications/Xcode_14.1.app/Contents/Developer/
+          sudo xcode-select -s /Applications/Xcode_16.4.app/Contents/Developer/
           # Delete the command line tools to make sure they don't get our builds
-          # messed up with macOS SDK 11 stuff.
+          # messed up with newer macOS SDK stuff.
           sudo rm -rf /Library/Developer/CommandLineTools
       - uses: actions/checkout@v3
         with:

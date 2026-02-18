@@ -6,6 +6,12 @@ import { coerceVersionPrefix } from './lib/coerce-version'
 
 process.on('unhandledRejection', reason => {
   console.error(reason)
+  process.exit(1)
+})
+
+process.on('uncaughtException', error => {
+  console.error(error)
+  process.exit(1)
 })
 
 async function run(): Promise<boolean> {
@@ -48,7 +54,7 @@ async function run(): Promise<boolean> {
 
   const fileTemplates = [
     {
-      name: `gcm-linux_amd64.${clean_version}.tar.gz`,
+      name: `gcm-linux-x64-${clean_version}.tar.gz`,
       platform: 'linux',
       arch: 'amd64',
     },
@@ -94,4 +100,9 @@ async function run(): Promise<boolean> {
   return true
 }
 
-run().then(success => process.exit(success ? 0 : 1))
+run()
+  .catch(error => {
+    console.error(error)
+    return false
+  })
+  .then(success => process.exit(success ? 0 : 1))
