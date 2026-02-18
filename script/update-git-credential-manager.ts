@@ -48,7 +48,7 @@ async function run(): Promise<boolean> {
 
   const fileTemplates = [
     {
-      name: `gcm-linux_amd64.${clean_version}.tar.gz`,
+      name: `gcm-linux-x64-${clean_version}.tar.gz`,
       platform: 'linux',
       arch: 'amd64',
     },
