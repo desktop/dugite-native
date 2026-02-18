@@ -9,11 +9,11 @@ scripted usage in applications. It also removes many non-core features:
  - no dependency on OpenSSL
  - no Tcl/Tk GUI
  - no translation of error messages
- - no 32-bit support
 
 There are also additional customizations included in this toolchain:
 
  - Git-LFS
+ - Git Credential Manager
  - certificate bundle for Linux consumers
 
 **Note:** this is not intended to be installed by end users - [go here](https://git-scm.com/)
@@ -21,7 +21,7 @@ to download Git for your operating system.
 
 ### Status
 
-This project is under active development for Git-related projects at GitHub. This will stabilize as this library gets more usage in production.
+This project's primary purpose is to support GitHub Desktop.
 
 ### Roadmap
 
@@ -32,12 +32,6 @@ Feel free to open issues or pull requests about fixes or optimizations we can in
 into the packaging process. Refer to the [CONTRIBUTING.md](./CONTRIBUTING.md) file for instructions and the [documentation](./docs/) sections for more information about the repository.
 
 Bugfixes and feature requests for Git should be discussied on the [Git mailing list](https://git.wiki.kernel.org/index.php/GitCommunity).
-
-### Supported Platforms
-
- - Windows 7 and later
- - macOS 10.9 and up
- - Linux (GLIBC 2.17+ on x64/arm64 systems and GLIBC 2.28+ on x86/arm32 systems)
 
 ### Credits
 
