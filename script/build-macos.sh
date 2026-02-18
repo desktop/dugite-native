@@ -65,7 +65,7 @@ echo "-- Building git at $SOURCE to $DESTINATION"
   # configure script. However the Makefile prepends some developer CFLAGS that
   # we could use to select the right target CPU to cross-compile git.
   DESTDIR="$DESTINATION" make strip install prefix=/ \
-    DEVELOPER_CFLAGS="$TARGET_CFLAGS" \
+    DEVELOPER_CFLAGS="$TARGET_CFLAGS -Werror=unsupported-availability-guard" \
     HOST_CPU="$HOST_CPU" \
     CURL_CONFIG=/usr/bin/curl-config \
     NO_PERL=1 \
