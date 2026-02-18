@@ -6,6 +6,16 @@ on:
       version:
         description: The version to release (e.g., "v1.2.3")
         required: true
+      draft:
+        description: Publish the release as a draft
+        required: false
+        default: false
+        type: boolean
+      prerelease:
+        description: Publish the release as a prerelease
+        required: false
+        default: false
+        type: boolean
       dry-run:
         description: Perform a dry run without creating a release
         required: false
@@ -89,7 +99,7 @@ jobs:
         with:
           body_path: ${{ github.workspace }}/script/release_notes.txt
           tag_name: ${{ github.event.inputs.version }}
-          draft: true
-          prerelease: false
+          draft: ${{ github.event.inputs.draft }}
+          prerelease: ${{ github.event.inputs.prerelease }}
           files: ${{ github.workspace }}/artifacts/dugite-*
           fail_on_unmatched_files: true
