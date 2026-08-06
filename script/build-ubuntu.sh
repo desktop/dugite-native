@@ -15,11 +15,6 @@ if [[ -z "${DESTINATION}" ]]; then
   exit 1
 fi
 
-if [[ -z "${CURL_INSTALL_DIR}" ]]; then
-  echo "Required environment variable CURL_INSTALL_DIR was not set"
-  exit 1
-fi
-
 case "$TARGET_ARCH" in
   "x64")
     DEPENDENCY_ARCH="amd64"
