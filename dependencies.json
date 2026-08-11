@@ -94,28 +94,28 @@
     ]
   },
   "git-credential-manager": {
-    "version": "v2.7.3",
+    "version": "v2.9.0",
     "files": [
       {
-        "filename": "gcm-linux-x64-2.7.3.tar.gz",
+        "filename": "gcm-linux-x64-2.9.0.tar.gz",
         "platform": "linux",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.7.3/gcm-linux-x64-2.7.3.tar.gz",
-        "checksum": "c7935c3e1b22681d56011b580086aeb6d60f3f0aaf6ef9c581480356988ff804"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-linux-x64-2.9.0.tar.gz",
+        "checksum": "194b6524a34551a93f9f0a965e9cce910b3c3e79233af1f30bb93414ee194910"
       },
       {
-        "filename": "gcm-osx-arm64-2.7.3.tar.gz",
+        "filename": "gcm-osx-arm64-2.9.0.tar.gz",
         "platform": "darwin",
         "arch": "arm64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.7.3/gcm-osx-arm64-2.7.3.tar.gz",
-        "checksum": "7051a5e953bcd37a182330a0f18bc6842c4cac143b537f8c49a8c5906d335c80"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-osx-arm64-2.9.0.tar.gz",
+        "checksum": "8fe7903cbacb11c07904e89e16e46f5044c48444a3486d3580aeebe7d2b783d0"
       },
       {
-        "filename": "gcm-osx-x64-2.7.3.tar.gz",
+        "filename": "gcm-osx-x64-2.9.0.tar.gz",
         "platform": "darwin",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.7.3/gcm-osx-x64-2.7.3.tar.gz",
-        "checksum": "f172be74f3c8fb38c69a93464d6c07a911f2259a62304d0adc60142f8d2c9226"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-osx-x64-2.9.0.tar.gz",
+        "checksum": "d94d5d952454bb882b79a6a07b9470db5fbbc0d718a12e5cfa033189463a3da4"
       }
     ]
   }
