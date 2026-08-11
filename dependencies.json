@@ -5,23 +5,23 @@
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "MinGit-2.53.0.3-64-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.3/MinGit-2.53.0.3-64-bit.zip",
-        "checksum": "0d7c85a26e45668b35d0d0aeb763289376cfc039e55e0938a617ed0dfa32e433"
+        "filename": "MinGit-2.53.0.4-64-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.4/MinGit-2.53.0.4-64-bit.zip",
+        "checksum": "55b413d9e7f64ca39ac9eec699bc00f3d6ba83241be5079b2cae2ff6b44b65c4"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "MinGit-2.53.0.3-32-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.3/MinGit-2.53.0.3-32-bit.zip",
-        "checksum": "2a55bcec4de958570f4e27ae59dfa9f91d98c816113189e2fc6af8afe85ed66a"
+        "filename": "MinGit-2.53.0.4-32-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.4/MinGit-2.53.0.4-32-bit.zip",
+        "checksum": "fe92ceccff33d95936ef906ab36f2c010f033aef66a01f1e0e55fb6278e788fd"
       },
       {
         "platform": "windows",
         "arch": "arm64",
-        "filename": "MinGit-2.53.0.3-arm64.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.3/MinGit-2.53.0.3-arm64.zip",
-        "checksum": "4e023ced9acba38d45b63cafadde57a11c754c0b46df8968117cd243f8f58ef4"
+        "filename": "MinGit-2.53.0.4-arm64.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.4/MinGit-2.53.0.4-arm64.zip",
+        "checksum": "e1898dbb750804e13472a0e4170ade581516df3ff47ddb5b5503cbfa574b3624"
       }
     ]
   },
@@ -94,28 +94,28 @@
     ]
   },
   "git-credential-manager": {
-    "version": "v2.7.3",
+    "version": "v2.9.0",
     "files": [
       {
-        "filename": "gcm-linux-x64-2.7.3.tar.gz",
+        "filename": "gcm-linux-x64-2.9.0.tar.gz",
         "platform": "linux",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.7.3/gcm-linux-x64-2.7.3.tar.gz",
-        "checksum": "c7935c3e1b22681d56011b580086aeb6d60f3f0aaf6ef9c581480356988ff804"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-linux-x64-2.9.0.tar.gz",
+        "checksum": "194b6524a34551a93f9f0a965e9cce910b3c3e79233af1f30bb93414ee194910"
       },
       {
-        "filename": "gcm-osx-arm64-2.7.3.tar.gz",
+        "filename": "gcm-osx-arm64-2.9.0.tar.gz",
         "platform": "darwin",
         "arch": "arm64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.7.3/gcm-osx-arm64-2.7.3.tar.gz",
-        "checksum": "7051a5e953bcd37a182330a0f18bc6842c4cac143b537f8c49a8c5906d335c80"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-osx-arm64-2.9.0.tar.gz",
+        "checksum": "8fe7903cbacb11c07904e89e16e46f5044c48444a3486d3580aeebe7d2b783d0"
       },
       {
-        "filename": "gcm-osx-x64-2.7.3.tar.gz",
+        "filename": "gcm-osx-x64-2.9.0.tar.gz",
         "platform": "darwin",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.7.3/gcm-osx-x64-2.7.3.tar.gz",
-        "checksum": "f172be74f3c8fb38c69a93464d6c07a911f2259a62304d0adc60142f8d2c9226"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-osx-x64-2.9.0.tar.gz",
+        "checksum": "d94d5d952454bb882b79a6a07b9470db5fbbc0d718a12e5cfa033189463a3da4"
       }
     ]
   }
