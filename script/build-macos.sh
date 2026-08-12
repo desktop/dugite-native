@@ -118,11 +118,11 @@ if [[ "$GCM_VERSION" && "$GCM_URL" ]]; then
   COMPUTED_SHA256=$(compute_checksum $GCM_FILE)
   if [ "$COMPUTED_SHA256" = "$GCM_CHECKSUM" ]; then
     echo "GCM: checksums match"
-    SUBFOLDER="$DESTINATION/libexec/git-core"
+    SUBFOLDER="$DESTINATION/bin"
     tar -xvkf $GCM_FILE -C "$SUBFOLDER"
 
     if [[ ! -f "$SUBFOLDER/git-credential-manager" ]]; then
-      echo "After extracting GCM the file was not found under libexec/git-core/"
+      echo "After extracting GCM the file was not found under bin/"
       echo "aborting..."
       exit 1
     fi
