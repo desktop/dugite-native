@@ -67,13 +67,12 @@ CFLAGS='-Wall -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werro
   LDFLAGS='-Wl,-Bsymbolic-functions -Wl,-z,relro' ac_cv_iconv_omits_bom=no ac_cv_fread_reads_directories=no ac_cv_snprintf_returns_bogus=no \
   ./configure $HOST \
   --prefix=/
-sed -i "s/STRIP = strip/STRIP = $STRIP/" Makefile
 DESTDIR="$DESTINATION" \
   NO_TCLTK=1 \
   NO_GETTEXT=1 \
   NO_INSTALL_HARDLINKS=1 \
   NO_R_TO_GCC_LINKER=1 \
-  make strip install
+  make STRIP="$STRIP" strip install
 )
 
 if [[ "$GIT_LFS_VERSION" ]]; then
