@@ -13,7 +13,7 @@ fi
 case $TARGET_ARCH in
   x64)
     DEPENDENCY_ARCH="amd64"
-    MINGW_DIR="mingw64"
+    MINGW_DIR="ucrt64"
     ;;
   x86)
     DEPENDENCY_ARCH="x86"
@@ -56,6 +56,11 @@ else
   exit 1
 fi
 
+if [[ ! -d "$DESTINATION/$MINGW_DIR/libexec/git-core" ]]; then
+  echo "MinGit: expected Git exec directory $DESTINATION/$MINGW_DIR/libexec/git-core was not found"
+  exit 1
+fi
+
 
 if [[ "$GIT_LFS_VERSION" ]]; then
   # download Git LFS, verify its the right contents, and unpack it
@@ -74,7 +79,7 @@ if [[ "$GIT_LFS_VERSION" ]]; then
     unzip -j $GIT_LFS_FILE -d "$SUBFOLDER" "*/git-lfs.exe"
 
     if [[ ! -f "$SUBFOLDER/git-lfs.exe" ]]; then
-      echo "After extracting Git LFS the file was not found under /mingw64/libexec/git-core/"
+      echo "After extracting Git LFS the file was not found under $SUBFOLDER/"
       echo "aborting..."
       exit 1
     fi

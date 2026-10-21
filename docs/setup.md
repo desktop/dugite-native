@@ -10,6 +10,16 @@ easier.
 
 As this project depends on the toolchain you have installed, you will also need access to the same operating system you wish to compile Git for. Currently we don't need to build from source on Windows, but for macOS we do need access to the XCode toolchain. You also need a bash environment to run these scripts.
 
+Building Git on macOS and Linux also requires Rust and Cargo installed through
+[rustup](https://rustup.rs/). The build scripts install the Rust standard library
+for the selected `TARGET_ARCH` and use that target for both native and cross
+builds. Linux cross builds still require the corresponding C compiler and
+development libraries installed by CI.
+
+Windows packages retain MinGit's directory layout: `ucrt64` for x64,
+`mingw32` for x86, and `clangarm64` for arm64. Consumers that set `GIT_EXEC_PATH`,
+certificate paths, or credential helper paths must use the matching directory.
+
 #### Fedora
 
 These two packages are necessary to compile Git, in case you don't already have them installed:
@@ -42,4 +52,3 @@ Package size:  16M
 The two most interesting points to look at would be the uncompressed size of the folder on disk, and the package size (after compression).
 
 These scripts will perform the same setup that is performed on Travis, and have the same constraints (macOS and Ubuntu are built from source, requiring the necessary toolchains for those platforms).
-

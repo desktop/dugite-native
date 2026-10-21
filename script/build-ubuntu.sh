@@ -19,21 +19,25 @@ case "$TARGET_ARCH" in
   "x64")
     DEPENDENCY_ARCH="amd64"
     export CC="gcc"
+    export CARGO_BUILD_TARGET="x86_64-unknown-linux-gnu"
     STRIP="strip"
     HOST="" ;;
   "x86")
     DEPENDENCY_ARCH="x86"
     export CC="i686-linux-gnu-gcc"
+    export CARGO_BUILD_TARGET="i686-unknown-linux-gnu"
     STRIP="i686-gnu-strip"
     HOST="--host=i686-linux-gnu" ;;
   "arm64")
     DEPENDENCY_ARCH="arm64"
     export CC="aarch64-linux-gnu-gcc"
+    export CARGO_BUILD_TARGET="aarch64-unknown-linux-gnu"
     STRIP="aarch64-linux-gnu-strip"
     HOST="--host=aarch64-linux-gnu" ;;
   "arm")
     DEPENDENCY_ARCH="arm"
     export CC="arm-linux-gnueabihf-gcc"
+    export CARGO_BUILD_TARGET="armv7-unknown-linux-gnueabihf"
     STRIP="arm-linux-gnueabihf-strip"
     HOST="--host=arm-linux-gnueabihf" ;;
   *)
@@ -58,6 +62,8 @@ source "$CURRENT_DIR/check-static-linking.sh"
 source "$CURRENT_DIR/verify-lfs-contents.sh"
 
 echo " -- Building git at $SOURCE to $DESTINATION"
+
+rustup target add "$CARGO_BUILD_TARGET"
 
 (
 cd "$SOURCE" || exit 1
