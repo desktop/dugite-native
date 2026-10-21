@@ -9,11 +9,13 @@ MACOSX_BUILD_VERSION="10.15"
 
 if [ "$TARGET_ARCH" = "x64" ]; then
   HOST_CPU=x86_64
+  export CARGO_BUILD_TARGET=x86_64-apple-darwin
   TARGET_CFLAGS="-target x86_64-apple-darwin"
   GOARCH=amd64
   DEPENDENCY_ARCH="amd64"
 else
   HOST_CPU=arm64
+  export CARGO_BUILD_TARGET=aarch64-apple-darwin
   TARGET_CFLAGS="-target arm64-apple-darwin"
   GOARCH=arm64
   DEPENDENCY_ARCH="arm64"
@@ -40,6 +42,8 @@ source "$CURRENT_DIR/compute-checksum.sh"
 source "$CURRENT_DIR/verify-lfs-contents.sh"
 
 echo "-- Building git at $SOURCE to $DESTINATION"
+
+rustup target add "$CARGO_BUILD_TARGET"
 
 (
   cd "$SOURCE" || exit 1
