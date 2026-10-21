@@ -1,121 +1,121 @@
 {
   "git": {
-    "version": "v2.53.0",
+    "version": "v2.56.0",
     "files": [
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "MinGit-2.53.0.4-64-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.4/MinGit-2.53.0.4-64-bit.zip",
-        "checksum": "55b413d9e7f64ca39ac9eec699bc00f3d6ba83241be5079b2cae2ff6b44b65c4"
+        "filename": "MinGit-2.56.0.2-64-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.56.0.windows.2/MinGit-2.56.0.2-64-bit.zip",
+        "checksum": "da35e72aa21c005a5a0d298cfbae110bc1609a815730ea0dde84b01a1b3cd3be"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "MinGit-2.53.0.4-32-bit.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.4/MinGit-2.53.0.4-32-bit.zip",
-        "checksum": "fe92ceccff33d95936ef906ab36f2c010f033aef66a01f1e0e55fb6278e788fd"
+        "filename": "MinGit-2.56.0.2-32-bit.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.56.0.windows.2/MinGit-2.56.0.2-32-bit.zip",
+        "checksum": "f63de755797c4cec513f7df0c7a6d2f5addc9d5b4e910fda0f502f72e0643366"
       },
       {
         "platform": "windows",
         "arch": "arm64",
-        "filename": "MinGit-2.53.0.4-arm64.zip",
-        "url": "https://github.com/git-for-windows/git/releases/download/v2.53.0.windows.4/MinGit-2.53.0.4-arm64.zip",
-        "checksum": "e1898dbb750804e13472a0e4170ade581516df3ff47ddb5b5503cbfa574b3624"
+        "filename": "MinGit-2.56.0.2-arm64.zip",
+        "url": "https://github.com/git-for-windows/git/releases/download/v2.56.0.windows.2/MinGit-2.56.0.2-arm64.zip",
+        "checksum": "38b33dc6024026e3315cf88ab2cfea65205bbd7bb3a8e824bd21c8ad4fe609a7"
       }
     ]
   },
   "git-lfs": {
-    "version": "v3.7.1",
+    "version": "v3.8.0",
     "files": [
       {
         "platform": "linux",
         "arch": "amd64",
-        "filename": "git-lfs-linux-amd64-v3.7.1.tar.gz",
-        "checksum": "1c0b6ee5200ca708c5cebebb18fdeb0e1c98f1af5c1a9cba205a4c0ab5a5ec08",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-amd64-v3.7.1.tar.gz"
+        "filename": "git-lfs-linux-amd64-v3.8.0.tar.gz",
+        "checksum": "e455e00f15d9b95661b8d53498ffb0c3367962cf1ec73c31ab7369516cd6ab8d",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-amd64-v3.8.0.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "x86",
-        "filename": "git-lfs-linux-386-v3.7.1.tar.gz",
-        "checksum": "a49eed4612d9a33db848db8cb9079b15d5f3116bbca2c1a11cb89a70e3218921",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-386-v3.7.1.tar.gz"
+        "filename": "git-lfs-linux-386-v3.8.0.tar.gz",
+        "checksum": "5f6f5f9c53f2f517546486a8aa9cc8c34b958a1c9c167797aa70a44ac4a3da44",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-386-v3.8.0.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "arm64",
-        "filename": "git-lfs-linux-arm64-v3.7.1.tar.gz",
-        "checksum": "73a9c90eeb4312133a63c3eaee0c38c019ea7bfa0953d174809d25b18588dd8d",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-arm64-v3.7.1.tar.gz"
+        "filename": "git-lfs-linux-arm64-v3.8.0.tar.gz",
+        "checksum": "ac9c8efac980bb0505ead384d087e2acb6486fd8498691a2165fa174ec6118c2",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-arm64-v3.8.0.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "arm",
-        "filename": "git-lfs-linux-arm-v3.7.1.tar.gz",
-        "checksum": "567002d2735ceb0e876e326736f1b72895931d5ac156002cc8561b072a4ce9a3",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-arm-v3.7.1.tar.gz"
+        "filename": "git-lfs-linux-arm-v3.8.0.tar.gz",
+        "checksum": "67144f93c2342f46456d22dbf33077f54e0581cb91f2966393151871ca328553",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-arm-v3.8.0.tar.gz"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "git-lfs-windows-386-v3.7.1.zip",
-        "checksum": "06c05c06523abf3930301b3022527ad881b1a7f8bf036ed6d93c8e68569041bb",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-windows-386-v3.7.1.zip"
+        "filename": "git-lfs-windows-386-v3.8.0.zip",
+        "checksum": "657337f2ee95c2f2e5e431eb7cf9de3481346f11d708ce116c8a96a622288386",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-windows-386-v3.8.0.zip"
       },
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "git-lfs-windows-amd64-v3.7.1.zip",
-        "checksum": "8683cdc3d6c029b49393dcebbaa6265bd6efd9abdcf837be855b4cd42e5e80b6",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-windows-amd64-v3.7.1.zip"
+        "filename": "git-lfs-windows-amd64-v3.8.0.zip",
+        "checksum": "b62e7b8ceddee635f691233d77de8eaa4b213e9209e0173811d8cfa77f7882c1",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-windows-amd64-v3.8.0.zip"
       },
       {
         "platform": "windows",
         "arch": "arm64",
-        "filename": "git-lfs-windows-arm64-v3.7.1.zip",
-        "checksum": "9441383a3928a7f387223711929292a46ace95580ceed443d61e7b8a4d9615c3",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-windows-arm64-v3.7.1.zip"
+        "filename": "git-lfs-windows-arm64-v3.8.0.zip",
+        "checksum": "72403a96eae6689c3a4038c99e5d9e0938ef5552c71a234aef65ef0c314af081",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-windows-arm64-v3.8.0.zip"
       },
       {
         "platform": "darwin",
         "arch": "amd64",
-        "filename": "git-lfs-darwin-amd64-v3.7.1.zip",
-        "checksum": "b5b1b641c0648c83661fa9eda991cd3eff945264dabc2cdf411a80dfe7ec0970",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-darwin-amd64-v3.7.1.zip"
+        "filename": "git-lfs-darwin-amd64-v3.8.0.zip",
+        "checksum": "f1c17aeca0b4eaab9ea606226477dbed3b84b56fe0811a9f967d2ea2b2393c53",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-darwin-amd64-v3.8.0.zip"
       },
       {
         "platform": "darwin",
         "arch": "arm64",
-        "filename": "git-lfs-darwin-arm64-v3.7.1.zip",
-        "checksum": "76260fb34f4ee622ff0a66b857e5954aa49c7e343a92e57a1ec4a760618c94b2",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-darwin-arm64-v3.7.1.zip"
+        "filename": "git-lfs-darwin-arm64-v3.8.0.zip",
+        "checksum": "caff76a7d070d8160c89bc39b6e85d98f24135b6fed038a3b4de2590d25102d8",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-darwin-arm64-v3.8.0.zip"
       }
     ]
   },
   "git-credential-manager": {
-    "version": "v2.9.0",
+    "version": "v2.9.1",
     "files": [
       {
-        "filename": "gcm-linux-x64-2.9.0.tar.gz",
+        "filename": "gcm-linux-x64-2.9.1.tar.gz",
         "platform": "linux",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-linux-x64-2.9.0.tar.gz",
-        "checksum": "194b6524a34551a93f9f0a965e9cce910b3c3e79233af1f30bb93414ee194910"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.1/gcm-linux-x64-2.9.1.tar.gz",
+        "checksum": "31fc151c3b111ffe25616a4356bd9a50bdcdbd0922c5e11990fb220c6caf1ce1"
       },
       {
-        "filename": "gcm-osx-arm64-2.9.0.tar.gz",
+        "filename": "gcm-osx-arm64-2.9.1.tar.gz",
         "platform": "darwin",
         "arch": "arm64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-osx-arm64-2.9.0.tar.gz",
-        "checksum": "8fe7903cbacb11c07904e89e16e46f5044c48444a3486d3580aeebe7d2b783d0"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.1/gcm-osx-arm64-2.9.1.tar.gz",
+        "checksum": "2ac8f99258d04acb45cf592eb5b06ec0e0760c329bce40a4d18dabb5e0e37f68"
       },
       {
-        "filename": "gcm-osx-x64-2.9.0.tar.gz",
+        "filename": "gcm-osx-x64-2.9.1.tar.gz",
         "platform": "darwin",
         "arch": "amd64",
-        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.0/gcm-osx-x64-2.9.0.tar.gz",
-        "checksum": "d94d5d952454bb882b79a6a07b9470db5fbbc0d718a12e5cfa033189463a3da4"
+        "url": "https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.9.1/gcm-osx-x64-2.9.1.tar.gz",
+        "checksum": "326fc3e1c708ae792b010b2f9f701f3dc4dbaebdf40cafd036254ab0f148c034"
       }
     ]
   }
