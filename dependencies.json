@@ -26,70 +26,70 @@
     ]
   },
   "git-lfs": {
-    "version": "v3.8.0",
+    "version": "v3.8.1",
     "files": [
       {
         "platform": "linux",
         "arch": "amd64",
-        "filename": "git-lfs-linux-amd64-v3.8.0.tar.gz",
-        "checksum": "e455e00f15d9b95661b8d53498ffb0c3367962cf1ec73c31ab7369516cd6ab8d",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-amd64-v3.8.0.tar.gz"
+        "filename": "git-lfs-linux-amd64-v3.8.1.tar.gz",
+        "checksum": "e72cf723a4a660438862282e8aecf3885fc8123e88bfcad534cf6b941a354b75",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-linux-amd64-v3.8.1.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "x86",
-        "filename": "git-lfs-linux-386-v3.8.0.tar.gz",
-        "checksum": "5f6f5f9c53f2f517546486a8aa9cc8c34b958a1c9c167797aa70a44ac4a3da44",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-386-v3.8.0.tar.gz"
+        "filename": "git-lfs-linux-386-v3.8.1.tar.gz",
+        "checksum": "42d862b5cad499820fde9ea6c3080c73327f679f1968eb4a3e71fa11d8737d26",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-linux-386-v3.8.1.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "arm64",
-        "filename": "git-lfs-linux-arm64-v3.8.0.tar.gz",
-        "checksum": "ac9c8efac980bb0505ead384d087e2acb6486fd8498691a2165fa174ec6118c2",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-arm64-v3.8.0.tar.gz"
+        "filename": "git-lfs-linux-arm64-v3.8.1.tar.gz",
+        "checksum": "67895dd77b63329796bc5efdd47b57f218e1f7b98717ebaf936a8238dbcaec0f",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-linux-arm64-v3.8.1.tar.gz"
       },
       {
         "platform": "linux",
         "arch": "arm",
-        "filename": "git-lfs-linux-arm-v3.8.0.tar.gz",
-        "checksum": "67144f93c2342f46456d22dbf33077f54e0581cb91f2966393151871ca328553",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-linux-arm-v3.8.0.tar.gz"
+        "filename": "git-lfs-linux-arm-v3.8.1.tar.gz",
+        "checksum": "51850fba78f08c8ffe86e162ce277a36fb41929ba699c2853f4b0ff178cf0eb2",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-linux-arm-v3.8.1.tar.gz"
       },
       {
         "platform": "windows",
         "arch": "x86",
-        "filename": "git-lfs-windows-386-v3.8.0.zip",
-        "checksum": "657337f2ee95c2f2e5e431eb7cf9de3481346f11d708ce116c8a96a622288386",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-windows-386-v3.8.0.zip"
+        "filename": "git-lfs-windows-386-v3.8.1.zip",
+        "checksum": "d036588bd9027b7bf2a57e9fcb476ab95880f078d9b0a622869f397fb9030088",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-windows-386-v3.8.1.zip"
       },
       {
         "platform": "windows",
         "arch": "amd64",
-        "filename": "git-lfs-windows-amd64-v3.8.0.zip",
-        "checksum": "b62e7b8ceddee635f691233d77de8eaa4b213e9209e0173811d8cfa77f7882c1",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-windows-amd64-v3.8.0.zip"
+        "filename": "git-lfs-windows-amd64-v3.8.1.zip",
+        "checksum": "5bb771c12b3dacc535e912d0270a010c209d4da2e63819c5918e3547c2defed9",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-windows-amd64-v3.8.1.zip"
       },
       {
         "platform": "windows",
         "arch": "arm64",
-        "filename": "git-lfs-windows-arm64-v3.8.0.zip",
-        "checksum": "72403a96eae6689c3a4038c99e5d9e0938ef5552c71a234aef65ef0c314af081",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-windows-arm64-v3.8.0.zip"
+        "filename": "git-lfs-windows-arm64-v3.8.1.zip",
+        "checksum": "7e70990e339efab3e793affb919355b548c9a41c5b6bb52d90267bcb84ba4784",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-windows-arm64-v3.8.1.zip"
       },
       {
         "platform": "darwin",
         "arch": "amd64",
-        "filename": "git-lfs-darwin-amd64-v3.8.0.zip",
-        "checksum": "f1c17aeca0b4eaab9ea606226477dbed3b84b56fe0811a9f967d2ea2b2393c53",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-darwin-amd64-v3.8.0.zip"
+        "filename": "git-lfs-darwin-amd64-v3.8.1.zip",
+        "checksum": "4292b3518e717e53c20a6c2c0696e2069a21e97500ad14b80b06bd52de8f3b72",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-darwin-amd64-v3.8.1.zip"
       },
       {
         "platform": "darwin",
         "arch": "arm64",
-        "filename": "git-lfs-darwin-arm64-v3.8.0.zip",
-        "checksum": "caff76a7d070d8160c89bc39b6e85d98f24135b6fed038a3b4de2590d25102d8",
-        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.0/git-lfs-darwin-arm64-v3.8.0.zip"
+        "filename": "git-lfs-darwin-arm64-v3.8.1.zip",
+        "checksum": "0ba10e897e0496412cd86eacaed4ed554c97ddc29bc5c709d28faa5eaaa2222c",
+        "url": "https://github.com/git-lfs/git-lfs/releases/download/v3.8.1/git-lfs-darwin-arm64-v3.8.1.zip"
       }
     ]
   },
