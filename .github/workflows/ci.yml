@@ -48,7 +48,7 @@ jobs:
         exclude:
           - os: macos-15
             arch: x86
-    timeout-minutes: 20
+    timeout-minutes: ${{ matrix.targetPlatform == 'ubuntu' && 60 || 20 }}
     steps:
       - name: Install dependencies into dockerfile on Ubuntu
         if: matrix.targetPlatform == 'ubuntu'
